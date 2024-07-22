@@ -64,7 +64,7 @@ Private Sub WybierzCommandButton_Click()
         Exit Sub
     End If
     
-    ' Pobierz wybrany nr ze s³ownika
+    ' Pobierz wybrany nr ze slownika
     If dictComboBoxItems.Exists(selectedItemIndex) Then
         selectedNr = dictComboBoxItems(selectedItemIndex)
     Else
@@ -91,7 +91,7 @@ Private Sub WybierzCommandButton_Click()
         wycieczka.cena_bazowa = rs.Fields("cena_bazowa").value
         wycieczka.bilety_wstepu = rs.Fields("bilety_wstepu").value
     Else
-        MsgBox "Nie znaleziono wycieczki o podanym nr.", vbExclamation, "B³¹d"
+        MsgBox "Nie znaleziono wycieczki o podanym nr.", vbExclamation, "Error"
         rs.Close
         conn.Close
         Exit Sub
@@ -104,56 +104,38 @@ Private Sub WybierzCommandButton_Click()
     Set conn = Nothing
     
     ' Wstaw dane do zakladek w dokumencie Word
-    AddDataToBookmark "nr", wycieczka.nr
-    AddDataToBookmark "nazwa_wycieczki", wycieczka.nazwa_wycieczki
-    AddDataToBookmark "cena_bazowa", wycieczka.cena_bazowa
-    AddDataToBookmark "bilety_wstepu", wycieczka.bilety_wstepu
+    ' Wstaw dane do formantow w dokumencie Word
+    InsertTextToContentControl "nr_wycieczki", wycieczka.nr
+    InsertTextToContentControl "nazwa_wycieczki", wycieczka.nazwa_wycieczki
     
-    ' Wstaw date do zakladki
-    AddDate "data_dzis"
-    
+    'AddDataToBookmark "nr", wycieczka.nr
+    'AddDataToBookmark "nazwa_wycieczki", wycieczka.nazwa_wycieczki
+    'AddDataToBookmark "cena_bazowa", wycieczka.cena_bazowa
+    'AddDataToBookmark "bilety_wstepu", wycieczka.bilety_wstepu
+        
     ' Zamknij UserForma po wstawieniu numeru
     Unload Me
 End Sub
 
-Private Sub AddDataToBookmark(bookmarkName As String, bookmarkValue As Variant)
-    Set doc = ThisDocument ' Ustaw biezacy dokument Word
+'Private Sub AddDataToBookmark(bookmarkName As String, bookmarkValue As Variant)
+   ' Set doc = ThisDocument ' Ustaw biezacy dokument Word
     
     ' Sprawdz czy istnieje zakladka o podanej nazwie
-    If doc.Bookmarks.Exists(bookmarkName) Then
+'    If doc.Bookmarks.Exists(bookmarkName) Then
     
         ' Uzyskaj zakres zak³adki
-        Set bookmarkRange = doc.Bookmarks(bookmarkName).Range
+ '       Set bookmarkRange = doc.Bookmarks(bookmarkName).Range
         
         ' Wstaw podana wartosc do zakladki
-        If VarType(bookmarkValue) = vbInteger Then
-            bookmarkRange.text = CStr(bookmarkValue) ' Konwertuj Integer na String
-        Else
-            bookmarkRange.text = bookmarkValue
-        End If
+  '      If VarType(bookmarkValue) = vbInteger Then
+   '         bookmarkRange.text = CStr(bookmarkValue) ' Konwertuj Integer na String
+    '    Else
+     '       bookmarkRange.text = bookmarkValue
+        'End If
         
         ' Dodaj zakladke na nowo
-        doc.Bookmarks.Add bookmarkName, bookmarkRange
-    Else
-        MsgBox "Nie mozna znalezc zakladki """ & bookmarkName & """ w dokumencie.", vbExclamation, "Error"
-    End If
-End Sub
-
-Private Sub AddDate(bookmarkName As String)
-    Set doc = ThisDocument
-    
-    ' Sprawdz czy istnieje zakladka o podanej nazwie
-    If doc.Bookmarks.Exists(bookmarkName) Then
-    
-        ' Uzyskaj zakres zakladki
-        Set bookmarkRange = doc.Bookmarks(bookmarkName).Range
-        
-        ' Formatuj date na zadany format
-        bookmarkRange.text = Format(Date, "dd.mm.yyyy")
-                
-        ' Dodaj zakladke na nowo
-        doc.Bookmarks.Add bookmarkName, bookmarkRange
-    Else
-        MsgBox "Nie mozna znalezc zakladki """ & bookmarkName & """ w dokumencie.", vbExclamation, "Error"
-    End If
-End Sub
+        'doc.Bookmarks.Add bookmarkName, bookmarkRange
+    'Else
+     '   MsgBox "Nie mozna znalezc zakladki """ & bookmarkName & """ w dokumencie.", vbExclamation, "Error"
+    'End If
+'End Sub
