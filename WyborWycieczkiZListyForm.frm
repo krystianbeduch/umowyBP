@@ -13,12 +13,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Dim dictComboBoxItems As Scripting.Dictionary ' Globalny s³ownik
+Dim dictComboBoxItems As Scripting.Dictionary ' Globalny slownik
 
 Private Sub UserForm_Initialize()
     Set dictComboBoxItems = New Scripting.Dictionary
     
-    ' Inicjalizacja po³¹czenia z baz¹ danych
+    ' Inicjalizacja polaczenia z baza danych
     InitializeConnection
     
     ' Zapytanie SQL do pobrania danych
@@ -26,14 +26,14 @@ Private Sub UserForm_Initialize()
     strSQL = "SELECT nr, nazwa_wycieczki FROM wycieczki;"
     
     ' Wykonanie zapytania SQL
-    Dim rs As Object ' Zmienna dla zestawu wyników
+    Dim rs As Object ' Zmienna dla zestawu wynikow
     Set rs = conn.Execute(strSQL)
     
-    ' Wczytanie wyników do ComboBoxa i s³ownika
+    ' Wczytanie wynikow do ComboBoxa i slownika
     Dim itemIndex As Long
     itemIndex = 0
     Do While Not rs.EOF
-        ' Dodaj wycieczkê do ComboBoxa
+        ' Dodaj wycieczke do ComboBoxa
         Me.WycieczkiComboBox.AddItem rs.Fields("nr").value & " - " & rs.Fields("nazwa_wycieczki").value
         
         ' Mapowanie indeksu na nr
@@ -43,7 +43,7 @@ Private Sub UserForm_Initialize()
         rs.MoveNext
     Loop
     
-    ' Zamkniêcie zestawu wynikowego i po³¹czenia
+    ' Zamkniecie zestawu wynikowego i polaczenia
     rs.Close
     conn.Close
     Set rs = Nothing
@@ -58,9 +58,9 @@ Private Sub WybierzCommandButton_Click()
     ' Pobierz wybrany indeks elementu z ComboBoxa
     selectedItemIndex = Me.WycieczkiComboBox.ListIndex
     
-    ' SprawdŸ, czy wybrano element z ComboBoxa
+    ' Sprawdz, czy wybrano element z ComboBoxa
     If selectedItemIndex = -1 Then
-        MsgBox "Proszê wybraæ wycieczkê z listy.", vbExclamation, "B³¹d"
+        MsgBox "Wybierz wycieczke z listy.", vbExclamation, "Error"
         Exit Sub
     End If
     
@@ -68,18 +68,18 @@ Private Sub WybierzCommandButton_Click()
     If dictComboBoxItems.Exists(selectedItemIndex) Then
         selectedNr = dictComboBoxItems(selectedItemIndex)
     Else
-        MsgBox "B³¹d: nie znaleziono wybranego elementu w s³owniku.", vbExclamation, "B³¹d"
+        MsgBox "Nie znaleziono wybranego elementu w slowniku.", vbExclamation, "Error"
         Exit Sub
     End If
     
-    ' Inicjalizacja po³¹czenia z baz¹ danych
+    ' Inicjalizacja polaczenia z baza danych
     InitializeConnection
     
     ' Zapytanie SQL
     Dim strSQL As String
     strSQL = "SELECT nr, nazwa_wycieczki, cena_bazowa, bilety_wstepu FROM wycieczki WHERE nr = '" & selectedNr & "';"
 
-    ' Zmienna dla zestawu wyników
+    ' Zmienna dla zestawu wynikow
     Dim rs As Object
     Set rs = conn.Execute(strSQL)
 
@@ -97,19 +97,19 @@ Private Sub WybierzCommandButton_Click()
         Exit Sub
     End If
         
-    ' Zamkniêcie zestawu wynikowego i po³¹czenia
+    ' Zamkniecie zestawu wynikowego i polaczenia
     rs.Close
     conn.Close
     Set rs = Nothing
     Set conn = Nothing
     
-    ' Wstaw dane do zak³adek w dokumencie Word
+    ' Wstaw dane do zakladek w dokumencie Word
     AddDataToBookmark "nr", wycieczka.nr
     AddDataToBookmark "nazwa_wycieczki", wycieczka.nazwa_wycieczki
     AddDataToBookmark "cena_bazowa", wycieczka.cena_bazowa
     AddDataToBookmark "bilety_wstepu", wycieczka.bilety_wstepu
     
-    ' Wstaw date do zak³adki
+    ' Wstaw date do zakladki
     AddDate "data_dzis"
     
     ' Zamknij UserForma po wstawieniu numeru
@@ -117,44 +117,43 @@ Private Sub WybierzCommandButton_Click()
 End Sub
 
 Private Sub AddDataToBookmark(bookmarkName As String, bookmarkValue As Variant)
-    Set doc = ThisDocument ' Ustaw bie¿¹cy dokument Word
+    Set doc = ThisDocument ' Ustaw biezacy dokument Word
     
-    ' SprawdŸ czy istnieje zak³adka o podanej nazwie
+    ' Sprawdz czy istnieje zakladka o podanej nazwie
     If doc.Bookmarks.Exists(bookmarkName) Then
     
         ' Uzyskaj zakres zak³adki
-        'Dim bookmarkRange As Range
         Set bookmarkRange = doc.Bookmarks(bookmarkName).Range
         
-        ' Wstaw podana wartosc do zak³adki
+        ' Wstaw podana wartosc do zakladki
         If VarType(bookmarkValue) = vbInteger Then
-            bookmarkRange.Text = CStr(bookmarkValue) ' Konwertuj Integer na String
+            bookmarkRange.text = CStr(bookmarkValue) ' Konwertuj Integer na String
         Else
-            bookmarkRange.Text = bookmarkValue
+            bookmarkRange.text = bookmarkValue
         End If
         
-        ' Dodaj zak³adkê na nowo
+        ' Dodaj zakladke na nowo
         doc.Bookmarks.Add bookmarkName, bookmarkRange
     Else
-        MsgBox "Nie mo¿na znaleŸæ zak³adki """ & bookmarkName & """ w dokumencie.", vbExclamation, "B³¹d"
+        MsgBox "Nie mozna znalezc zakladki """ & bookmarkName & """ w dokumencie.", vbExclamation, "Error"
     End If
 End Sub
 
 Private Sub AddDate(bookmarkName As String)
     Set doc = ThisDocument
     
-    ' SprawdŸ czy istnieje zak³adka o podanej nazwie
+    ' Sprawdz czy istnieje zakladka o podanej nazwie
     If doc.Bookmarks.Exists(bookmarkName) Then
     
-        ' Uzyskaj zakres zak³adki
-        'Dim bookmarkRange As Range
+        ' Uzyskaj zakres zakladki
         Set bookmarkRange = doc.Bookmarks(bookmarkName).Range
         
-        bookmarkRange.Text = Format(Date, "dd.mm.yyyy")
+        ' Formatuj date na zadany format
+        bookmarkRange.text = Format(Date, "dd.mm.yyyy")
                 
-        ' Dodaj zak³adkê na nowo
+        ' Dodaj zakladke na nowo
         doc.Bookmarks.Add bookmarkName, bookmarkRange
     Else
-        MsgBox "Nie mo¿na znaleŸæ zak³adki """ & bookmarkName & """ w dokumencie.", vbExclamation, "B³¹d"
+        MsgBox "Nie mozna znalezc zakladki """ & bookmarkName & """ w dokumencie.", vbExclamation, "Error"
     End If
 End Sub

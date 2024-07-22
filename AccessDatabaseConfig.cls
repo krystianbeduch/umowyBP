@@ -10,7 +10,7 @@ Attribute VB_Exposed = False
 ' Deklaracja klasy AccessDatabaseConfig
 Private m_Path As String
 
-' W³aœciwosæ Path
+' Wlasciwosc Path
 Public Property Get Path() As String
     Path = m_Path
 End Property
@@ -19,7 +19,7 @@ Public Property Let Path(ByVal value As String)
     m_Path = value
 End Property
 
-' W³aœciwoœæ ConnectionString
+' Wlasciwosc ConnectionString
 Public Property Get ConnectionString() As String
     ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & m_Path & ";"
 End Property
