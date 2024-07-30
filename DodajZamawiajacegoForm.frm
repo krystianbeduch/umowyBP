@@ -13,51 +13,108 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Dim dictComboBoxItems As Scripting.Dictionary ' Globalny slownik
+Dim ignoreChangeEvent As Boolean ' Flaga do ignorowania zdarzen zmiany w ComboBoxie
 
 Private Sub UserForm_Initialize()
-    Set dictComboBoxItems = New Scripting.Dictionary
+    On Error GoTo ErrorHandler ' Ustawienie obslugi bledow
+    
+    ' Inicjalnie nie ignorujemy zdarzen
+    ignoreChangeEvent = False
 
     ' Inicjalizacja polaczenia z baza danych
     InitializeConnection
     
     ' Zapytanie SQL do pobrania danych
-    Dim strSQL As String
-    strSQL = "SELECT id, imie, nazwisko, nazwa_instytucji FROM klienci;"
+    Dim sqlQuery As String
+    sqlQuery = "SELECT id, nazwa_instytucji FROM klienci;"
+    
+    ' Zaladuj wszystkie dane na poczatku
+    LoadDataIntoComboBox ""
+    Exit Sub
+    
+ErrorHandler:
+    MsgBox "Wystapil blad: " & Err.Description, vbCritical, "Error"
+End Sub
+
+Private Sub LoadDataIntoComboBox(searchText As String)
+    On Error GoTo ErrorHandler ' Ustawienie obslugi bledow
+    
+    ' Blokowanie zdarzen zmian w ComboBoxie
+    ignoreChangeEvent = True
+    
+    ' Zapytanie SQL do pobrania danych
+    Dim sqlQuery As String
+    sqlQuery = "SELECT id, nazwa_instytucji FROM klienci;"
     
     ' Wykonanie zapytania SQL
     Dim rs As Object ' Zmienna dla zestawu wynikow
-    Set rs = conn.Execute(strSQL)
+    Set rs = conn.Execute(sqlQuery)
     
-    ' Wczytanie wynikow do ComboBoxa i slownika
-    Dim itemIndex As Long
-    itemIndex = 0
+    ' Przechowywanie zaznaczonego tekstu
+    Dim selectedText As String
+    selectedText = Trim(Me.cboClient.text)
+    
+    ' Czyszczenie ComboBoxa
+    Me.cboClient.Clear
+    
+    ' Wczytanie wynikow do ComboBoxa
     Do While Not rs.EOF
-        ' Dodaj zamawiajacych do ComboBoxa
-        Me.ZamawiajacyComboBox.AddItem rs.Fields("nazwa_instytucji").value & " - " & _
-                                        rs.Fields("imie").value & " " & rs.Fields("nazwisko").value
-        
-        ' Mapowanie indeksu na nr
-        dictComboBoxItems.Add itemIndex, rs.Fields("id").value
-        itemIndex = itemIndex + 1
-        
+        ' Filtruj wyniki na podstawie wyszukiwanego tekstu
+        If InStr(1, rs.Fields("nazwa_instytucji").value, searchText, vbTextCompare) > 0 Then
+            ' Dodaj zamawiajacego do ComboBoxa
+            Me.cboClient.AddItem rs.Fields("nazwa_instytucji").value
+        End If
         rs.MoveNext
     Loop
     
-    ' Zamkniecie zestawu wynikowego i polaczenia
-    rs.Close
-    conn.Close
-    Set rs = Nothing
-    Set conn = Nothing
+    ' Przywracanie zaznaczonego tekstu (jesli istnieje)
+    If selectedText <> "" Then
+        Dim i As Long
+        For i = 0 To Me.cboClient.ListCount - 1
+            If Me.cboClient.List(i) = selectedText Then
+                Me.cboClient.ListIndex = i
+                Exit For
+            End If
+        Next i
+    End If
     
+    ' Zamkniecie zestawu wynikowego
+    rs.Close
+    Set rs = Nothing
+    
+    ' Odblokowanie zdarzen zmian w ComboBoxie
+    ignoreChangeEvent = False
+    Exit Sub
+    
+ErrorHandler:
+    MsgBox "Wystapil blad podczas ladowania danych do ComboBoxa: " & Err.Description, vbCritical, "Error"
+    If Not rs Is Nothing Then
+        rs.Close
+        Set rs = Nothing
+    End If
+    ignoreChangeEvent = False
 End Sub
 
-Private Sub WybierzCommandButton_Click()
-    Dim selectedItemIndex As Long
-    Dim selectedNr As String
+Private Sub cboClient_Change()
+    ' Sprawdzenie czy zdarzenie ma byc ignorowane
+    If ignoreChangeEvent Then Exit Sub
+    
+    ' Pobranie tekstu wprowadzonego przez uzytkownika
+    Dim searchText As String
+    searchText = Trim(Me.cboClient.text)
+    
+    ' Filtrowanie tekstu
+    LoadDataIntoComboBox searchText
+End Sub
+
+
+Private Sub btnSelect_Click()
+    On Error GoTo ErrorHandler ' Ustawienie obslugi bledow
+    
+    Dim selectedItemIndex As Integer
     
     ' Pobierz wybrany indeks elementu z ComboBoxa
-    selectedItemIndex = Me.ZamawiajacyComboBox.ListIndex
+    selectedItemIndex = Me.cboClient.ListIndex
     
     ' Sprawdz, czy wybrano element z ComboBoxa
     If selectedItemIndex = -1 Then
@@ -65,37 +122,27 @@ Private Sub WybierzCommandButton_Click()
         Exit Sub
     End If
     
-    ' Pobierz wybrany nr ze s³ownika
-    If dictComboBoxItems.Exists(selectedItemIndex) Then
-        selectedNr = dictComboBoxItems(selectedItemIndex)
-    Else
-        MsgBox "Nie znaleziono wybranego elementu w slowniku.", vbExclamation, "Error"
-        Exit Sub
-    End If
-    
-    ' Inicjalizacja polaczenia z baza danych
-    InitializeConnection
-    
+    Dim selectedText As String
+    selectedText = Me.cboClient.text
+        
     ' Zapytanie SQL
-    Dim strSQL As String
-    strSQL = "SELECT id, imie, nazwisko, nazwa_instytucji, ulica, " & _
-             "numer, kod_pocztowy, miejscowosc FROM klienci WHERE id = " & selectedNr & ";"
+    Dim sqlQuery As String
+    sqlQuery = "SELECT id, nazwa_instytucji, ulica, numer, kod_pocztowy, " & _
+             "miejscowosc FROM klienci WHERE nazwa_instytucji = '" & selectedText & "';"
            
     ' Zmienna dla zestawu wynikow
     Dim rs As Object
-    Set rs = conn.Execute(strSQL)
+    Set rs = conn.Execute(sqlQuery)
 
-    ' Dodanie obiektu klasy Wycieczka
+    ' Dodanie obiektu klasy ClientClass
     If Not rs.EOF Then
-        Set zamawiajacy = New KlasaZamawiajacy
-        zamawiajacy.id = rs.Fields("id").value
-        zamawiajacy.imie = rs.Fields("imie").value
-        zamawiajacy.nazwisko = rs.Fields("nazwisko").value
-        zamawiajacy.nazwa_instytucji = rs.Fields("nazwa_instytucji").value
-        zamawiajacy.ulica = rs.Fields("ulica").value
-        zamawiajacy.numer = rs.Fields("numer").value
-        zamawiajacy.kod_pocztowy = rs.Fields("kod_pocztowy").value
-        zamawiajacy.miejscowosc = rs.Fields("miejscowosc").value
+        Set client = New ClientClass
+        client.id = rs.Fields("id").value
+        client.institutionName = rs.Fields("nazwa_instytucji").value
+        client.street = rs.Fields("ulica").value
+        client.number = rs.Fields("numer").value
+        client.postalCode = rs.Fields("kod_pocztowy").value
+        client.city = rs.Fields("miejscowosc").value
     Else
         MsgBox "Nie znaleziono zamawiajacego o podanym id.", vbExclamation, "Error"
         rs.Close
@@ -111,4 +158,8 @@ Private Sub WybierzCommandButton_Click()
     
     ' Zamknij UserForma
     Unload Me
+    Exit Sub
+    
+ErrorHandler:
+    MsgBox "Wystapil blad: " & Err.Description, vbCritical, "Error"
 End Sub

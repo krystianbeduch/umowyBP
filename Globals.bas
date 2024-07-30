@@ -4,8 +4,7 @@ Public conn As Object ' Globalne polaczenie z baza danych
 Public config As AccessDatabaseConfig ' Globalna konfiguracja bazy danych Access
 Public Const DATABASE_PATH As String = "E:\Dokumenty z C\US\BP Wesley\umowy-bp.accdb"
 Public wycieczka As KlasaWycieczka ' Globalny obiekt konkretnej wycieczki
-Public zamawiajacy As KlasaZamawiajacy ' Globalny obiekt konkretnego zamawiajacego
-Public bookmarkRange As Range ' Globalna zmienna do lokalizacji zakladek
+Public client As ClientClass ' Globalny obiekt klienta
 
 Public Sub InitializeConnection()
     ' Inicjalizacja polaczenia z baza danych
@@ -21,4 +20,10 @@ Public Sub InitializeConnection()
     conn.Open strConnection
 End Sub
 
-
+Public Function Ceiling(ByVal value As Currency) As Currency
+    ' Funkcja zakraglacaja do gory
+    Ceiling = Int(value)
+    If value > Int(value) Then
+        Ceiling = Ceiling + 1
+    End If
+End Function

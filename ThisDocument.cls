@@ -9,21 +9,11 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 
 Sub Wybierz_Wycieczke()
-    'Dim form As WyborWycieczkiZListyForm
-    'Set form = New WyborWycieczkiZListyForm
-    'form.Show ' Wyswietlenie UserForma
-    'Unload form ' Zwolnienie zasobow po zakonczeniu
     WyborWycieczkiZListyForm.Show
 End Sub
 
 Sub Wprowadz_Ilosc_Osob()
-    'Dim form As WprowadzLiczbeOsobForm
-    'Set form = New WprowadzLiczbeOsobForm
-    'form.Show ' Wyswietlenie UserForma
-    'Unload form ' Zwolnienie zasobow po zakonczeniu
-    
     WprowadzLiczbeOsobForm.Show
-    UpdateTotalPrice
 End Sub
 
 Sub Przelicz_Kwoty()
@@ -31,28 +21,19 @@ Sub Przelicz_Kwoty()
 End Sub
 
 Sub Wprowadz_zamawiajacego()
-    'Dim form As DodajZamawiajacegoForm
-    'Set form = New DodajZamawiajacegoForm
-    'form.Show ' Wyswietlenie UserForma
-    'Unload form ' Zwolnienie zasobow po zakonczeniu
-    
     DodajZamawiajacegoForm.Show
     
-    ' Wstaw dane do formantu "zamawiajacy"
+    ' Wstaw dane do formantu "client"
     Dim resultText As String
-    resultText = zamawiajacy.nazwa_instytucji & ", " & zamawiajacy.ulica & " " & zamawiajacy.numer & _
-             ", " & zamawiajacy.kod_pocztowy & " " & zamawiajacy.miejscowosc
+    resultText = client.institutionName & ", " & client.street & " " & client.number & _
+             ", " & client.postalCode & " " & client.city
     Call InsertTextToContentControl("zamawiajacy", resultText)
-    
-    ' Wstaw dane do formantu "zamawiajacy_osoba"
-    resultText = zamawiajacy.imie & " " & zamawiajacy.nazwisko
-    Call InsertTextToContentControl("zamawiajacy_osoba", resultText)
     
     ' Wstaw dane do formantu "miejsce_odjazdu" i "miejsce_powrotu"
     AddPickupAndDropOffLocations
-    resultText = zamawiajacy.miejsce_odbioru.miejscowosc & ", " & _
-                 zamawiajacy.miejsce_odbioru.ulica & " " & zamawiajacy.miejsce_odbioru.numer & _
-                 ", " & zamawiajacy.miejsce_odbioru.kod_pocztowy
+    resultText = client.pickupLocation.postalCode & " " & client.pickupLocation.city & ", " & _
+                 client.pickupLocation.pickupLocation & " " & client.pickupLocation.street & " " & _
+                 client.pickupLocation.number
     Call InsertTextToContentControl("miejsce_odjazdu", resultText)
     Call InsertTextToContentControl("miejsce_powrotu", resultText)
 End Sub
@@ -62,19 +43,25 @@ Sub Wstaw_ilosc_osob()
     Dim fld As Field
     Dim rng As Range
     
-    ' Pobranie bie¿¹cej pozycji kursora
+    ' Pobranie biezacej pozycji kursora
     Set rng = Selection.Range
     
-    ' Wstawienie pola DocProperty w bie¿¹cej pozycji kursora
+    ' Wstawienie pola DocProperty w biezacej pozycji kursora
     Set fld = ActiveDocument.Fields.Add(rng, wdFieldDocProperty, "ile_osob", False)
     
     ' Aktualizacja pola
     fld.Update
 End Sub
 
+Sub Dodaj_usluge()
+    DodajUslugeForm.Show
+End Sub
+
+Sub Dodaj_dodatkowo_platne()
+    DodajDodatkowoPlatneForm.Show
+End Sub
+
 Private Sub Document_ContentControlOnExit(ByVal ContentControl As ContentControl, Cancel As Boolean)
-    ' Sprawdz, czy zmieniony formant to "termin_od" lub "termin_do"
-    Dim cc As ContentControl
     If ContentControl.Tag = "termin_od" Then
         UpdateTransportDate ContentControl, "termin_od_transport"
     ElseIf ContentControl.Tag = "termin_do" Then
@@ -91,3 +78,5 @@ Private Sub Document_Open()
     ' Aktualizacja formantu datowego "data_dzis" na dzisiejsza date
     Call UpdateTodayDate
 End Sub
+
+
