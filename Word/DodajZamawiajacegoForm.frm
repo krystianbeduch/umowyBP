@@ -14,9 +14,13 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Dim ignoreChangeEvent As Boolean ' Flaga do ignorowania zdarzen zmiany w ComboBoxie
+Private dataEntered As Boolean
 
 Private Sub UserForm_Initialize()
     On Error GoTo ErrorHandler ' Ustawienie obslugi bledow
+    
+    ' Flaga prawidlowo zatwierdzonych danych
+    dataEntered = False
     
     ' Inicjalnie nie ignorujemy zdarzen
     ignoreChangeEvent = False
@@ -156,6 +160,9 @@ Private Sub btnSelect_Click()
     Set rs = Nothing
     Set conn = Nothing
     
+    ' Ustaw flage prawidlowo wprowadzonych danych
+    dataEntered = True
+    
     ' Zamknij UserForma
     Unload Me
     Exit Sub
@@ -163,3 +170,7 @@ Private Sub btnSelect_Click()
 ErrorHandler:
     MsgBox "Wystapil blad: " & Err.Description, vbCritical, "Error"
 End Sub
+
+Public Function IsDataEntered() As Boolean
+    IsDataEntered = dataEntered
+End Function

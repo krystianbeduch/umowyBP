@@ -2,9 +2,15 @@ Attribute VB_Name = "Globals"
 Public doc As Document ' Globalny obiekt dokumentu
 Public conn As Object ' Globalne polaczenie z baza danych
 Public config As AccessDatabaseConfig ' Globalna konfiguracja bazy danych Access
-Public Const DATABASE_PATH As String = "E:\Dokumenty z C\US\BP Wesley\umowy-bp.accdb"
+Public BASE_DIRECTORY As String ' Lokalizacja pliku
+Public DATABASE_PATH As String ' Sciezka do pliku bazy danych
 Public wycieczka As KlasaWycieczka ' Globalny obiekt konkretnej wycieczki
 Public client As ClientClass ' Globalny obiekt klienta
+
+Public Sub InitializePath()
+    BASE_DIRECTORY = ActiveDocument.Path
+    DATABASE_PATH = BASE_DIRECTORY & "\umowy-bp.accdb"
+End Sub
 
 Public Sub InitializeConnection()
     ' Inicjalizacja polaczenia z baza danych
@@ -27,3 +33,4 @@ Public Function Ceiling(ByVal value As Currency) As Currency
         Ceiling = Ceiling + 1
     End If
 End Function
+

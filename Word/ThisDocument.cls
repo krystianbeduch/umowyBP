@@ -8,9 +8,9 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 
-Sub Wybierz_Wycieczke()
-    WyborWycieczkiZListyForm.Show
-End Sub
+'Sub Wybierz_Wycieczke()
+    'WyborWycieczkiZListyForm.Show
+'End Sub
 
 Sub Wprowadz_Ilosc_Osob()
     WprowadzLiczbeOsobForm.Show
@@ -21,7 +21,14 @@ Sub Przelicz_Kwoty()
 End Sub
 
 Sub Wprowadz_zamawiajacego()
+    On Error GoTo ErrorHandler ' Ustawienie obslugi bledow
+    
     DodajZamawiajacegoForm.Show
+    
+    ' Sprawdz czy dane zostaly prawidlowo wprowadzone (czy zostala wybrana opcja)
+    If Not DodajZamawiajacegoForm.IsDataEntered Then
+        Exit Sub
+    End If
     
     ' Wstaw dane do formantu "client"
     Dim resultText As String
@@ -36,6 +43,10 @@ Sub Wprowadz_zamawiajacego()
                  client.pickupLocation.number
     Call InsertTextToContentControl("miejsce_odjazdu", resultText)
     Call InsertTextToContentControl("miejsce_powrotu", resultText)
+    Exit Sub
+    
+ErrorHandler:
+    MsgBox "Nie wybrano prawidlowo zamawiajacego: " & Err.Description, vbExclamation, "Error"
 End Sub
 
 Sub Wstaw_ilosc_osob()
@@ -73,10 +84,10 @@ Private Sub Document_ContentControlOnExit(ByVal ContentControl As ContentControl
     End If
 End Sub
 
-
 Private Sub Document_Open()
     ' Aktualizacja formantu datowego "data_dzis" na dzisiejsza date
     Call UpdateTodayDate
+    Call InitializePath
 End Sub
 
 
