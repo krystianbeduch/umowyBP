@@ -7,11 +7,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
-
-'Sub Wybierz_Wycieczke()
-    'WyborWycieczkiZListyForm.Show
-'End Sub
-
 Sub Wprowadz_Ilosc_Osob()
     WprowadzLiczbeOsobForm.Show
 End Sub
@@ -26,7 +21,7 @@ Sub Wprowadz_zamawiajacego()
     DodajZamawiajacegoForm.Show
     
     ' Sprawdz czy dane zostaly prawidlowo wprowadzone (czy zostala wybrana opcja)
-    If Not DodajZamawiajacegoForm.IsDataEntered Then
+    If Not Wprowadz_zamawiajacego_IsDataEntered Then
         Exit Sub
     End If
     
@@ -87,7 +82,4 @@ End Sub
 Private Sub Document_Open()
     ' Aktualizacja formantu datowego "data_dzis" na dzisiejsza date
     Call UpdateTodayDate
-    Call InitializePath
 End Sub
-
-
