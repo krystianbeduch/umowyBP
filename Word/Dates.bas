@@ -1,13 +1,25 @@
 Attribute VB_Name = "Dates"
-Sub UpdateTransportDate(ByVal ContentControl As ContentControl, ByVal transportTag As String)
-    ' Znajdz formant "termin_od_transport" i skopiuj date
+Sub UpdateTransportDate(ByVal ContentControl As ContentControl, ByVal transportTitle As String)
     Dim cc As ContentControl
-    For Each cc In ThisDocument.ContentControls
-        If cc.Tag = transportTag Then
-            cc.Range.text = ContentControl.Range.text
-            Exit For
+    
+    If isMultiDay Then
+        ' Znajdz formanty "termin_wyjazdu" i "termin_przyjazdu" i skopiuj daty
+        For Each cc In ActiveDocument.ContentControls
+            If cc.Title = transportTitle Then
+                cc.Range.text = ContentControl.Range.text
+                Exit For
+            End If
+        Next cc
+    Else
+        ' Znajdz formant 'termin wjazdu' i skopiuj do 2 formantow transportu
+        If ContentControl.Title = "termin_wyjazdu" Then
+            For Each cc In ActiveDocument.ContentControls
+                If cc.Tag = "termin_transport" Then
+                    cc.Range.text = ContentControl.Range.text
+                End If
+            Next cc
         End If
-    Next cc
+    End If
 End Sub
 
 Sub UpdateTodayDate()

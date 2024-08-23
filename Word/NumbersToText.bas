@@ -66,3 +66,4 @@ Function GetThousandsName(ByVal number As Long, ByVal thousands As Variant) As S
             GetThousandsName = thousands(3)
     End Select
 End Function
+

@@ -64,7 +64,7 @@ End Sub
 
 Private Sub UserForm_Initialize()
     Dim ileOsob As Integer
-    ileOsob = GetDocProperty("ile_osob")
+    ileOsob = GetDocProperty(DOC_PROP_NUMBER_OF_PEOPLE)
     ' Ustawienie wartosci w txtQuantity i zablokowanie pola
     txtQuantity.text = ileOsob
     txtQuantity.Enabled = False
@@ -72,5 +72,7 @@ Private Sub UserForm_Initialize()
     ' Ustaw fokus na odpowiednio text boxa
     txtUnitPrice.SetFocus
 End Sub
+
+
 
 

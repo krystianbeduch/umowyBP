@@ -7,8 +7,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
-Sub Wprowadz_Ilosc_Osob()
-    WprowadzLiczbeOsobForm.Show
+Sub Ustaw_liczbe_osob()
+    UstawLiczbeOsobForm.Show
 End Sub
 
 Sub Przelicz_Kwoty()
@@ -67,13 +67,20 @@ Sub Dodaj_dodatkowo_platne()
     DodajDodatkowoPlatneForm.Show
 End Sub
 
+Sub Okresl_Rodzaj_Wycieczki()
+    OkreslRodzajWycieczkiForm.Show
+End Sub
+
 Private Sub Document_ContentControlOnExit(ByVal ContentControl As ContentControl, Cancel As Boolean)
-    If ContentControl.Tag = "termin_od" Then
+    If ContentControl.Title = "termin_wyjazdu" Then
         UpdateTransportDate ContentControl, "termin_od_transport"
-    ElseIf ContentControl.Tag = "termin_do" Then
+        
+    ElseIf ContentControl.Title = "termin_przyjazdu" Then
         UpdateTransportDate ContentControl, "termin_do_transport"
+        
     ElseIf Right(ContentControl.Title, 17) = "_cena_jednostkowa" Then
         UpdateTotalPriceInline ContentControl
+        
     ElseIf Right(ContentControl.Title, 6) = "_ilosc" Then
         UpdateTotalPriceInlineForQuantity ContentControl
     End If
@@ -83,3 +90,5 @@ Private Sub Document_Open()
     ' Aktualizacja formantu datowego "data_dzis" na dzisiejsza date
     Call UpdateTodayDate
 End Sub
+
+

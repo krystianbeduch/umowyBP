@@ -35,12 +35,13 @@ Sub AddNewService( _
         ' Wstawienie wlasciwosci dokumentu (DocProperty) z iloscia
         Dim fld As Field
         On Error Resume Next ' Wlaczenie obslugi bledow
-        Set fld = ActiveDocument.Fields.Add(rng, wdFieldDocProperty, "ile_osob", False)
+        Set fld = ActiveDocument.Fields.Add(rng, wdFieldDocProperty, DOC_PROP_NUMBER_OF_PEOPLE, False)
         On Error GoTo ErrorHandler
         
         If fld Is Nothing Then
             MsgBox "Nie udalo sie dodac pola DocProperty. " & _
-            "Upewnij sie, ¿e wlasciwosc 'ile_osob' istnieje w dokumencie.", vbExclamation, "Error"
+            "Upewnij sie, ¿e wlasciwosc '" & DOC_PROP_NUMBER_OF_PEOPLE & "' istnieje w dokumencie", _
+            vbExclamation, "Error"
             Exit Sub
         End If
         fld.Update
@@ -146,16 +147,18 @@ Sub UpdateTotalAmount()
         End If
     Next cc
     
+    ' Aktualizacja formantu 'razem_kwota_brutto'
+    Call InsertTextToContentControl("razem_kwota_brutto", FormatCurrency(totalAmount))
     ' Proba znalezienia formantu z tytulem "razem_kwota_brutto"
-    Dim totalCC As ContentControl
-    On Error Resume Next
-    Set totalCC = doc.SelectContentControlsByTitle("razem_kwota_brutto")(1)
-    On Error GoTo ErrorHandler
+    'Dim totalCC As ContentControl
+    'On Error Resume Next
+    'Set totalCC = doc.SelectContentControlsByTitle("razem_kwota_brutto")(1)
+    'On Error GoTo ErrorHandler
     
     ' Jesli formant zostal znaleziony zaktualizuj kwote calkowita
-    If Not totalCC Is Nothing Then
-        totalCC.Range.text = FormatCurrency(totalAmount)
-    End If
+    'If Not totalCC Is Nothing Then
+     '   totalCC.Range.text = FormatCurrency(totalAmount)
+    'End If
     
     ' Proba znalezienia formantu z tytulem "razem_kwota_brutto_slownie"
     On Error Resume Next
@@ -202,7 +205,7 @@ Sub UpdateTotalPriceInline(ByVal ContentControl As ContentControl)
         isDocPropertyPresent = False
 
         For Each fld In ActiveDocument.Fields
-            If fld.Type = wdFieldDocProperty And fld.Code.text Like "*ile_osob*" Then
+            If fld.Type = wdFieldDocProperty And fld.Code.text Like "*" & DOC_PROP_NUMBER_OF_PEOPLE & "*" Then
                 If fld.result.Start >= ContentControl.Range.End And fld.result.End <= totalCC.Range.Start Then
                     isDocPropertyPresent = True
                     Exit For
@@ -213,7 +216,7 @@ Sub UpdateTotalPriceInline(ByVal ContentControl As ContentControl)
         If isDocPropertyPresent Then ' zawiera docProperty 'ile_osob'
             ' Obliczenie nowej calkowitej ceny
             Dim totalPrice As Currency
-            itemQuantity = GetDocProperty("ile_osob")
+            itemQuantity = GetDocProperty(DOC_PROP_NUMBER_OF_PEOPLE)
             totalPrice = unitPrice * itemQuantity
 
             ' Aktualizacja formantu z cena calkowita
@@ -326,12 +329,13 @@ Sub AddExtraPayableDuringTheTrip( _
     ' Wstawienie wlasciwosci dokumentu (DocProperty) z iloscia
     Dim fld As Field
     On Error Resume Next ' Wlaczenie obslugi bledow
-    Set fld = ActiveDocument.Fields.Add(rng, wdFieldDocProperty, "ile_osob", False)
+    Set fld = ActiveDocument.Fields.Add(rng, wdFieldDocProperty, DOC_PROP_NUMBER_OF_PEOPLE, False)
     On Error GoTo ErrorHandler
         
     If fld Is Nothing Then
         MsgBox "Nie udalo sie dodac pola DocProperty." & _
-        "Upewnij sie, ¿e wlasciwosc 'ile_osob' istnieje w dokumencie.", vbExclamation, "Error"
+        "Upewnij sie, ¿e wlasciwosc '" & DOC_PROP_NUMBER_OF_PEOPLE & "' istnieje w dokumencie", _
+        vbExclamation, "Error"
         Exit Sub
     End If
     fld.Update
@@ -406,6 +410,8 @@ Sub UpdateCurrencyToText( _
 ErrorHandler:
     MsgBox "Wystapil blad: " & Err.Description, vbCritical, "Error"
 End Sub
+
+
 
 
 

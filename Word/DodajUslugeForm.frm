@@ -18,7 +18,7 @@ Private Sub UserForm_Initialize()
     ' Ustawienie checkboxa jako zaznaczonego
     chkIsPersons.value = True
     Dim numberOfPersons As Integer
-    numberOfPersons = GetDocProperty("ile_osob")
+    numberOfPersons = GetDocProperty(DOC_PROP_NUMBER_OF_PEOPLE)
     ' Ustawienie wartoœci w txtQuantity i zablokowanie pola
     txtQuantity.text = numberOfPersons
     txtQuantity.Enabled = False
@@ -133,7 +133,7 @@ Private Sub chkIsPersons_Click()
     If chkIsPersons.value = True Then
         ' Pobierz wartosc wlasciwosci dokumentu
         Dim numberOfPersons As String
-        numberOfPersons = GetDocProperty("ile_osob")
+        numberOfPersons = GetDocProperty(DOC_PROP_NUMBER_OF_PEOPLE)
         
         ' Ustaw wartosc w txtQuantity i zablokuj pole
         txtQuantity.text = numberOfPersons
@@ -160,3 +160,5 @@ End Sub
 Private Sub rbtnCZK_Click()
     rbtnEUR_Click
 End Sub
+
+

@@ -1,14 +1,14 @@
 VERSION 5.00
-Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} WprowadzLiczbeOsobForm 
-   Caption         =   "WprowadŸ liczbê osób"
+Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UstawLiczbeOsobForm 
+   Caption         =   "Ustaw liczbê osób"
    ClientHeight    =   1935
    ClientLeft      =   120
    ClientTop       =   465
    ClientWidth     =   5310
-   OleObjectBlob   =   "WprowadzLiczbeOsobForm.frx":0000
+   OleObjectBlob   =   "UstawLiczbeOsobForm.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
-Attribute VB_Name = "WprowadzLiczbeOsobForm"
+Attribute VB_Name = "UstawLiczbeOsobForm"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
@@ -43,11 +43,17 @@ Private Sub cboConfirm_Click()
     End If
     
     ' Zaktualizuj docProperty 'ile_osob'
-    UpdateCustomProperty ActiveDocument, "ile_osob", intNumberOfPeople
+    UpdateCustomProperty ActiveDocument, DOC_PROP_NUMBER_OF_PEOPLE, intNumberOfPeople
     ActiveDocument.Fields.Update
         
     ' Zaktualizuj ceny po zmianie liczby osob
     UpdateTotalPricesAfterChangingNumberOfPeople
+    
+    ' Ustaw minimalna liczbe osob
+    SetMinNumberOfPeople
+    
+    ' Ustaw opiekunow gratis
+    SetCareeFree
     
     ' Zamknij UserForma po wstawieniu numeru
     Unload Me
@@ -87,7 +93,7 @@ Private Sub UpdateTotalPricesAfterChangingNumberOfPeople()
             Debug.Print "End Position: " & cc.Range.End
         
             itemPrice = CCur(cc.Range.text)
-            itemQuantity = GetDocProperty("ile_osob")
+            itemQuantity = GetDocProperty(DOC_PROP_NUMBER_OF_PEOPLE)
             
             ' Pozyskanie bazowego tytulu formantu
             Dim baseTitle As String
@@ -196,6 +202,3 @@ Private Function ExtractCurrencySymbol(text As String) As String
     ExtractCurrencySymbol = ""
 End Function
 
-Private Sub UserForm_Click()
-
-End Sub
