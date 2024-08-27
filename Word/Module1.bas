@@ -1,18 +1,16 @@
 Attribute VB_Name = "Module1"
 Sub AddPickupAndDropOffLocations()
     ' Inicjalizacja polaczenia z baza danych
-    InitializeConnection
+    If Not InitializeConnection_PostgreSQL() Then
+        MsgBox "Nie udalo sie nawiazac polaczenia z baza danych PostgreSQL.", vbCritical, "Error"
+        Exit Sub
+    End If
     
     ' Zapytanie SQL do pobrania danych
-    Dim sqlQuery As String
-    sqlQuery = "SELECT miejsce_odbioru, miejscowosc, ulica, " & _
-                "numer, miejscowosc_miejsca_odbioru, ulica_miejsca_odbioru, " & _
-                "numer_miejsca_odbioru, kod_pocztowy_miejsca_odbioru " & _
-                "FROM klienci WHERE id = " & client.id & ";"
+    Dim sqlProvider As New SQLQueryProvider
 
-    ' Wykonanie zapytania SQL
     Dim rs As Object ' Zmienna dla zestawu wynikow
-    Set rs = conn.Execute(sqlQuery)
+    Set rs = conn.Execute(sqlProvider.SelectClientWithPickupLocation(client.id))
     
     ' Sprawdz wynik i utworz tekst do wstawienia do formantow
     If Not rs.EOF Then

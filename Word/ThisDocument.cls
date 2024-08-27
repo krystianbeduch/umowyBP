@@ -18,7 +18,7 @@ End Sub
 Sub Wprowadz_zamawiajacego()
     On Error GoTo ErrorHandler ' Ustawienie obslugi bledow
     
-    DodajZamawiajacegoForm.Show
+    WybierzZamawiajacegoForm.Show
     
     ' Sprawdz czy dane zostaly prawidlowo wprowadzone (czy zostala wybrana opcja)
     If Not Wprowadz_zamawiajacego_IsDataEntered Then

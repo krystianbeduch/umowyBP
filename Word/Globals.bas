@@ -1,8 +1,8 @@
 Attribute VB_Name = "Globals"
 Public doc As Document ' Globalny obiekt dokumentu
 Public conn As Object ' Globalne polaczenie z baza danych
-Public config As AccessDatabaseConfig ' Globalna konfiguracja bazy danych Access
-Public Const DATABASE_PATH As String = "E:\Dokumenty z C\US\BP Wesley\umowy-bp.accdb" ' Sciezka do pliku bazy danych
+'Public config As AccessDatabaseConfig ' Globalna konfiguracja bazy danych Access
+'Public Const DATABASE_PATH As String = "E:\Dokumenty z C\US\BP Wesley\umowy-bp.accdb" ' Sciezka do pliku bazy danych
 Public Const DOC_PROP_NUMBER_OF_PEOPLE As String = "ile_osob"
 Public wycieczka As KlasaWycieczka ' Globalny obiekt konkretnej wycieczki
 Public client As ClientClass ' Globalny obiekt klienta
@@ -12,9 +12,9 @@ Public typeOfTour As Boolean ' Typ wycieczki: true - szkolna, false - dorosli (d
 Public locationOfTour As Boolean ' Lokalizacja wycieczki: true - Polska, false - Europa
 Public isMultiDay As Boolean ' true - wycieczka wielodniowa, false - wycieczka 1-dniowa
 
-Public Sub InitializeConnection()
+Public Sub InitializeConnection_Access()
     ' Inicjalizacja polaczenia z baza danych
-    Set config = New AccessDatabaseConfig
+    Dim config As New AccessDatabaseConfig
     config.Path = DATABASE_PATH
     
     ' Uzyskaj ciag polaczenia do bazy danych Access
@@ -25,6 +25,33 @@ Public Sub InitializeConnection()
     Set conn = New ADODB.Connection
     conn.Open strConnection
 End Sub
+
+Public Function InitializeConnection_PostgreSQL() As Boolean
+    ' Inicjalizacja polaczenia z baza danych PostgreSQL
+    Dim config As New PostgreSQLDatabaseConfig
+    config.Server = "localhost"
+    config.Port = 5432
+    config.Database = "postgres"
+    config.User = "postgres"
+    config.Password = "root"
+    
+    Dim strConnection As String
+    strConnection = config.ConnectionString
+
+    ' Otwarcie polaczenia
+    On Error GoTo ErrorHandler
+    Set conn = CreateObject("ADODB.Connection")
+    conn.Open strConnection
+    
+  ' MsgBox "Polaczenie z baza danych PostgreSQL zostalo nawiazane"
+    InitializeConnection_PostgreSQL = True
+    Exit Function
+    
+ErrorHandler:
+    MsgBox "Blad bazy: " & Err.Description, vbCritical, "Error"
+    If conn.State = adStateOpen Then conn.Close
+    InitializeConnection_PostgreSQL = False
+End Function
 
 Public Function Ceiling(ByVal value As Currency) As Currency
     ' Funkcja zakraglacaja do gory

@@ -139,3 +139,6 @@ End Sub
      '   MsgBox "Nie mozna znalezc zakladki """ & bookmarkName & """ w dokumencie.", vbExclamation, "Error"
     'End If
 'End Sub
+Private Sub WycieczkiComboBox_Change()
+
+End Sub

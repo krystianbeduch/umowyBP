@@ -202,3 +202,6 @@ Private Function ExtractCurrencySymbol(text As String) As String
     ExtractCurrencySymbol = ""
 End Function
 
+Private Sub UserForm_Click()
+
+End Sub
