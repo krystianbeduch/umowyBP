@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edycja klientów</title>
+    <!-- <link rel="stylesheet" type="text/css" href="/css/style.css"> -->
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    <script src="../static/js/scripts.js"></script>
+</head>
+<body>
+    <header>
+        <span class="title">Edycja Klienta</span>
+    </header>
+
+    <main id="edit-main">
+        <!-- Sekcja skrócona tabela klientów -->
+        <section class="client-overview">
+            <h2>Lista klientów</h2>
+            <table class="client-overview-table">
+                <thead>
+                    <tr>
+                        <th>Numer klienta</th>
+                        <th>Nazwa instytucji</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <!-- Testowe -->
+                        <td>1</td>
+                        <td>Zakład Opieki Zdrowotnej Szpital im. Jana Pawła II we Włoszczowie</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Zespół Szkolno-Przedszkolny nr 5</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Sekcja formularz edycji klienta -->
+        <section id="edit-client">
+            <h2>Edytuj klienta</h2>
+            <form id="edit-client-form">              
+                <label for="edit-client-id">Numer Klienta:</label>
+                <input type="text" id="edit-client-id">
+                    
+                <label for="edit-name">Nazwa Instytucji:</label>
+                <input type="text" id="edit-name" name="edit-name" required>
+
+                <fieldset class="form-group address-grooup">
+                    <legend>Adres</legend>    
+                    <label for="edit-street">Ulica:</label>
+                    <input type="text" id="edit-street" name="edit-street" required>
+                    
+                    <label for="edit-number">Numer:</label>
+                    <input type="text" id="edit-number" name="edit-number" required>
+                    
+                    <label for="edit-post-code">Kod Pocztowy:</label>
+                    <input type="text" id="edit-post-code" name="edit-post-code" required>
+                    
+                    <label for="edit-city">Miejscowość:</label>
+                    <input type="text" id="edit-city" name="edit-city" required>
+                </fieldset>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="sameAsAddress" name="sameAsAddress">
+                    <label for="sameAsAddress">Miejsce odbioru takie samo jak adres</label>
+                </div>
+                <fieldset class="form-group pickup-location-group">
+                    <legend>Miejsce Odbioru</legend>
+                    
+                    <label for="edit-pickup_location">Miejsce:</label>
+                    <input type="text" id="edit-pickup_location" name="edit-pickup_location">
+                    
+                    <label for="edit-pickup_street">Ulica:</label>
+                    <input type="text" id="edit-pickup_street" name="edit-pickup_street">
+                    
+                    <label for="edit-pickup_number">Numer:</label>
+                    <input type="text" id="edit-pickup_number" name="edit-pickup_number">
+                    
+                    <label for="edit-pickup_post-code">Kod Pocztowy:</label>
+                    <input type="text" id="edit-pickup_post-code" name="edit-pickup_post-code">
+                    
+                    <label for="edit-pickup_city">Miejscowość:</label>
+                    <input type="text" id="edit-pickup_city" name="edit-pickup_city">
+                </fieldset>
+
+                <button type="submit">Zapisz Zmiany</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Krystian Będuch</p>
+    </footer>
+</body>
+</html>
