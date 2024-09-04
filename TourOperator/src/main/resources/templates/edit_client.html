@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edycja klientów</title>
-    <!-- <link rel="stylesheet" type="text/css" href="/css/style.css"> -->
-    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
-    <script src="../static/js/scripts.js"></script>
+      <link rel="stylesheet" type="text/css" href="/css/style.css">
+<!--   <link rel="stylesheet" type="text/css" href="../static/css/style.css">-->
+<!--        <script src="../static/js/scripts.js"></script>-->
+    <script src="/js/scripts.js"></script>
 </head>
 <body>
     <header>
@@ -16,6 +17,7 @@
     <main id="edit-main">
         <!-- Sekcja skrócona tabela klientów -->
         <section class="client-overview">
+            <a href="/" class="back-button">Powrót</a>
             <h2>Lista klientów</h2>
             <table class="client-overview-table">
                 <thead>
@@ -25,14 +27,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <!-- Testowe -->
-                        <td>1</td>
-                        <td>Zakład Opieki Zdrowotnej Szpital im. Jana Pawła II we Włoszczowie</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Zespół Szkolno-Przedszkolny nr 5</td>
+                    <tr th:each="client : ${clients}">
+                        <td th:text="${client.clientNumber}"></td>
+                        <td th:text="${client.name}"></td>
                     </tr>
                 </tbody>
             </table>
@@ -41,7 +38,7 @@
         <!-- Sekcja formularz edycji klienta -->
         <section id="edit-client">
             <h2>Edytuj klienta</h2>
-            <form id="edit-client-form">              
+            <form id="edit-client-form" class="client-form">              
                 <label for="edit-client-id">Numer Klienta:</label>
                 <input type="text" id="edit-client-id">
                     
@@ -91,8 +88,6 @@
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2024 Krystian Będuch</p>
-    </footer>
+    <footer th:replace="fragments/footer :: CopyrightFooter"></footer>
 </body>
 </html>

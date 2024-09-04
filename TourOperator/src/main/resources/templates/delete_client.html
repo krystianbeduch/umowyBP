@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuń Klienta</title>
+      <link rel="stylesheet" type="text/css" href="/css/style.css">
+<!--   <link rel="stylesheet" type="text/css" href="../static/css/style.css">-->
+    <!--    <script src="../static/js/scripts.js"></script>-->
+    <script src="/js/scripts.js"></script>
+</head>
+<body>
+    <header>
+        <span class="title">Usuń Klienta</span>
+    </header>
+
+    <main id="edit-main">
+        <!-- Sekcja skrócona tabela klientów -->
+        <section class="client-overview">
+            <a href="/" class="back-button">Powrót</a>
+            <h2>Lista klientów</h2>
+            <table class="client-overview-table">
+                <thead>
+                    <tr>
+                        <th>Numer klienta</th>
+                        <th>Nazwa instytucji</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="client : ${clients}">
+                        <td th:text="${client.clientNumber}"></td>
+                        <td th:text="${client.name}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Sekcja formularz edycji klienta -->
+        <section id="delete-client">
+            <h2>Usuń klienta</h2>
+            <form id="delete-client-form" class="client-form">              
+                <label for="delete-client-id">Numer Klienta:</label>
+                <input type="number" min="1" step="1" id="delete-client-id">
+                    
+                <label for="delete-name">Nazwa Instytucji:</label>
+                <input type="text" id="delete-name" name="delete-name" required>
+
+
+                <button type="submit">Usuń klienta</button>
+            </form>
+        </section>
+    </main>
+
+    <footer th:replace="fragments/footer :: CopyrightFooter"></footer>
+</body>
+</html>
