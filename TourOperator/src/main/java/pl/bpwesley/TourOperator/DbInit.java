@@ -24,7 +24,7 @@ public class DbInit implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         clientRepository.saveAll(List.of(
-                new Client("Zakład Opieki Zdrowotnej Szpital im. Jana Pawła II we Włoszczowie", null, "ul. Żeromskiego", "28", "29-100", "Włoszczowa",
+                new Client("Zakład Opieki Zdrowotnej Szpital im. Jana Pawła II we Włoszczowie", "", "ul. Żeromskiego", "28", "29-100", "Włoszczowa",
                         new PickupLocation()),
                 new Client("Zespół Szkolno-Przedszkolny nr 5", null, "ul. Św.Barbary", "32", "42-200", "Częstochowa",
                         new PickupLocation()),

@@ -38,19 +38,26 @@ public class HomeController {
         this.clientRepository = clientRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping("/") // strona dostepna pod URL /
     public String home(Model model) {
+        // Zaladuj liste klientow
         List<Client> clientList = clientRepository.findAll();
         model.addAttribute("clients", clientList);
+
+        // Zwroc home.html
         return "home";
     }
 
-    @GetMapping("/add-client")
-    public String addClientForm(Model model) {
-        List<Client> clientList = clientRepository.findAll();
-        model.addAttribute("clients", clientList);
-        return "add_client";
-    }
+//    @GetMapping("/add-client") // strona dostepna pod URL /add-client
+//    public String addClientForm(Model model) {
+//         Zaladuj liste klientow
+//        List<Client> clientList = clientRepository.findAll();
+//        model.addAttribute("clients", clientList);
+
+        // Zwroc add_client.html
+//        return "add_client";
+//        return "redirect:/form/add";
+//    }
 
     @GetMapping("/edit-client")
     public String editClientForm(Model model) {
@@ -59,10 +66,10 @@ public class HomeController {
         return "edit_client";
     }
 
-    @GetMapping("/delete-client")
-    public String deleteClientForm(Model model) {
-        List<Client> clientList = clientRepository.findAll();
-        model.addAttribute("clients", clientList);
-        return "delete_client";
-    }
+//    @GetMapping("/delete-client")
+//    public String deleteClientForm(Model model) {
+//        List<Client> clientList = clientRepository.findAll();
+//        model.addAttribute("clients", clientList);
+//        return "delete_client";
+//    }
 }

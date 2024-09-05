@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.bpwesley.TourOperator.model.Client;
 
 @Repository
-public interface ClientRepository extends JpaRepository<Client, Integer> {
+public interface ClientRepository extends JpaRepository<Client, Long> {
 }

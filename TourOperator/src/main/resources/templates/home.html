@@ -35,7 +35,8 @@
                 <tbody>
                     <tr th:each="client, stat: ${clients}">
                         <td th:text="${client.clientNumber}"></td>
-                        <td th:text="${client.name}"></td>
+                        <td th:if="${client.alias != null}" th:text="${client.name} + ' (' + ${client.alias} + ')'"></td>
+                        <td th:unless="${client.alias != null}" th:text="${client.name}"></td>
                         <!-- Adres -->
                         <td th:text="${client.street}"></td>
                         <td th:text="${client.number}"></td>
@@ -158,17 +159,14 @@
 
         <nav id="home-navigation">
             <div class="buttons-container">
-                <a href="/add-client" class="button">Dodaj nowego klienta</a>
+                <a href="/form/add" class="button">Dodaj nowego klienta</a>
                 <a href="/edit-client" class="button">Edytuj klienta</a>
-                <a href="/delete-client" class="button">Usuń klienta</a>
+                <a href="/form/delete" class="button">Usuń klienta</a>
             </div>
         </nav>
         
     </main>
 
-    <!-- <footer th:replace="fragments/footer :: CopyrightFooter"></footer> -->
-    <footer th:fragment="CopyrightFooter">
-        <p>&copy; 2024 Krystian Będuch</p>
-    </footer>
+    <footer th:replace="~{fragments/footer :: CopyrightFooter}"></footer>
 </body>
 </html>

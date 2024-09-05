@@ -101,7 +101,7 @@ nav#home-navigation a.button:hover {
     cursor: pointer;
 }
 
-section.client-overview a.back-button {
+section#client-overview a.back-button {
     /* position: absolute; */
     /* top: 90px; */
     /* left: 20px; */
@@ -116,7 +116,7 @@ section.client-overview a.back-button {
     margin-bottom: 20px;
 }
 
-section.client-overview a.back-button:hover {
+section#client-overview a.back-button:hover {
     background-color: #0056b3;
 }
 
@@ -132,7 +132,7 @@ footer {
 
 /* STRONA - edycja klienta */
 /* Skrocona tabela */
-section.client-overview {
+section#client-overview {
     width: 45%;
     background-color: #fff;
     padding: 20px;
@@ -140,13 +140,13 @@ section.client-overview {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-table.client-overview-table {
+table#client-overview-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.85em;
 }
 
-.client-overview-table th, .client-overview-table td {
+#client-overview-table th, #client-overview-table td {
     padding: 6px 10px;
     border: 1px solid #ddd;
     text-align: left;
@@ -169,14 +169,14 @@ section#delete-client h2 {
     margin-bottom: 20px;
 }
 
-form.client-form label {
+form#client-form label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
 }
 
-form.client-form input[type="text"],
-form.client-form input[type="number"] {
+form#client-form input[type="text"],
+form#client-form input[type="number"] {
     width: calc(100% - 22px);
     padding: 8px;
     margin-bottom: 15px;
@@ -184,7 +184,7 @@ form.client-form input[type="number"] {
     border: 1px solid #ddd;
 }
 
-form.client-form button {
+form#client-form button {
     width: 100%;
     padding: 10px;
     background-color: #007bff;
@@ -195,7 +195,7 @@ form.client-form button {
     cursor: pointer;
 }
 
-form.client-form button:hover {
+form#client-form button:hover {
     background-color: #0056b3;
 }
 
@@ -226,4 +226,45 @@ legend {
 
 .checkbox-group input[type="checkbox"] {
     margin-right: 15px;
+}
+
+
+/* Ukrywanie domyślnych radiobuttonów */
+input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Stylizacja etykiet radiobuttonów */
+label.radio-label {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1em;
+    padding: 10px;
+}
+
+/* Okrągłe przyciski radiobuttona */
+label.radio-label::before {
+    content: "";
+    width: 16px;
+    height: 16px;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    margin-right: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    transition: background-color 0.5s, border-color 0.5s;
+}
+
+/* Wypełniony zaznaczony radiobutton */
+input[type="radio"]:checked + label.radio-label::before {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+/* Zmieniony kolor tekstu dla zaznaczonego radiobuttona */
+input[type="radio"]:checked + label.radio-label {
+    color: #007bff;
 }

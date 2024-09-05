@@ -16,10 +16,10 @@
 
     <main id="add-main">
         <!-- Sekcja skrócona tabela klientów -->
-        <section class="client-overview">
+        <section id="client-overview">
             <a href="/" class="back-button">Powrót</a>
             <h2>Lista klientów</h2>
-            <table class="client-overview-table">
+            <table id="client-overview-table">
                 <thead>
                     <tr>
                         <th>Numer klienta</th>
@@ -29,7 +29,8 @@
                 <tbody>
                     <tr th:each="client : ${clients}">
                         <td th:text="${client.clientNumber}"></td>
-                        <td th:text="${client.name}"></td>
+                        <td th:if="${client.alias != null}" th:text="${client.name} + ' (' + ${client.alias} + ')'"></td>
+                        <td th:unless="${client.alias != null}" th:text="${client.name}"></td>
                     </tr>
                 </tbody>
             </table>
@@ -38,10 +39,9 @@
         <!-- Sekcja formularz edycji klienta -->
         <section id="edit-client">
             <h2>Dodaj nowego klienta</h2>
-            <form id="add-client-form" class="client-form" th:action="@{/form}" method="post" >
-<!--                <label for="add-client-id">Numer Klienta:</label>-->
-<!--                <input type="text" id="add-client-id">-->
-                    
+            <!-- th:action - przekieruj formularz do FormControllera na mapping /add-->
+            <form id="client-form" th:action="@{/form/add}" method="post">
+
                 <label for="add-name">Nazwa Instytucji:</label>
                 <input type="text" id="add-name" name="name" required>
 
@@ -64,8 +64,8 @@
                 </fieldset>
 
                 <div class="checkbox-group">
-                    <input type="checkbox" id="sameAsAddress" name="sameAsAddress">
-                    <label for="sameAsAddress">Miejsce odbioru takie samo jak adres</label>
+                    <input type="checkbox" id="pickup-location-same-as-address" name="sameAsAddress" checked>
+                    <label for="pickup-location-same-as-address">Miejsce odbioru takie samo jak adres</label>
                 </div>
                 <fieldset class="form-group pickup-location-group">
                     <legend>Miejsce Odbioru</legend>
@@ -90,6 +90,6 @@
             </form>
         </section>
     </main>
-    <footer th:replace="fragments/footer :: CopyrightFooter"></footer>
+    <footer th:replace="~{fragments/footer :: CopyrightFooter}"></footer>
 </body>
 </html>

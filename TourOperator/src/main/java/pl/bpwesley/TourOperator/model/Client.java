@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -15,8 +14,8 @@ import lombok.Setter;
 public class Client {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer clientNumber;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long clientNumber;
     private String name;
     private String alias;
     private String street;
