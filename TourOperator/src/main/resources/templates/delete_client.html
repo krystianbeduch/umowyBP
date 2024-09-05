@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Usuń Klienta</title>
-      <!-- <link rel="stylesheet" type="text/css" href="/css/style.css"> -->
-  <link rel="stylesheet" type="text/css" href="../static/css/style.css">
-       <script src="../static/js/scripts.js"></script>
-    <!-- <script src="/js/scripts.js"></script> -->
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+<!-- <link rel="stylesheet" type="text/css" href="../static/css/style.css">-->
+<!--      <script src="../static/js/delete-client.js"></script>-->
+      <script src="/js/delete-client.js"></script>
 </head>
 <body>
     <header>
@@ -40,8 +40,8 @@
         <section id="delete-client">
             <h2>Usuń klienta</h2>
 
-            <input type="radio" name="delete-method" id="delete-by-number" value="number" checked>
-            <label for="delete-by-number" class="radio-label">Usuń według numeru klienta</label>
+            <input type="radio" name="delete-method" id="delete-by-id" value="number" checked>
+            <label for="delete-by-id" class="radio-label">Usuń według numeru klienta</label>
             <input type="radio" name="delete-method" id="delete-by-name" value="name">
             <label for="delete-by-name" class="radio-label">Usuń według nazwy</label>
 <!--            <form id="client-form" th:action="@{'/form/delete/' + ${selectedClientNumber}}" method="post">-->
