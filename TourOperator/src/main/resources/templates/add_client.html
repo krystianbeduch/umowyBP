@@ -29,8 +29,8 @@
                 <tbody>
                     <tr th:each="client : ${clients}">
                         <td th:text="${client.clientNumber}"></td>
-                        <td th:if="${client.alias != null}" th:text="${client.name} + ' (' + ${client.alias} + ')'"></td>
-                        <td th:unless="${client.alias != null}" th:text="${client.name}"></td>
+                        <td th:if="${client.alias != null and !client.alias.equals('')}" th:text="${client.name} + ' (' + ${client.alias} + ')'"></td>
+                        <td th:unless="${client.alias != null and !client.alias.equals('')}" th:text="${client.name}"></td>
                     </tr>
                 </tbody>
             </table>

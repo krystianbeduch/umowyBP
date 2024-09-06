@@ -35,8 +35,8 @@
                 <tbody>
                     <tr th:each="client, stat: ${clients}">
                         <td th:text="${client.clientNumber}"></td>
-                        <td th:if="${client.alias != null}" th:text="${client.name} + ' (' + ${client.alias} + ')'"></td>
-                        <td th:unless="${client.alias != null}" th:text="${client.name}"></td>
+                        <td th:if="${client.alias == null or client.alias.equals('')}" th:text="${client.name}"></td>
+                        <td th:unless="${client.alias == null or client.alias.equals('')}" th:text="${client.name} + ' (' + ${client.alias} + ')'"></td>
                         <!-- Adres -->
                         <td th:text="${client.street}"></td>
                         <td th:text="${client.number}"></td>

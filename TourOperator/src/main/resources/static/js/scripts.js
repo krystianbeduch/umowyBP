@@ -25,8 +25,9 @@ document.addEventListener("DOMContentLoaded", function() {
       const inputs = form.querySelectorAll('input[type="text"], input[type="number"]');
       inputs.forEach(input => {
          if (input.value.trim() === "") {
-           // input.value = null;
+            input.value = null;
             console.log(`Pole '${input.name}' jest puste.`);
+            console.log(`Value '${input.name.value}'`)
          }
       });
       console.log('Form submitted');
