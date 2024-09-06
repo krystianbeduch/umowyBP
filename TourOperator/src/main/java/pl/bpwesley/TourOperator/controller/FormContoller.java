@@ -30,7 +30,17 @@ public class FormContoller {
     }
 
     @PostMapping("/add") // obsluga wyslania formularza add-client
-    private String addClient(@ModelAttribute("client") Client client ) {
+    private String addClient(@ModelAttribute("client") Client client, Model model) {
+        // Sprwadzenie czy klient o takiej nazwie juz istnieje
+        Client existingClient = clientRepository.findByNameIgnoreCaseAndAccent(client.getName()).orElse(null);
+
+        if (existingClient != null) {
+            // Klient istnieje, wyswietl komunikat o bledzie
+            model.addAttribute("errorMessage", "Klient o podanej nazwie już istnieje");
+            model.addAttribute("clients", getClientList());
+            return "add_client";
+        }
+
         // INSERT INTO
         clientRepository.save(client);
         return "redirect:/"; // przekierowanie na strone glowna po dodaniu klienta

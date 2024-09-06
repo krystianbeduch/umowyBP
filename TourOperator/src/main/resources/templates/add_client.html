@@ -88,6 +88,9 @@
 
                 <button type="submit">Dodaj Nowego Klienta</button>
             </form>
+            <div th:if="${errorMessage != null}">
+                <p th:text="${errorMessage}" style="color: red;"></p>
+            </div>
         </section>
     </main>
     <footer th:replace="~{fragments/footer :: CopyrightFooter}"></footer>

@@ -1,6 +1,5 @@
 package pl.bpwesley.TourOperator.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.bpwesley.TourOperator.entity.Client;
 import pl.bpwesley.TourOperator.repository.ClientRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController // klasa jest kontrolerem REST, ktory obsluguje zapytania HTTP i zwraca dane
