@@ -1,7 +1,6 @@
-package pl.bpwesley.TourOperator.model;
+package pl.bpwesley.TourOperator.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

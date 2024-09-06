@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import pl.bpwesley.TourOperator.model.Client;
-import pl.bpwesley.TourOperator.model.PickupLocation;
+import pl.bpwesley.TourOperator.entity.Client;
+import pl.bpwesley.TourOperator.entity.PickupLocation;
 import pl.bpwesley.TourOperator.repository.ClientRepository;
 
 import java.util.List;

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pl.bpwesley.TourOperator.model.Client;
+import pl.bpwesley.TourOperator.entity.Client;
 import pl.bpwesley.TourOperator.repository.ClientRepository;
 
 import java.util.List;
@@ -41,11 +41,15 @@ public class FormContoller {
         // Zaladuj liste klientow
         model.addAttribute("clients", getClientList());
 
+        Long selectedClientNumber = null;
+        model.addAttribute("selectedClientNumber", selectedClientNumber);
+
         // Zwroc delete_client.html
         return "delete_client";
     }
 
     @DeleteMapping("/delete/{clientNumber}") // obsluga wyslania formularza delete-client
+//    @PostMapping("/delete/{clientNumber}") // obsluga wyslania formularza delete-client
     private String deleteClient(@PathVariable Long clientNumber) {
         if (clientRepository.existsById(clientNumber)) {
             // DELETE

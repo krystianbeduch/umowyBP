@@ -28,9 +28,13 @@ document.addEventListener("DOMContentLoaded", function() {
     clientIdInput.addEventListener("input", function() {
         if (radioById.checked && clientIdInput.value) {
         fetch(`/api/client/${clientIdInput.value}`)
-            .then(response => response.json())
+            .then(response => {
+                if(response.ok) {
+                    return response.text().then(text => text ? JSON.parse(text): {})
+                }
+            })
             .then(client => {
-                if (client) {
+                if (client && Object.keys(client).length !== 0) {
                     clientNameInput.value = client.name;
                 }
                 else {
@@ -57,6 +61,21 @@ document.addEventListener("DOMContentLoaded", function() {
                 })
                 .catch(error => console.error('Error:', error));
         }
+    });
+
+    const form = document.getElementById("client-form");
+    const clientNumberInput = document.getElementById("delete-client-id");
+
+    form.addEventListener("submit", function(event) {
+       if (clientNumberInput.value) {
+           form.action= `/form/delete/${clientNumberInput.value}`
+           console.log("Usunieto klienta o numerze: ", clientNumberInput.value);
+           alert("sas");
+       }
+       else {
+           event.preventDefault();
+           alert("Wymagnay nuymer");
+       }
     });
 
 });

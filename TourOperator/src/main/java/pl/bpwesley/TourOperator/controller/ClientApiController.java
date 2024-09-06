@@ -1,12 +1,14 @@
 package pl.bpwesley.TourOperator.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import pl.bpwesley.TourOperator.model.Client;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import pl.bpwesley.TourOperator.entity.Client;
 import pl.bpwesley.TourOperator.repository.ClientRepository;
+
+import java.util.List;
 
 @RestController // klasa jest kontrolerem REST, ktory obsluguje zapytania HTTP i zwraca dane
 @RequestMapping("/api/client") // bazowy URL dla wszystkich metod w tym kontrolerze
@@ -18,16 +20,57 @@ public class ClientApiController {
         this.clientRepository = clientRepository;
     }
 
+    // Metoda sprawdzajaca czy request pochodzi z przegladarki
+    private boolean isBrowser(HttpServletRequest request) {
+        String userAgent = request.getHeader("User-Agent");
+        return userAgent != null && userAgent.contains("Mozilla");
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<Client>> getAllClients(HttpServletRequest request) {
+        if (isBrowser(request)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+        return ResponseEntity.ok(clientRepository.findAll());
+    }
     @GetMapping("/{clientNumber}") // metoda odpowiada na zapytania GET na podany mapping
-    public Client getClientByNumber(@PathVariable("clientNumber") Long clientNumber) {
-    //@PathVariable - {clientNumber} z URL jest przekazywana do metody jako argument
+    public ResponseEntity<Client> getClientByNumber(@PathVariable("clientNumber") Long clientNumber,
+                                                    HttpServletRequest request) {
+//    @PathVariable - {clientNumber} z URL jest przekazywana do metody jako argument
+        if (isBrowser(request)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
         return clientRepository.findByClientNumber(clientNumber)
-                .orElse(null); // jesli nie znajdziesz klienta - 404
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(null));
     }
 
     @GetMapping("/name/{name}")
-    public Client getClientByName(@PathVariable("name") String name) {
+    public ResponseEntity<Client> getClientByName(@PathVariable("name") String name,
+                                                  HttpServletRequest request) {
+        if (isBrowser(request)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
         return clientRepository.findByNameIgnoreCaseAndAccent(name)
-                .orElse(null); // jesli nie znajdziesz klienta - 404
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(null));
+    }
+    @DeleteMapping("/{clientNumber}")
+    public ResponseEntity<Void> deleteClient(@PathVariable("clientNumber") Long clientNumber,
+                                             HttpServletRequest request) {
+        if (isBrowser(request)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        else {
+            if (clientRepository.existsById(clientNumber)) {
+                clientRepository.deleteById(clientNumber);
+                return ResponseEntity.noContent().build();
+            }
+            else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        }
     }
 }

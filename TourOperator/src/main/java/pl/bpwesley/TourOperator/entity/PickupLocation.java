@@ -1,4 +1,4 @@
-package pl.bpwesley.TourOperator.model;
+package pl.bpwesley.TourOperator.entity;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
