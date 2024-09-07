@@ -37,9 +37,10 @@ public class ClientApiController {
     public ResponseEntity<Client> getClientByNumber(@PathVariable("clientNumber") Long clientNumber,
                                                     HttpServletRequest request) {
 //    @PathVariable - {clientNumber} z URL jest przekazywana do metody jako argument
-        if (isBrowser(request)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
+// Blokada spowodowala problem z auto uzupelnianiem formularza do usuwania
+//        if (isBrowser(request)) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+//        }
         return clientRepository.findByClientNumber(clientNumber)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -49,9 +50,9 @@ public class ClientApiController {
     @GetMapping("/name/{name}")
     public ResponseEntity<Client> getClientByName(@PathVariable("name") String name,
                                                   HttpServletRequest request) {
-        if (isBrowser(request)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        }
+//        if (isBrowser(request)) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+//        }
         return clientRepository.findByNameIgnoreCaseAndAccent(name)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -72,5 +73,12 @@ public class ClientApiController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         }
+    }
+
+    @GetMapping("/max-client-number")
+    public ResponseEntity<Long> getMaxClientNumber() {
+        Long maxClientNumber = clientRepository.findMaxClientNumber()
+                .orElse(0L);
+        return ResponseEntity.ok(maxClientNumber);
     }
 }

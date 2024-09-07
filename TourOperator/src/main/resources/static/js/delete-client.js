@@ -1,20 +1,20 @@
 document.addEventListener("DOMContentLoaded", function() {
     const radioById = document.getElementById("delete-by-id");
     const radioByName = document.getElementById("delete-by-name");
-    const clientIdInput = document.getElementById("delete-client-id");
+    const clientNumberInput = document.getElementById("delete-client-id");
     const clientNameInput = document.getElementById("delete-name")
 
     // Funkcja blokujaca/odblokowujaca odpowiendie pola
     function toggleDeleteInputs() {
         if (radioById.checked) {
-            clientIdInput.disabled = false;
+            clientNumberInput.disabled = false;
             clientNameInput.disabled = true;
             clientNameInput.value = "";
         }
         else if (radioByName.checked) {
-            clientIdInput.disabled = true;
+            clientNumberInput.disabled = true;
             clientNameInput.disabled = false;
-            clientIdInput.value = "";
+            clientNumberInput.value = "";
         }
 
     }
@@ -25,9 +25,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     
     // Funkcja do automatycznego uzupelniania nazwy na podstawie numeru
-    clientIdInput.addEventListener("input", function() {
-        if (radioById.checked && clientIdInput.value) {
-        fetch(`/api/client/${clientIdInput.value}`)
+    clientNumberInput.addEventListener("input", function() {
+        if (radioById.checked && clientNumberInput.value) {
+        fetch(`/api/client/${clientNumberInput.value}`)
             .then(response => {
                 if(response.ok) {
                     return response.text().then(text => text ? JSON.parse(text): {})
@@ -53,10 +53,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(response => response.json())
                 .then(client => {
                     if (client) {
-                        clientIdInput.value = client.clientNumber;
+                        clientNumberInput.value = client.clientNumber;
                     }
                     else {
-                        clientIdInput.value = "";
+                        clientNumberInput.value = "";
                     }
                 })
                 .catch(error => console.error('Error:', error));
@@ -64,18 +64,36 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     const form = document.getElementById("client-form");
-    const clientNumberInput = document.getElementById("delete-client-id");
 
+    // przekierowanie formularza
     form.addEventListener("submit", function(event) {
        if (clientNumberInput.value) {
            form.action= `/form/delete/${clientNumberInput.value}`
-           console.log("Usunieto klienta o numerze: ", clientNumberInput.value);
-           alert("sas");
        }
        else {
            event.preventDefault();
-           alert("Wymagnay nuymer");
+           alert("Nie podano numeru");
        }
     });
+
+    // Wyslij zapytanie API aby pobrac maksymalny numer klienta w bazie
+    fetch('/api/client/max-client-number')
+        .then(response => response.json())
+        .then(maxClientNumber => {
+            if (maxClientNumber > 0) {
+                // ustaw maksymalna wartosc pola
+                clientNumberInput.setAttribute('max', maxClientNumber);
+            }
+            else {
+                // jesli brak klientow w bazie, wylacz pole
+                clientNumberInput.setAttribute('disabled', true);
+                alert("Brak klientów w bazie")
+            }
+        })
+        .catch(error => console.error('Błąd podczas pobierania maksymalnego numeru klienta'));
+
+
+
+
 
 });

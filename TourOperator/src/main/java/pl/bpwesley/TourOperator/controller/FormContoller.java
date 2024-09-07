@@ -60,12 +60,18 @@ public class FormContoller {
 
     @DeleteMapping("/delete/{clientNumber}") // obsluga wyslania formularza delete-client
 //    @PostMapping("/delete/{clientNumber}") // obsluga wyslania formularza delete-client
-    private String deleteClient(@PathVariable Long clientNumber) {
+    private String deleteClient(@PathVariable Long clientNumber, Model model) {
         if (clientRepository.existsById(clientNumber)) {
             // DELETE
             clientRepository.deleteById(clientNumber);
+            return "redirect:/"; // przekierowanie na strone glowna po usunieciu klienta
         }
-        return "redirect:/"; // przekierowanie na strone glowna po usunieciu klienta
+        else {
+            model.addAttribute("errorMessage", "Klient o numerze " + clientNumber + " nie istnieje");
+            model.addAttribute("clients", getClientList());
+            return "delete_client";
+        }
+
     }
 
     private List<Client> getClientList() {

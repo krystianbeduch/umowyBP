@@ -6,8 +6,8 @@
     <title>Dodaj Nowego Klienta</title>
        <link rel="stylesheet" type="text/css" href="/css/style.css">
 <!--  <link rel="stylesheet" type="text/css" href="../static/css/style.css">-->
-   <!-- <script src="../static/js/scripts.js"></script> -->
-    <script src="/js/scripts.js"></script>
+   <!-- <script src="../static/js/add-client.js"></script> -->
+    <script src="/js/add-client.js"></script>
 </head>
 <body>
     <header>
@@ -36,8 +36,8 @@
             </table>
         </section>
 
-        <!-- Sekcja formularz edycji klienta -->
-        <section id="edit-client">
+        <!-- Sekcja formularz dodawania klienta -->
+        <section id="add-client">
             <h2>Dodaj nowego klienta</h2>
             <!-- th:action - przekieruj formularz do FormControllera na mapping /add-->
             <form id="client-form" th:action="@{/form/add}" method="post">
@@ -55,9 +55,11 @@
                     
                     <label for="add-number">Numer:</label>
                     <input type="text" id="add-number" name="number" required>
+                    <span class="error-message" id="error-add-number"></span>
                     
                     <label for="add-post-code">Kod Pocztowy:</label>
                     <input type="text" id="add-post-code" name="postCode" required>
+                    <span class="error-message" id="error-add-post-code"></span>
                     
                     <label for="add-city">Miejscowość:</label>
                     <input type="text" id="add-city" name="city" required>
@@ -78,16 +80,19 @@
                     
                     <label for="add-pickup_number">Numer:</label>
                     <input type="text" id="add-pickup_number" name="pickupLocation.pickupNumber">
-                    
+                    <span class="error-message" id="error-add-pickup_number"></span>
+
                     <label for="add-pickup_post-code">Kod Pocztowy:</label>
                     <input type="text" id="add-pickup_post-code" name="pickupLocation.pickupPostCode">
-                    
+                    <span class="error-message" id="error-pickup_post-code"></span>
+
                     <label for="add-pickup_city">Miejscowość:</label>
                     <input type="text" id="add-pickup_city" name="pickupLocation.pickupCity">
                 </fieldset>
 
                 <button type="submit">Dodaj Nowego Klienta</button>
             </form>
+
             <div th:if="${errorMessage != null}">
                 <p th:text="${errorMessage}" style="color: red;"></p>
             </div>

@@ -17,4 +17,7 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     @Query("SELECT c FROM Client c WHERE unaccent(LOWER(c.name)) = unaccent(LOWER(:name))")
     Optional<Client> findByNameIgnoreCaseAndAccent(@Param("name") String name);
     // JPA automatycznie wygeneruje implementacje na podstawie definicji
+
+    @Query("SELECT COALESCE(MAX(c.clientNumber), 0) FROM Client c")
+    Optional<Long> findMaxClientNumber();
 }
