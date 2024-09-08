@@ -57,8 +57,8 @@
                 <button type="submit">Usuń klienta</button>
             </form>
 
-            <div th:if="${errorMessage != null}">
-                <p th:text="${errorMessage}" style="color: red;"></p>
+            <div>
+                <p th:text="${errorMessage}" style="color: red;" id="error-message"></p>
             </div>
         </section>
     </main>
