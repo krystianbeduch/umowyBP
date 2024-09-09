@@ -74,7 +74,16 @@ public class FormContoller {
 
     }
 
+    @GetMapping("/edit")
+    public String showEditClientForm(Model model) {
+        // Zaladuj liste klientow
+        model.addAttribute("clients", getClientList());
+
+        // Zwroc edit_client.html
+        return "edit_client";
+    }
+
     private List<Client> getClientList() {
-        return clientRepository.findAll();
+        return clientRepository.findAllByOrderByClientNumberAsc();
     }
 }

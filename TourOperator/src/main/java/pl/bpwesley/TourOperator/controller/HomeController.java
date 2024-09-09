@@ -41,7 +41,7 @@ public class HomeController {
     @GetMapping("/") // strona dostepna pod URL /
     public String home(Model model) {
         // Zaladuj liste klientow
-        List<Client> clientList = clientRepository.findAll();
+        List<Client> clientList = clientRepository.findAllByOrderByClientNumberAsc();
         model.addAttribute("clients", clientList);
 
         // Zwroc home.html
@@ -59,12 +59,12 @@ public class HomeController {
 //        return "redirect:/form/add";
 //    }
 
-    @GetMapping("/edit-client")
-    public String editClientForm(Model model) {
-        List<Client> clientList = clientRepository.findAll();
-        model.addAttribute("clients", clientList);
-        return "edit_client";
-    }
+//    @GetMapping("/edit-client")
+//    public String editClientForm(Model model) {
+//        List<Client> clientList = clientRepository.findAll();
+//        model.addAttribute("clients", clientList);
+//        return "edit_client";
+//    }
 
 //    @GetMapping("/delete-client")
 //    public String deleteClientForm(Model model) {

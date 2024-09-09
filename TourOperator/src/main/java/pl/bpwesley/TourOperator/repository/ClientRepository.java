@@ -6,10 +6,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.bpwesley.TourOperator.entity.Client;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
+
+    List<Client> findAllByOrderByClientNumberAsc();
+
     // metoda zwracana Optional<Client> - zwrocony moze zostac klient lub empty jesli klient nie zostanie znaleziony
     Optional<Client> findByClientNumber(Long clientNumber);
 

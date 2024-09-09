@@ -6,8 +6,8 @@
     <title>Edycja klientów</title>
       <link rel="stylesheet" type="text/css" href="/css/style.css">
 <!--   <link rel="stylesheet" type="text/css" href="../static/css/style.css">-->
-<!--        <script src="../static/js/add-client.js"></script>-->
-    <script src="/js/add-client.js"></script>
+<!--        <script src="../static/js/edit-client.js"></script>-->
+    <script src="/js/edit-client.js"></script>
 </head>
 <body>
     <header>
@@ -27,7 +27,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="client : ${clients}">
+                    <tr th:each="client : ${clients}"
+                        th:data-client-number="${client.clientNumber}">
                         <td th:text="${client.clientNumber}"></td>
                         <td th:if="${client.alias != null and !client.alias.equals('')}" th:text="${client.name} + ' (' + ${client.alias} + ')'"></td>
                         <td th:unless="${client.alias != null and !client.alias.equals('')}" th:text="${client.name}"></td>
@@ -41,24 +42,26 @@
             <h2>Edytuj klienta</h2>
             <form id="client-form">
                 <label for="edit-client-id">Numer Klienta:</label>
-                <input type="text" id="edit-client-id">
+                <input type="text" id="edit-client-id" name="clientNumber" disabled>
                     
                 <label for="edit-name">Nazwa Instytucji:</label>
-                <input type="text" id="edit-name" name="edit-name" required>
+                <input type="text" id="edit-name" name="name" required>
 
-                <fieldset class="form-group address-grooup">
+                <fieldset class="form-group address-group">
                     <legend>Adres</legend>    
                     <label for="edit-street">Ulica:</label>
-                    <input type="text" id="edit-street" name="edit-street" required>
+                    <input type="text" id="edit-street" name="street" required>
                     
                     <label for="edit-number">Numer:</label>
-                    <input type="text" id="edit-number" name="edit-number" required>
+                    <input type="text" id="edit-number" name="number" required>
+                    <span class="error-message" id="error-edit-number"></span>
                     
                     <label for="edit-post-code">Kod Pocztowy:</label>
-                    <input type="text" id="edit-post-code" name="edit-post-code" required>
+                    <input type="text" id="edit-post-code" name="postCode" required>
+                    <span class="error-message" id="error-edit-post-code"></span>
                     
                     <label for="edit-city">Miejscowość:</label>
-                    <input type="text" id="edit-city" name="edit-city" required>
+                    <input type="text" id="edit-city" name="city" required>
                 </fieldset>
 
                 <div class="checkbox-group">
@@ -69,19 +72,21 @@
                     <legend>Miejsce Odbioru</legend>
                     
                     <label for="edit-pickup-location">Miejsce:</label>
-                    <input type="text" id="edit-pickup-location" name="edit-pickup-location">
+                    <input type="text" id="edit-pickup-location" name="pickupLocation.pickupLocation">
                     
                     <label for="edit-pickup-street">Ulica:</label>
-                    <input type="text" id="edit-pickup-street" name="edit-pickup-street">
+                    <input type="text" id="edit-pickup-street" name="pickupLocation.pickupStreet">
                     
                     <label for="edit-pickup-number">Numer:</label>
-                    <input type="text" id="edit-pickup-number" name="edit-pickup-number">
+                    <input type="text" id="edit-pickup-number" name="pickupLocation.pickupNumber">
+                    <span class="error-message" id="error-edit-pickup-number"></span>
                     
                     <label for="edit-pickup-post-code">Kod Pocztowy:</label>
-                    <input type="text" id="edit-pickup-post-code" name="edit-pickup-post-code">
+                    <input type="text" id="edit-pickup-post-code" name="pickupLocation.pickupPostCode">
+                    <span class="error-message" id="error-edit-pickup-post-code"></span>
                     
                     <label for="edit-pickup-city">Miejscowość:</label>
-                    <input type="text" id="edit-pickup-city" name="edit-pickup-city">
+                    <input type="text" id="edit-pickup-city" name="pickupLocation.pickupCity">
                 </fieldset>
 
                 <button type="submit">Zapisz Zmiany</button>
