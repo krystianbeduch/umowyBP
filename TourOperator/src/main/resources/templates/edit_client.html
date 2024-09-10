@@ -40,12 +40,18 @@
         <!-- Sekcja formularz edycji klienta -->
         <section id="edit-client">
             <h2>Edytuj klienta</h2>
-            <form id="client-form">
+            <form id="client-form" th:action="@{'/form/edit'}" method="post">
+                <!-- Wymagane dla Springa -->
+                <input type="hidden" name="_method" value="put">
+
                 <label for="edit-client-id">Numer Klienta:</label>
-                <input type="text" id="edit-client-id" name="clientNumber" disabled>
+                <input type="text" id="edit-client-id" name="clientNumber" readonly>
                     
                 <label for="edit-name">Nazwa Instytucji:</label>
                 <input type="text" id="edit-name" name="name" required>
+
+                <label for="edit-alias">Nazwa Potoczna:</label>
+                <input type="text" id="edit-alias" name="alias">
 
                 <fieldset class="form-group address-group">
                     <legend>Adres</legend>    
@@ -91,6 +97,10 @@
 
                 <button type="submit">Zapisz Zmiany</button>
             </form>
+
+            <div>
+                <p th:text="${errorMessage}" style="color: red;" id="error-message"></p>
+            </div>
         </section>
     </main>
 

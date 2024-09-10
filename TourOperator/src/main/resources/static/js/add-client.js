@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
    const form = document.getElementById("client-form");
 
    // Funkcja do ukrywania/pokazywania sekcji "miejsce-odbioru"
-   function togglePickupLocation() {
+   function handlePickupLocationToggle() {
       // Wyszukaj wszystkie inputu miejsca odbioru; inputy ktorych id zaczyna sie od 'add-pickup-'
       const pickupFields = document.querySelectorAll("input[id^='add-pickup-']");
       if(checkbox.checked) {
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function() {
    } // togglePickupLocation()
 
    // Wlaczenie obslugi na zmiane checkboxa
-   checkbox.addEventListener("change", togglePickupLocation);
+   checkbox.addEventListener("change", handlePickupLocationToggle);
 
 
    // Funkcja do ustawiania pustych pol na null
@@ -86,5 +86,5 @@ document.addEventListener("DOMContentLoaded", function() {
       }
    });  // form.addEventListener
 
-   togglePickupLocation();
+   handlePickupLocationToggle();
 });

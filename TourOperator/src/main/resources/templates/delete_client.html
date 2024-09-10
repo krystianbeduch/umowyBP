@@ -14,7 +14,7 @@
         <span class="title">Usuń Klienta</span>
     </header>
 
-    <main id="edit-main">
+    <main id="delete-main">
         <!-- Sekcja skrócona tabela klientów -->
         <section id="client-overview">
             <a th:href="@{/}" class="back-button">Powrót</a>
@@ -45,9 +45,9 @@
             <input type="radio" name="delete-method" id="delete-by-name" value="name">
             <label for="delete-by-name" class="radio-label">Usuń według nazwy</label>
             <form id="client-form" th:action="@{'/form/delete/' + ${selectedClientNumber}}" method="post">
-<!--            <form id="client-form" th:action="@{/form/delete}" method="post">-->
+                <!-- Wymagane dla Springa -->
                 <input type="hidden" name="_method" value="delete">
-<!--            <form id="client-form">-->
+
                 <label for="delete-client-id">Numer Klienta:</label>
                 <input type="number" min="1" step="1" id="delete-client-id">
                     

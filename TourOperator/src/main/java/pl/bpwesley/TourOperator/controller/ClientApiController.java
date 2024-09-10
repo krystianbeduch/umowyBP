@@ -8,16 +8,20 @@ import pl.bpwesley.TourOperator.entity.Client;
 import pl.bpwesley.TourOperator.repository.ClientRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
+import pl.bpwesley.TourOperator.service.ClientService;
+
 import java.util.List;
 
 @RestController // klasa jest kontrolerem REST, ktory obsluguje zapytania HTTP i zwraca dane
 @RequestMapping("/api/client") // bazowy URL dla wszystkich metod w tym kontrolerze
 public class ClientApiController {
     private final ClientRepository clientRepository;
+    private final ClientService clientService;
 
     @Autowired // automatyczne wstrzykniecie instancji klasy do kontrolera
-    public ClientApiController(ClientRepository clientRepository) {
+    public ClientApiController(ClientRepository clientRepository, ClientService clientService) {
         this.clientRepository = clientRepository;
+        this.clientService = clientService;
     }
 
     // Metoda sprawdzajaca czy request pochodzi z przegladarki
@@ -133,18 +137,11 @@ public class ClientApiController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
-        // Aktualizacja danych
-        existingClient.setName(updatedClient.getName());
-        existingClient.setAlias(updatedClient.getAlias());
-        existingClient.setStreet(updatedClient.getStreet());
-        existingClient.setNumber(updatedClient.getNumber());
-        existingClient.setPostCode(updatedClient.getPostCode());
-        existingClient.setCity(updatedClient.getCity());
-        existingClient.setPickupLocation(updatedClient.getPickupLocation());
+        // Zaktualizuj dane i zapisz klienta w bazie
+        Client updated = clientService.updateClientData(existingClient, updatedClient);
 
-        // Zapisz klienta w bazie i zwroc go z kodem 200 OK
-        clientRepository.save(existingClient);
-        return ResponseEntity.ok(existingClient);
+        // Zwroc go z kodem 200 OK
+        return ResponseEntity.ok(updated);
 }
 
 

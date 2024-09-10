@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.bpwesley.TourOperator.entity.Client;
 import pl.bpwesley.TourOperator.repository.ClientRepository;
+import pl.bpwesley.TourOperator.service.ClientService;
 
 import java.util.List;
 
@@ -14,10 +15,12 @@ import java.util.List;
 public class FormContoller {
 
     private final ClientRepository clientRepository;
+    private final ClientService clientService;
 
     @Autowired
-    public FormContoller(ClientRepository clientRepository) {
+    public FormContoller(ClientRepository clientRepository, ClientService clientService) {
         this.clientRepository = clientRepository;
+        this.clientService = clientService;
     }
 
     @GetMapping("/add")
@@ -81,6 +84,23 @@ public class FormContoller {
 
         // Zwroc edit_client.html
         return "edit_client";
+    }
+
+    @PutMapping("/edit")
+    public String updateClient(@ModelAttribute("client") Client updatedClient, Model model) {
+        // Sprawdz czy klient istnieje
+        Client existingClient = clientRepository.findByClientNumber(updatedClient.getClientNumber()).orElse(null);
+
+        if (existingClient != null) {
+            // Zaktualizuj dane i zapisz klienta w bazie
+            clientService.updateClientData(existingClient, updatedClient);
+            return "redirect:/";
+        }
+        else {
+            model.addAttribute("errorMessage", "Klient o numerze " + updatedClient.getClientNumber() + " nie istnieje");
+            model.addAttribute("clients", getClientList());
+            return "edit_client";
+        }
     }
 
     private List<Client> getClientList() {
