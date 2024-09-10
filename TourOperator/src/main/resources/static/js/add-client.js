@@ -9,15 +9,18 @@ document.addEventListener("DOMContentLoaded", function() {
       // Wyszukaj wszystkie inputu miejsca odbioru; inputy ktorych id zaczyna sie od 'add-pickup-'
       const pickupFields = document.querySelectorAll("input[id^='add-pickup-']");
       if(checkbox.checked) {
-         // Ukryj sekcje "Miejsce odbioru" i ustaw w polu domyślną wartość
+         // Ukryj sekcje "Miejsce odbioru"
          pickupLocationGroup.style.display = "none";
-         pickupLocation.value = "*Adres*";
+
 
          // Usun obowiazkowosc pol
          pickupFields.forEach(field => {
             field.removeAttribute("required");
             field.value = "";
          });
+
+         // Ustaw w polu domyslna wartosc dla bazy
+         pickupLocation.value = "*Adres*";
       } // if
       else {
          pickupLocationGroup.style.display = "block";
@@ -52,9 +55,9 @@ document.addEventListener("DOMContentLoaded", function() {
          const errorMessageElement = document.getElementById(`error-${input.id}`);
 
          // Jesli wartosc nieobowiazkowych pol jest pusta, ustaw null (nie dziala w bazie)
-         if (value === "") {
-            input.value = null;
-         }
+         // if (value === "") {
+         //    input.value = null;
+         // }
 
          // Walidacja ogolna dla pol numeru i kodu pocztowego
          if (input.name === "number" && !/^[A-Za-z0-9\/]+$/.test(value)) {
