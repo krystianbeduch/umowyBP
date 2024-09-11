@@ -1,4 +1,6 @@
 Attribute VB_Name = "Services"
+Option Explicit
+
 Sub AddNewService( _
     serviceName As String, _
     unitPrice As Currency, _
@@ -149,26 +151,17 @@ Sub UpdateTotalAmount()
     
     ' Aktualizacja formantu 'razem_kwota_brutto'
     Call InsertTextToContentControl("razem_kwota_brutto", FormatCurrency(totalAmount))
-    ' Proba znalezienia formantu z tytulem "razem_kwota_brutto"
-    'Dim totalCC As ContentControl
-    'On Error Resume Next
-    'Set totalCC = doc.SelectContentControlsByTitle("razem_kwota_brutto")(1)
-    'On Error GoTo ErrorHandler
-    
-    ' Jesli formant zostal znaleziony zaktualizuj kwote calkowita
-    'If Not totalCC Is Nothing Then
-     '   totalCC.Range.text = FormatCurrency(totalAmount)
-    'End If
     
     ' Proba znalezienia formantu z tytulem "razem_kwota_brutto_slownie"
     On Error Resume Next
+    Dim totalCC As ContentControl
     Set totalCC = doc.SelectContentControlsByTitle("razem_kwota_brutto_slownie")(1)
     On Error GoTo ErrorHandler
     
     ' Jesli formant zosta³ znaleziony zaktualizuj kwote calkowita
     If Not totalCC Is Nothing Then
         ' Aktualizacja reprezentacji slownej
-        UpdateCurrencyToText totalCC, totalAmount, currencySymbol
+        UpdateCurrencyToText totalCC, totalAmount, ""
     Else
         MsgBox "Nie znaleziono formantu o tytule 'razem_kwota_brutto_slownie'.", _
         vbExclamation, "B³¹d"
@@ -410,8 +403,3 @@ Sub UpdateCurrencyToText( _
 ErrorHandler:
     MsgBox "Wystapil blad: " & Err.Description, vbCritical, "Error"
 End Sub
-
-
-
-
-

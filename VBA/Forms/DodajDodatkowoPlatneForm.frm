@@ -13,6 +13,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Option Explicit
+
 Private Sub btnAddItem_Click()
     On Error GoTo ErrorHandler ' Wlaczenie obslugi bledow
     
@@ -72,7 +74,3 @@ Private Sub UserForm_Initialize()
     ' Ustaw fokus na odpowiednio text boxa
     txtUnitPrice.SetFocus
 End Sub
-
-
-
-

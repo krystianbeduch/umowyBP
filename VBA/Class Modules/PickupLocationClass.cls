@@ -7,18 +7,20 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' Deklaracja klasy KlasaMiejsceOdbioru
+Option Explicit
+
+' Deklaracja klasy
 Private m_pickupLocation As String
 Private m_street As String
 Private m_number As String
-Private m_postalCode As String
+Private m_postCode As String
 Private m_city As String
 
-' Wlasciwosc nazwa_instytucji
-Public Property Get pickupLocation() As String
-    pickupLocation = m_pickupLocation
+' Wlasciwosc pickupLocation
+Public Property Get PickupLocation() As String
+    PickupLocation = m_pickupLocation
 End Property
-Public Property Let pickupLocation(value As String)
+Public Property Let PickupLocation(value As String)
     m_pickupLocation = value
 End Property
 
@@ -38,12 +40,12 @@ Public Property Let number(value As String)
     m_number = value
 End Property
 
-' Wlasciwosc postalCode
-Public Property Get postalCode() As String
-    postalCode = m_postalCode
+' Wlasciwosc postCode
+Public Property Get postCode() As String
+    postCode = m_postCode
 End Property
-Public Property Let postalCode(value As String)
-    m_postalCode = value
+Public Property Let postCode(value As String)
+    m_postCode = value
 End Property
 
 ' Wlasciwosc city

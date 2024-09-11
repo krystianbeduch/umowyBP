@@ -13,6 +13,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Option Explicit
+
 Private Sub cboConfirm_Click()
     Dim strNumberOfPeople As String
     Dim intNumberOfPeople As Integer
@@ -65,7 +67,7 @@ Private Sub UpdateCustomProperty(doc As Document, propertyName As String, proper
     If doc.CustomDocumentProperties(propertyName).Exists Then
         doc.CustomDocumentProperties(propertyName).value = propertyValue
     Else
-        doc.CustomDocumentProperties.Add Name:=propertyName, LinkToContent:=False, _
+        doc.CustomDocumentProperties.Add name:=propertyName, LinkToContent:=False, _
             Type:=msoPropertyTypeString, value:=propertyValue
     End If
     On Error GoTo 0
@@ -83,14 +85,15 @@ Private Sub UpdateTotalPricesAfterChangingNumberOfPeople()
     Dim itemPrice As Currency
     Dim itemQuantity As Integer
     Dim itemTotal As Currency
+    Dim currencySymbol As String
         
     ' Petla przez wszystkie formanty w dokumencie
     For Each cc In doc.ContentControls
         If Right(cc.Title, 17) = "_cena_jednostkowa" Then
-            Debug.Print "Title: " & cc.Title
-            Debug.Print "Text: " & cc.Range.text
-            Debug.Print "Start Position: " & cc.Range.Start
-            Debug.Print "End Position: " & cc.Range.End
+            'Debug.Print "Title: " & cc.Title
+            'Debug.Print "Text: " & cc.Range.text
+            'Debug.Print "Start Position: " & cc.Range.Start
+            'Debug.Print "End Position: " & cc.Range.End
         
             itemPrice = CCur(cc.Range.text)
             itemQuantity = GetDocProperty(DOC_PROP_NUMBER_OF_PEOPLE)
@@ -201,7 +204,3 @@ Private Function ExtractCurrencySymbol(text As String) As String
     ' Zwrocenie pustego ciagu, jesli symbol nie zostal znaleziony
     ExtractCurrencySymbol = ""
 End Function
-
-Private Sub UserForm_Click()
-
-End Sub

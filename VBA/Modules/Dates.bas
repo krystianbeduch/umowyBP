@@ -1,4 +1,6 @@
 Attribute VB_Name = "Dates"
+Option Explicit
+
 Sub UpdateTransportDate(ByVal ContentControl As ContentControl, ByVal transportTitle As String)
     Dim cc As ContentControl
     

@@ -1,13 +1,12 @@
 Attribute VB_Name = "Globals"
+Option Explicit
+
 Public doc As Document ' Globalny obiekt dokumentu
 Public conn As Object ' Globalne polaczenie z baza danych
-'Public config As AccessDatabaseConfig ' Globalna konfiguracja bazy danych Access
-'Public Const DATABASE_PATH As String = "E:\Dokumenty z C\US\BP Wesley\umowy-bp.accdb" ' Sciezka do pliku bazy danych
 Public Const DOC_PROP_NUMBER_OF_PEOPLE As String = "ile_osob"
-Public wycieczka As KlasaWycieczka ' Globalny obiekt konkretnej wycieczki
 Public client As ClientClass ' Globalny obiekt klienta
 
-Public Wprowadz_zamawiajacego_IsDataEntered As Boolean
+Public Wprowadz_klienta_IsDataEntered As Boolean
 Public typeOfTour As Boolean ' Typ wycieczki: true - szkolna, false - dorosli (domyslnie False)
 Public locationOfTour As Boolean ' Lokalizacja wycieczki: true - Polska, false - Europa
 Public isMultiDay As Boolean ' true - wycieczka wielodniowa, false - wycieczka 1-dniowa
@@ -15,7 +14,7 @@ Public isMultiDay As Boolean ' true - wycieczka wielodniowa, false - wycieczka 1
 Public Sub InitializeConnection_Access()
     ' Inicjalizacja polaczenia z baza danych
     Dim config As New AccessDatabaseConfig
-    config.Path = DATABASE_PATH
+    config.Path = DATABASE_PATH ' sciezka do pliku .accdb
     
     ' Uzyskaj ciag polaczenia do bazy danych Access
     Dim strConnection As String
@@ -54,7 +53,7 @@ ErrorHandler:
 End Function
 
 Public Function Ceiling(ByVal value As Currency) As Currency
-    ' Funkcja zakraglacaja do gory
+    ' Funkcja zaokraglajaca do gory
     Ceiling = Int(value)
     If value > Int(value) Then
         Ceiling = Ceiling + 1

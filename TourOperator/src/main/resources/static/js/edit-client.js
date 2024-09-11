@@ -50,19 +50,41 @@ document.addEventListener("DOMContentLoaded", function() {
    } // selectClient()
 
    function populateForm(client) {
-      document.getElementById('edit-client-id').value = client.clientNumber;
-      document.getElementById('edit-name').value = client.name;
-      document.getElementById('edit-alias').value = client?.alias || '';
-      document.getElementById('edit-street').value = client.street;
-      document.getElementById('edit-number').value = client.number;
-      document.getElementById('edit-post-code').value = client.postCode;
-      document.getElementById('edit-city').value = client.city;
+      // document.getElementById('edit-client-id').value = client.clientNumber;
+      // document.getElementById('edit-name').value = client.name;
+      // document.getElementById('edit-alias').value = client?.alias || '';
+      // document.getElementById('edit-street').value = client.street;
+      // document.getElementById('edit-number').value = client.number;
+      // document.getElementById('edit-post-code').value = client.postCode;
+      // document.getElementById('edit-city').value = client.city;
+      //
+      // document.getElementById('edit-pickup-location').value = client.pickupLocation?.pickupLocation || '';
+      // document.getElementById('edit-pickup-street').value = client.pickupLocation?.pickupStreet || '';
+      // document.getElementById('edit-pickup-number').value = client.pickupLocation?.pickupNumber || '';
+      // document.getElementById('edit-pickup-post-code').value = client.pickupLocation?.pickupPostCode || '';
+      // document.getElementById('edit-pickup-city').value = client.pickupLocation?.pickupCity || '';
 
-      document.getElementById('edit-pickup-location').value = client.pickupLocation?.pickupLocation || '';
-      document.getElementById('edit-pickup-street').value = client.pickupLocation?.pickupStreet || '';
-      document.getElementById('edit-pickup-number').value = client.pickupLocation?.pickupNumber || '';
-      document.getElementById('edit-pickup-post-code').value = client.pickupLocation?.pickupPostCode || '';
-      document.getElementById('edit-pickup-city').value = client.pickupLocation?.pickupCity || '';
+      const fields = {
+         'edit-client-id' : client.clientNumber,
+         'edit-name' : client.name,
+         'edit-alias' : client?.alias || '',
+         'edit-street': client.street,
+         'edit-number': client.number,
+         'edit-post-code': client.postCode,
+         'edit-city': client.city,
+         'edit-pickup-location': client.pickupLocation?.pickupLocation || '',
+         'edit-pickup-street': client.pickupLocation?.pickupStreet || '',
+         'edit-pickup-number': client.pickupLocation?.pickupNumber || '',
+         'edit-pickup-post-code': client.pickupLocation?.pickupPostCode || '',
+         'edit-pickup-city': client.pickupLocation?.pickupCity || ''
+      };
+
+      Object.keys(fields).forEach(id => {
+         const element = document.getElementById(id);
+         if (element) {
+            element.value = fields[id];
+         }
+      });
    } // populateForm()
 
    // Obsluga ukrywania/pokazywania sekcji "miejsce-odbioru" i ustawiania obowiazkowosci pol

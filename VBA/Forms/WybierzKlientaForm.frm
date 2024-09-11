@@ -1,35 +1,36 @@
 VERSION 5.00
-Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} DodajZamawiajacegoForm 
+Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} WybierzKlientaForm 
    Caption         =   "Dodaj zamawiajacego"
    ClientHeight    =   2010
    ClientLeft      =   120
    ClientTop       =   465
    ClientWidth     =   6210
-   OleObjectBlob   =   "DodajZamawiajacegoForm.frx":0000
+   OleObjectBlob   =   "WybierzKlientaForm.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
-Attribute VB_Name = "DodajZamawiajacegoForm"
+Attribute VB_Name = "WybierzKlientaForm"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Option Explicit
+
 Dim ignoreChangeEvent As Boolean ' Flaga do ignorowania zdarzen zmiany w ComboBoxie
 
 Private Sub UserForm_Initialize()
     On Error GoTo ErrorHandler ' Ustawienie obslugi bledow
     
     ' Flaga prawidlowo zatwierdzonych danych
-    Wprowadz_zamawiajacego_IsDataEntered = False
+    Wprowadz_klienta_IsDataEntered = False
     
     ' Inicjalnie nie ignorujemy zdarzen
     ignoreChangeEvent = False
 
-    ' Inicjalizacja polaczenia z baza danych
-    InitializeConnection
-    
-    ' Zapytanie SQL do pobrania danych
-    Dim sqlQuery As String
-    sqlQuery = "SELECT id, nazwa_instytucji FROM klienci;"
+    ' Inicjalizacja polaczenia z baza danych PostgreSQL
+    If Not InitializeConnection_PostgreSQL() Then
+        MsgBox "Nie udalo sie nawiazac polaczenia z baza danych PostgreSQL.", vbCritical, "Error"
+        Exit Sub
+    End If
     
     ' Zaladuj wszystkie dane na poczatku
     LoadDataIntoComboBox ""
@@ -45,13 +46,11 @@ Private Sub LoadDataIntoComboBox(searchText As String)
     ' Blokowanie zdarzen zmian w ComboBoxie
     ignoreChangeEvent = True
     
-    ' Zapytanie SQL do pobrania danych
-    Dim sqlQuery As String
-    sqlQuery = "SELECT id, nazwa_instytucji FROM klienci;"
+    Dim sqlProvider As New SQLQueryProvider
     
     ' Wykonanie zapytania SQL
     Dim rs As Object ' Zmienna dla zestawu wynikow
-    Set rs = conn.Execute(sqlQuery)
+    Set rs = conn.Execute(sqlProvider.SelectId_NazwaInstytucji)
     
     ' Przechowywanie zaznaczonego tekstu
     Dim selectedText As String
@@ -63,9 +62,9 @@ Private Sub LoadDataIntoComboBox(searchText As String)
     ' Wczytanie wynikow do ComboBoxa
     Do While Not rs.EOF
         ' Filtruj wyniki na podstawie wyszukiwanego tekstu
-        If InStr(1, rs.Fields("nazwa_instytucji").value, searchText, vbTextCompare) > 0 Then
+        If InStr(1, rs.Fields("name").value, searchText, vbTextCompare) > 0 Then
             ' Dodaj zamawiajacego do ComboBoxa
-            Me.cboClient.AddItem rs.Fields("nazwa_instytucji").value
+            Me.cboClient.AddItem rs.Fields("name").value
         End If
         rs.MoveNext
     Loop
@@ -110,7 +109,6 @@ Private Sub cboClient_Change()
     LoadDataIntoComboBox searchText
 End Sub
 
-
 Private Sub btnSelect_Click()
     On Error GoTo ErrorHandler ' Ustawienie obslugi bledow
     
@@ -129,25 +127,23 @@ Private Sub btnSelect_Click()
     selectedText = Me.cboClient.text
         
     ' Zapytanie SQL
-    Dim sqlQuery As String
-    sqlQuery = "SELECT id, nazwa_instytucji, ulica, numer, kod_pocztowy, " & _
-             "miejscowosc FROM klienci WHERE nazwa_instytucji = '" & selectedText & "';"
+    Dim sqlProvider As New SQLQueryProvider
            
     ' Zmienna dla zestawu wynikow
     Dim rs As Object
-    Set rs = conn.Execute(sqlQuery)
+    Set rs = conn.Execute(sqlProvider.SelectClient(selectedText))
 
     ' Dodanie obiektu klasy ClientClass
     If Not rs.EOF Then
         Set client = New ClientClass
-        client.id = rs.Fields("id").value
-        client.institutionName = rs.Fields("nazwa_instytucji").value
-        client.street = rs.Fields("ulica").value
-        client.number = rs.Fields("numer").value
-        client.postalCode = rs.Fields("kod_pocztowy").value
-        client.city = rs.Fields("miejscowosc").value
+        client.clientNumber = rs.Fields("client_number").value
+        client.name = rs.Fields("name").value
+        client.street = rs.Fields("street").value
+        client.number = rs.Fields("number").value
+        client.postCode = rs.Fields("post_code").value
+        client.city = rs.Fields("city").value
     Else
-        MsgBox "Nie znaleziono zamawiajacego o podanym id.", vbExclamation, "Error"
+        MsgBox "Nie znaleziono klienta o podanym numerze.", vbExclamation, "Error"
         rs.Close
         conn.Close
         Exit Sub
@@ -160,7 +156,7 @@ Private Sub btnSelect_Click()
     Set conn = Nothing
     
     ' Ustaw flage prawidlowo wprowadzonych danych
-    Wprowadz_zamawiajacego_IsDataEntered = True
+    Wprowadz_klienta_IsDataEntered = True
     
     ' Zamknij UserForma
     Unload Me

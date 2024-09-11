@@ -7,29 +7,31 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' Deklaracja klasy ClientClass
-Private m_id As Integer
-Private m_institutionName As String
+Option Explicit
+
+' Deklaracja klasy
+Private m_clientNumber As Long
+Private m_name As String
 Private m_street As String
 Private m_number As String
-Private m_postalCode As String
+Private m_postCode As String
 Private m_city As String
 Private m_pickupLocation As PickupLocationClass
 
 ' Wlasciwosc id
-Public Property Get id() As String
-    id = m_id
+Public Property Get clientNumber() As Long
+    clientNumber = m_clientNumber
 End Property
-Public Property Let id(value As String)
-    m_id = value
+Public Property Let clientNumber(value As Long)
+    m_clientNumber = value
 End Property
 
-' Wlasciwosc institutionName
-Public Property Get institutionName() As String
-    institutionName = m_institutionName
+' Wlasciwosc name
+Public Property Get name() As String
+    name = m_name
 End Property
-Public Property Let institutionName(value As String)
-    m_institutionName = value
+Public Property Let name(value As String)
+    m_name = value
 End Property
 
 ' Wlasciwosc street
@@ -48,12 +50,12 @@ Public Property Let number(value As String)
     m_number = value
 End Property
 
-' Wlasciwosc postalCode
-Public Property Get postalCode() As String
-    postalCode = m_postalCode
+' Wlasciwosc postCode
+Public Property Get postCode() As String
+    postCode = m_postCode
 End Property
-Public Property Let postalCode(value As String)
-    m_postalCode = value
+Public Property Let postCode(value As String)
+    m_postCode = value
 End Property
 
 ' Wlasciwosc city
@@ -65,10 +67,10 @@ Public Property Let city(value As String)
 End Property
 
 ' W³aœciwoœæ pickupLocation
-Public Property Get pickupLocation() As PickupLocationClass
-    Set pickupLocation = m_pickupLocation
+Public Property Get PickupLocation() As PickupLocationClass
+    Set PickupLocation = m_pickupLocation
 End Property
-Public Property Set pickupLocation(value As PickupLocationClass)
+Public Property Set PickupLocation(value As PickupLocationClass)
     Set m_pickupLocation = value
 End Property
 

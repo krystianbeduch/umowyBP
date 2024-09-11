@@ -13,6 +13,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Option Explicit
+
 Private Sub UserForm_Initialize()
     On Error GoTo ErrorHandler ' Wlaczenie obslugi bledow
     ' Ustawienie checkboxa jako zaznaczonego
@@ -160,5 +162,3 @@ End Sub
 Private Sub rbtnCZK_Click()
     rbtnEUR_Click
 End Sub
-
-

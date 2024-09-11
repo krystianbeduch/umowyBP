@@ -1,4 +1,6 @@
 Attribute VB_Name = "TourOptions"
+Option Explicit
+
 Sub SetMinNumberOfPeople()
     On Error GoTo ErrorHandler ' Ustawienie obslugi bledow
     

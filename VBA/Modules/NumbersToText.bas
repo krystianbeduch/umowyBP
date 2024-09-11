@@ -1,4 +1,6 @@
 Attribute VB_Name = "NumbersToText"
+Option Explicit
+
 Function NumberToText(ByVal value As Long) As String
     Dim units As Variant ' jednosci
     Dim teens As Variant ' nastki

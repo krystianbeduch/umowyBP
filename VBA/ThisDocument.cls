@@ -7,6 +7,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
+Option Explicit
+
 Sub Ustaw_liczbe_osob()
     UstawLiczbeOsobForm.Show
 End Sub
@@ -15,27 +17,27 @@ Sub Przelicz_Kwoty()
     UpdateTotalAmount
 End Sub
 
-Sub Wprowadz_zamawiajacego()
+Sub Wprowadz_klienta()
     On Error GoTo ErrorHandler ' Ustawienie obslugi bledow
     
-    WybierzZamawiajacegoForm.Show
+    WybierzKlientaForm.Show
     
     ' Sprawdz czy dane zostaly prawidlowo wprowadzone (czy zostala wybrana opcja)
-    If Not Wprowadz_zamawiajacego_IsDataEntered Then
+    If Not Wprowadz_klienta_IsDataEntered Then
         Exit Sub
     End If
     
-    ' Wstaw dane do formantu "client"
+    ' Wstaw dane do formantu "klient"
     Dim resultText As String
-    resultText = client.institutionName & ", " & client.street & " " & client.number & _
-             ", " & client.postalCode & " " & client.city
-    Call InsertTextToContentControl("zamawiajacy", resultText)
+    resultText = client.name & ", " & client.street & " " & client.number & _
+             ", " & client.postCode & " " & client.city
+    Call InsertTextToContentControl("klient", resultText)
     
     ' Wstaw dane do formantu "miejsce_odjazdu" i "miejsce_powrotu"
     AddPickupAndDropOffLocations
-    resultText = client.pickupLocation.postalCode & " " & client.pickupLocation.city & ", " & _
-                 client.pickupLocation.pickupLocation & " " & client.pickupLocation.street & " " & _
-                 client.pickupLocation.number
+    resultText = client.PickupLocation.postCode & " " & client.PickupLocation.city & ", " & _
+                 client.PickupLocation.PickupLocation & " " & client.PickupLocation.street & " " & _
+                 client.PickupLocation.number
     Call InsertTextToContentControl("miejsce_odjazdu", resultText)
     Call InsertTextToContentControl("miejsce_powrotu", resultText)
     Exit Sub
