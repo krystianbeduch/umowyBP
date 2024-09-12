@@ -209,7 +209,25 @@ fieldset {
 }
 
 fieldset.pickup-location-group { 
-    margin-top: 20px;
+    /*margin-top: 20px;*/
+    margin-bottom: 20px;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    /*transition: opacity 0.5s ease, height 1s ease;*/
+}
+
+fieldset.fade-in {
+    opacity: 1;
+    height: auto;
+    transition: opacity 0.5s ease, height 1s ease;
+}
+
+fieldset.fade-out {
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s ease, height 1s ease;
 }
 
 legend {
@@ -292,3 +310,4 @@ main#edit-main table#client-overview-table tbody tr.unselected {
     color: black;
     font-size: 1em;
 }
+

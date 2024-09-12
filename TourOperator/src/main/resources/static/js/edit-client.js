@@ -1,5 +1,6 @@
 import { handlePickupLocationToggle } from './modules/pickup-location.js';
 import { validateForm } from "./modules/form-validation.js";
+import { slideDown, slideUp } from "./modules/animations.js";
 
 document.addEventListener("DOMContentLoaded", function() {
    const checkbox = document.getElementById("pickup-location-same-as-address");
@@ -35,11 +36,17 @@ document.addEventListener("DOMContentLoaded", function() {
                 populateForm(client);
                 if (client.pickupLocation.pickupLocation === "*Adres*") {
                    checkbox.checked = true;
-                   pickupLocationGroup.style.display = "none";
+                   // pickupLocationGroup.style.display = "none";
+                   slideUp(pickupLocationGroup);
+                   // pickupLocationGroup.classList.add("fade-out");
+                   // pickupLocationGroup.classList.remove("fade-in");
                 }
                 else {
                    checkbox.checked = false;
-                   pickupLocationGroup.style.display = "block";
+                   // pickupLocationGroup.style.display = "block";
+                   slideDown(pickupLocationGroup);
+                   // pickupLocationGroup.classList.add("fade-in");
+                   // pickupLocationGroup.classList.remove("fade-out");
                 }
              }
              else {
