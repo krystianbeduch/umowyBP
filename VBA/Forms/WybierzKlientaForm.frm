@@ -50,7 +50,7 @@ Private Sub LoadDataIntoComboBox(searchText As String)
     
     ' Wykonanie zapytania SQL
     Dim rs As Object ' Zmienna dla zestawu wynikow
-    Set rs = conn.Execute(sqlProvider.SelectId_NazwaInstytucji)
+    Set rs = conn.Execute(sqlProvider.SelectClient_NumberNameAlias)
     
     ' Przechowywanie zaznaczonego tekstu
     Dim selectedText As String
@@ -62,7 +62,8 @@ Private Sub LoadDataIntoComboBox(searchText As String)
     ' Wczytanie wynikow do ComboBoxa
     Do While Not rs.EOF
         ' Filtruj wyniki na podstawie wyszukiwanego tekstu
-        If InStr(1, rs.Fields("name").value, searchText, vbTextCompare) > 0 Then
+        If InStr(1, rs.Fields("name").value, searchText, vbTextCompare) > 0 Or _
+           InStr(1, rs.Fields("alias").value, searchText, vbTextCompare) > 0 Then
             ' Dodaj zamawiajacego do ComboBoxa
             Me.cboClient.AddItem rs.Fields("name").value
         End If
@@ -138,6 +139,7 @@ Private Sub btnSelect_Click()
         Set client = New ClientClass
         client.clientNumber = rs.Fields("client_number").value
         client.name = rs.Fields("name").value
+        client.alias = rs.Fields("alias").value
         client.street = rs.Fields("street").value
         client.number = rs.Fields("number").value
         client.postCode = rs.Fields("post_code").value

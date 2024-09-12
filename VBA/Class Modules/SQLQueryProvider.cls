@@ -9,24 +9,26 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Property Get SelectId_NazwaInstytucji() As String
-    SelectId_NazwaInstytucji = "SELECT client_number, name " & _
+Public Function SelectClient_NumberNameAlias() As String
+    SelectClient_NumberNameAlias = "SELECT client_number, name, alias " & _
                                "FROM clients;"
-End Property
+End Function
 
-Public Property Get SelectClient(selectedText As String) As String
+Public Function SelectClient(selectedText As String) As String
     SelectClient = "SELECT " & _
                         "client_number, " & _
                         "name, " & _
+                        "alias, " & _
                         "street, " & _
                         "number, " & _
                         "post_code, " & _
                         "city " & _
                    "FROM clients " & _
-                   "WHERE name = '" & selectedText & "';"
-End Property
+                   "WHERE name = '" & selectedText & "'" & _
+                   "OR alias = '" & selectedText & "';"
+End Function
 
-Public Property Get SelectClientWithPickupLocation(clientNumber As Integer) As String
+Public Function SelectClientWithPickupLocation(clientNumber As Integer) As String
     SelectClientWithPickupLocation = "SELECT " & _
                                         "pickup_location, " & _
                                         "city, " & _
@@ -38,4 +40,4 @@ Public Property Get SelectClientWithPickupLocation(clientNumber As Integer) As S
                                         "pickup_post_code " & _
                                      "FROM clients " & _
                                      "WHERE client_number = " & clientNumber & ";"
-End Property
+End Function

@@ -12,6 +12,7 @@ Option Explicit
 ' Deklaracja klasy
 Private m_clientNumber As Long
 Private m_name As String
+Private m_alias As String
 Private m_street As String
 Private m_number As String
 Private m_postCode As String
@@ -32,6 +33,14 @@ Public Property Get name() As String
 End Property
 Public Property Let name(value As String)
     m_name = value
+End Property
+
+' Wlasciwosc alias
+Public Property Get alias() As String
+    alias = m_alias
+End Property
+Public Property Let alias(value As String)
+    m_alias = value
 End Property
 
 ' Wlasciwosc street
