@@ -15,7 +15,6 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     List<Client> findAllByOrderByClientNumberAsc();
 
     // metoda zwracana Optional<Client> - zwrocony moze zostac klient lub empty jesli klient nie zostanie znaleziony
-    Optional<Client> findByClientNumber(Long clientNumber);
 
     // w PostgreSQL wykonac polecenie CREATE EXTENSION IF NOT EXISTS unaccent
     @Query("SELECT c FROM Client c WHERE unaccent(LOWER(c.name)) = unaccent(LOWER(:name))")

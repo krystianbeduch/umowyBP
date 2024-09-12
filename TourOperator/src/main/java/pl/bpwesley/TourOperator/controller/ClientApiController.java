@@ -36,34 +36,35 @@ public class ClientApiController {
             // Zwroc status 403 FORBIDDEN
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
-        return ResponseEntity.ok(clientRepository.findAll());
+        return ResponseEntity.ok(clientService.getClientList());
     }
+
     @GetMapping("/{clientNumber}") // metoda odpowiada na zapytania GET na podany mapping
     public ResponseEntity<Client> getClientByNumber(@PathVariable("clientNumber") Long clientNumber,
                                                     HttpServletRequest request) {
 //    @PathVariable - {clientNumber} z URL jest przekazywana do metody jako argument
 // Blokada spowodowala problem z auto uzupelnianiem formularza do usuwania
 //        if (isBrowser(request)) {
-            // Zwroc status 403 FORBIDDEN
+        // Zwroc status 403 FORBIDDEN
 //            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
 //        }
-        return clientRepository.findByClientNumber(clientNumber)
+        return clientService.getClientByNumber(clientNumber)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(null));
+                        .build());
     }
 
     @GetMapping("/name/{name}")
     public ResponseEntity<Client> getClientByName(@PathVariable("name") String name,
                                                   HttpServletRequest request) {
 //        if (isBrowser(request)) {
-            // Zwroc status 403 FORBIDDEN
+        // Zwroc status 403 FORBIDDEN
 //            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
 //        }
-        return clientRepository.findByNameIgnoreCaseAndAccent(name)
+        return clientService.getClientByName(name)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(null));
+                        .build());
     }
 
     @PostMapping("/add")
@@ -77,17 +78,16 @@ public class ClientApiController {
         }
 
         // Sprawdzenie czy klient o tej samej nazwie juz istnieje
-        if (clientRepository.findByNameIgnoreCaseAndAccent(newClient.getName()).isPresent()) {
+        if (clientService.clientExistsByName(newClient.getName())) {
             // Jesli tak, zwracamy status 409 CONFLICT
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
         try {
             // Zapisz nowego klienta do bazy i zwroc status 201 CREATED oraz zapisanego klienta
-            Client savedClient = clientRepository.save(newClient);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedClient);
-        }
-        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(
+                    clientService.addClient(newClient));
+        } catch (Exception e) {
             // w przypadku wyjatku zwroc status 400 BAD REQUEST
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -102,12 +102,11 @@ public class ClientApiController {
         }
 
         // Sprawdzenie czy klient o podanym numerze istnieje w bazie
-        if (clientRepository.existsById(clientNumber)) {
+        if (clientService.clientExistsByClientNumber(clientNumber)) {
             // Jesli tak, usun go i zwroc status 204 NO CONTENT
-            clientRepository.deleteById(clientNumber);
+            clientService.deleteClient(clientNumber);
             return ResponseEntity.noContent().build();
-        }
-        else {
+        } else {
             // Jesli nie, zwroc status 404 NOT FOUND
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -123,29 +122,39 @@ public class ClientApiController {
         }
 
         // Sprawdzenie czy klient o danym numerze istnieje
-        Client existingClient = clientRepository.findByClientNumber(clientNumber).orElse(null);
-        if (existingClient == null) {
+        if (!clientService.clientExistsByClientNumber(clientNumber)) {
             // Jesli nie, zwroc status 404 NOT FOUND
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        // Sprawdzenie czy klient o podanej nazwie juz istnieje w bazie
-        if (clientRepository.findByNameIgnoreCaseAndAccent(updatedClient.getName())
-            .filter(client -> !client.getClientNumber().equals(clientNumber))
-            .isPresent()) {
-            // Jesli tak, zwroc status 409 CONFLICT
+        // Sprawdz czy nazwa jest unikalna dla innych klientow
+        if (clientService.getClientByName(updatedClient.getName())
+                .filter(client -> !client.getClientNumber().equals(clientNumber))
+                .isPresent()) {
+            // Jesli istnieje inny klient z taka nazwa, zwroc status 409 CONFLICT
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
+        updatedClient.setClientNumber(clientNumber);
+
+        // Zaktualizuj dane, zapisz klienta w bazie i zwroc go z kodem 200 OK
+        return ResponseEntity.ok(clientService.updateClientData(updatedClient));
+        //Client existingClient = clientRepository.findByClientNumber(clientNumber).orElse(null);
+        //if (existingClient == null) {
+//    }
+
+        // Sprawdzenie czy klient o podanej nazwie juz istnieje w bazie
+//        if (clientRepository.findByNameIgnoreCaseAndAccent(updatedClient.getName())
+//                .filter(client -> !client.getClientNumber().equals(clientNumber))
+//                .isPresent()) {
+        // Jesli tak, zwroc status 409 CONFLICT
+//            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+//        }
 
         // Zaktualizuj dane i zapisz klienta w bazie
-        Client updated = clientService.updateClientData(existingClient, updatedClient);
+//        Client updated = clientService.updateClientData(existingClient, updatedClient);
 
         // Zwroc go z kodem 200 OK
-        return ResponseEntity.ok(updated);
-}
-
-
-
+//        return ResponseEntity.ok(null);
 
 
         // Znajdz istniejacego klienta po numerze i zaktualizuj dane
@@ -174,11 +183,10 @@ public class ClientApiController {
 //                // Jesli klient o podanym numerze nie istnieje, zwroc 404 NOT FOUND
 //                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 //    }
+    }
 
     @GetMapping("/max-client-number")
     public ResponseEntity<Long> getMaxClientNumber() {
-        Long maxClientNumber = clientRepository.findMaxClientNumber()
-                .orElse(0L);
-        return ResponseEntity.ok(maxClientNumber);
+        return ResponseEntity.ok(clientService.getMaxClientNumber());
     }
 }
