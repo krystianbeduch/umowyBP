@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.bpwesley.TourOperator.dto.ClientDTO;
 import pl.bpwesley.TourOperator.entity.Client;
 import pl.bpwesley.TourOperator.repository.ClientRepository;
 
@@ -31,7 +32,7 @@ public class ClientApiController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Client>> getAllClients(HttpServletRequest request) {
+    public ResponseEntity<List<ClientDTO>> getAllClients(HttpServletRequest request) {
         if (isBrowser(request)) {
             // Zwroc status 403 FORBIDDEN
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
@@ -40,7 +41,7 @@ public class ClientApiController {
     }
 
     @GetMapping("/{clientNumber}") // metoda odpowiada na zapytania GET na podany mapping
-    public ResponseEntity<Client> getClientByNumber(@PathVariable("clientNumber") Long clientNumber,
+    public ResponseEntity<ClientDTO> getClientByNumber(@PathVariable("clientNumber") Long clientNumber,
                                                     HttpServletRequest request) {
 //    @PathVariable - {clientNumber} z URL jest przekazywana do metody jako argument
 // Blokada spowodowala problem z auto uzupelnianiem formularza do usuwania
@@ -55,7 +56,7 @@ public class ClientApiController {
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<Client> getClientByName(@PathVariable("name") String name,
+    public ResponseEntity<ClientDTO> getClientByName(@PathVariable("name") String name,
                                                   HttpServletRequest request) {
 //        if (isBrowser(request)) {
         // Zwroc status 403 FORBIDDEN
@@ -68,7 +69,7 @@ public class ClientApiController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Client> addClient(@RequestBody Client newClient,
+    public ResponseEntity<ClientDTO> addClient(@RequestBody ClientDTO newClientDTO,
                                             HttpServletRequest request) {
         // @RequestBody - mapowanie danych przesyłanych w ciele (body) żądania HTTP do obiektu w aplikajci;
         // automatyczne przekstrzalcenie obiektu JSON na obiekt Java
@@ -78,7 +79,7 @@ public class ClientApiController {
         }
 
         // Sprawdzenie czy klient o tej samej nazwie juz istnieje
-        if (clientService.clientExistsByName(newClient.getName())) {
+        if (clientService.clientExistsByName(newClientDTO.getName())) {
             // Jesli tak, zwracamy status 409 CONFLICT
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
@@ -86,8 +87,9 @@ public class ClientApiController {
         try {
             // Zapisz nowego klienta do bazy i zwroc status 201 CREATED oraz zapisanego klienta
             return ResponseEntity.status(HttpStatus.CREATED).body(
-                    clientService.addClient(newClient));
-        } catch (Exception e) {
+                    clientService.addClient(newClientDTO));
+        }
+        catch (Exception e) {
             // w przypadku wyjatku zwroc status 400 BAD REQUEST
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -113,8 +115,8 @@ public class ClientApiController {
     }
 
     @PutMapping("/update/{clientNumber}")
-    public ResponseEntity<Client> updateClient(@PathVariable("clientNumber") Long clientNumber,
-                                               @RequestBody Client updatedClient,
+    public ResponseEntity<ClientDTO> updateClient(@PathVariable("clientNumber") Long clientNumber,
+                                               @RequestBody ClientDTO updatedClientDTO,
                                                HttpServletRequest request) {
         if (isBrowser(request)) {
             // Zwroc status 403 FORBIDDEN
@@ -128,61 +130,16 @@ public class ClientApiController {
         }
 
         // Sprawdz czy nazwa jest unikalna dla innych klientow
-        if (clientService.getClientByName(updatedClient.getName())
+        if (clientService.getClientByName(updatedClientDTO.getName())
                 .filter(client -> !client.getClientNumber().equals(clientNumber))
                 .isPresent()) {
             // Jesli istnieje inny klient z taka nazwa, zwroc status 409 CONFLICT
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-        updatedClient.setClientNumber(clientNumber);
+        updatedClientDTO.setClientNumber(clientNumber);
 
         // Zaktualizuj dane, zapisz klienta w bazie i zwroc go z kodem 200 OK
-        return ResponseEntity.ok(clientService.updateClientData(updatedClient));
-        //Client existingClient = clientRepository.findByClientNumber(clientNumber).orElse(null);
-        //if (existingClient == null) {
-//    }
-
-        // Sprawdzenie czy klient o podanej nazwie juz istnieje w bazie
-//        if (clientRepository.findByNameIgnoreCaseAndAccent(updatedClient.getName())
-//                .filter(client -> !client.getClientNumber().equals(clientNumber))
-//                .isPresent()) {
-        // Jesli tak, zwroc status 409 CONFLICT
-//            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-//        }
-
-        // Zaktualizuj dane i zapisz klienta w bazie
-//        Client updated = clientService.updateClientData(existingClient, updatedClient);
-
-        // Zwroc go z kodem 200 OK
-//        return ResponseEntity.ok(null);
-
-
-        // Znajdz istniejacego klienta po numerze i zaktualizuj dane
-//        return clientRepository.findByClientNumber(clientNumber)
-//                .map(existingClient -> {
-// Sprawdzenie czy klient o podanej nazwie juz istnieje w bazie
-//                    if (clientRepository.findByNameIgnoreCaseAndAccent(updatedClient.getName())
-//                            .filter(client -> !client.getClientNumber().equals(clientNumber))
-//                            .isPresent()) {
-//                        // Jesli tak, zwroc status 409 CONFLICT
-//                        return ResponseEntity.status(HttpStatus.CONFLICT).build();
-//                    }
-//
-//                    existingClient.setName(updatedClient.getName());
-//                    existingClient.setAlias(updatedClient.getAlias());
-//                    existingClient.setStreet(updatedClient.getStreet());
-//                    existingClient.setNumber(updatedClient.getNumber());
-//                    existingClient.setPostCode(updatedClient.getPostCode());
-//                    existingClient.setCity(updatedClient.getCity());
-//                    existingClient.setPickupLocation(updatedClient.getPickupLocation());
-//
-//                    // Zapisz klienta w bazie i zwroc go z kodem 200 OK
-//                    Client savedClient = clientRepository.save(existingClient);
-//                    return ResponseEntity.ok(savedClient);
-//                })
-//                // Jesli klient o podanym numerze nie istnieje, zwroc 404 NOT FOUND
-//                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-//    }
+        return ResponseEntity.ok(clientService.updateClientData(updatedClientDTO));
     }
 
     @GetMapping("/max-client-number")

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pl.bpwesley.TourOperator.dto.ClientDTO;
 import pl.bpwesley.TourOperator.entity.Client;
 import pl.bpwesley.TourOperator.service.ClientService;
 
@@ -30,16 +31,16 @@ public class FormContoller {
     }
 
     @PostMapping("/add") // obsluga wyslania formularza add-client
-    private String addClient(@ModelAttribute("client") Client client, Model model) {
+    private String addClient(@ModelAttribute("client") ClientDTO clientDTO, Model model) {
         // Sprwadzenie czy klient o takiej nazwie juz istnieje
-        if (clientService.clientExistsByName(client.getName())) {
+        if (clientService.clientExistsByName(clientDTO.getName())) {
             // Klient istnieje, wyswietl komunikat o bledzie
             model.addAttribute("errorMessage", "Klient o podanej nazwie już istnieje");
             model.addAttribute("clients", clientService.getClientList());
             return "add_client";
         }
         // Dodanie klienta do bazy
-        clientService.addClient(client);
+        clientService.addClient(clientDTO);
         return "redirect:/"; // przekierowanie na strone glowna po dodaniu klienta
     }
 
@@ -79,26 +80,25 @@ public class FormContoller {
     }
 
     @PutMapping("/edit")
-    public String updateClient(@ModelAttribute("client") Client updatedClient, Model model) {
-        Long clientNumber =updatedClient.getClientNumber();
+    public String updateClient(@ModelAttribute("client") ClientDTO updatedClientDTO, Model model) {
         // Sprawdz czy klient o podanym numerze istnieje
-        if (!clientService.clientExistsByClientNumber(updatedClient.getClientNumber())) {
-            model.addAttribute("errorMessage", "Klient o numerze " + updatedClient.getClientNumber() + " nie istnieje");
+        if (!clientService.clientExistsByClientNumber(updatedClientDTO.getClientNumber())) {
+            model.addAttribute("errorMessage", "Klient o numerze " + updatedClientDTO.getClientNumber() + " nie istnieje");
             model.addAttribute("clients", clientService.getClientList());
             return "edit_client";
         }
 
         // Sprawdz czy nazwa jest unikalna
-        if (clientService.getClientByName(updatedClient.getName())
-                .filter(client -> !client.getClientNumber().equals(updatedClient.getClientNumber()))
+        if (clientService.getClientByName(updatedClientDTO.getName())
+                .filter(client -> !client.getClientNumber().equals(updatedClientDTO.getClientNumber()))
                 .isPresent()) {
-            model.addAttribute("errorMessage", "Klient o nazwie - " + updatedClient.getName() + " - już istnieje");
+            model.addAttribute("errorMessage", "Klient o nazwie - " + updatedClientDTO.getName() + " - już istnieje");
             model.addAttribute("clients", clientService.getClientList());
             return "edit_client";
         }
 
         // Zaktualizuj dane klienta
-        clientService.updateClientData(updatedClient);
+        clientService.updateClientData(updatedClientDTO);
         return "redirect:/";
     }
 }
