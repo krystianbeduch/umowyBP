@@ -3,6 +3,8 @@ package pl.bpwesley.TourOperator.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.bpwesley.TourOperator.dto.ClientDTO;
+import pl.bpwesley.TourOperator.exception.ClientAlreadyExistsException;
+import pl.bpwesley.TourOperator.exception.ClientNotFoundException;
 import pl.bpwesley.TourOperator.mapper.ClientMapper;
 import pl.bpwesley.TourOperator.entity.Client;
 import pl.bpwesley.TourOperator.repository.ClientRepository;
@@ -30,44 +32,48 @@ public class ClientService {
     }
 
     public ClientDTO addClient(ClientDTO clientDTO) {
-//        Client client = toEntity(clientDTO);
+        // Sprawdz czy klient o takiej nazwie istnieje
+        if (clientExistsByName(clientDTO.getName())) {
+            throw new ClientAlreadyExistsException("Klient o nazwie " + clientDTO.getName() + " już istnieje");
+        }
         Client client = clientMapper.clientDTOToClient(clientDTO);
         // INSERT INTO
         return clientMapper.clientToClientDTO(clientRepository.save(client));
-//        Client savedClient = clientRepository.save(client);
-//        return toDTO(savedClient);
     }
 
     public void deleteClient(Long clientNumber) {
+        // Sprawdz czy klient o takim numerze istnieje
+        if (!clientExistsByClientNumber(clientNumber)) {
+            throw new ClientNotFoundException("Klient o numerze " + clientNumber + " nie istnieje");
+        }
         // DELETE FROM
         clientRepository.deleteById(clientNumber);
     }
 
     public ClientDTO updateClientData(ClientDTO updatedClientDTO) {
-        // Znajdz klienta lub zwroc wyjatek
-        Client existingClient = clientRepository.findById(updatedClientDTO.getClientNumber())
-                .orElseThrow(() -> new IllegalStateException("Blad przy zapisie"));
+        Long clientNumber = updatedClientDTO.getClientNumber();
+
+        // Sprawdz czy klient o takim numerze istnieje
+        clientRepository.findById(clientNumber)
+                .orElseThrow(() -> new ClientNotFoundException("Klient o numerze " + clientNumber + " nie istnieje"));
+        Client existingClient;
+
+        String name = updatedClientDTO.getName();
+        if (clientExistsByName(name)) {
+            // Sprawdz unikalnosc nowej nazwy
+            Client clientWithSameName = clientRepository.findByNameIgnoreCaseAndAccent(name).orElse(null);
+            if (clientWithSameName != null && !clientWithSameName.getClientNumber().equals(clientNumber)) {
+                throw new ClientAlreadyExistsException("Klient o nazwie " + name + " już istnieje");
+            }
+        }
 
         // Zaktualizuj dane i zapisz klienta w bazie
         existingClient = clientMapper.clientDTOToClient(updatedClientDTO);
-        return clientMapper.clientToClientDTO(clientRepository.save(existingClient));
-//        existingClient.setName(updatedClientDTO.getName());
-//        existingClient.setAlias(updatedClientDTO.getAlias());
-//        existingClient.setStreet(updatedClientDTO.getStreet());
-//        existingClient.setNumber(updatedClientDTO.getNumber());
-//        existingClient.setPostCode(updatedClientDTO.getPostCode());
-//        existingClient.setCity(updatedClientDTO.getCity());
-//        existingClient.setPickupLocation(updatedClientDTO.getPickupLocation());
         // UPDATE SET
-//        Client updatedClient = clientRepository.save(existingClient);
-//        return toDTO(updatedClient);
+        return clientMapper.clientToClientDTO(clientRepository.save(existingClient));
     }
     public List<ClientDTO> getClientList() {
         // SELECT *
-//        List<Client> clientList = clientRepository.findAllByOrderByClientNumberAsc();
-//        return clientList.stream()
-//                .map(this::toDTO)
-//                .collect(Collectors.toList());
         return clientRepository.findAllByOrderByClientNumberAsc().stream()
                 .map(clientMapper::clientToClientDTO)
                 .collect(Collectors.toList());

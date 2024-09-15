@@ -1,13 +1,12 @@
 package pl.bpwesley.TourOperator.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.bpwesley.TourOperator.dto.ClientDTO;
-import pl.bpwesley.TourOperator.entity.Client;
+import pl.bpwesley.TourOperator.exception.ClientAlreadyExistsException;
+import pl.bpwesley.TourOperator.exception.ClientNotFoundException;
 import pl.bpwesley.TourOperator.service.ClientService;
 
 @Controller
@@ -32,16 +31,17 @@ public class FormContoller {
 
     @PostMapping("/add") // obsluga wyslania formularza add-client
     private String addClient(@ModelAttribute("client") ClientDTO clientDTO, Model model) {
-        // Sprwadzenie czy klient o takiej nazwie juz istnieje
-        if (clientService.clientExistsByName(clientDTO.getName())) {
-            // Klient istnieje, wyswietl komunikat o bledzie
-            model.addAttribute("errorMessage", "Klient o podanej nazwie już istnieje");
-            model.addAttribute("clients", clientService.getClientList());
-            return "add_client";
+        try {
+            // Dodanie klienta do bazy
+            clientService.addClient(clientDTO);
+            return "redirect:/"; // przekierowanie na strone glowna po dodaniu klienta
         }
-        // Dodanie klienta do bazy
-        clientService.addClient(clientDTO);
-        return "redirect:/"; // przekierowanie na strone glowna po dodaniu klienta
+        catch (ClientAlreadyExistsException e) {
+            // Klient istnieje, wyswietl komunikat o bledzie
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("clients", clientService.getClientList());
+            return "add_client"; // Zwroc add_client.html
+        }
     }
 
     @GetMapping("/delete")
@@ -49,24 +49,20 @@ public class FormContoller {
         // Zaladuj liste klientow
         model.addAttribute("clients", clientService.getClientList());
         model.addAttribute("selectedClientNumber", null);
-
-        // Zwroc delete_client.html
-        return "delete_client";
+        return "delete_client"; // Zwroc delete_client.html
     }
 
     @DeleteMapping("/delete/{clientNumber}") // obsluga wyslania formularza delete-client
     private String deleteClient(@PathVariable Long clientNumber, Model model) {
-        if (clientService.clientExistsByClientNumber(clientNumber)) {
+        try {
             clientService.deleteClient(clientNumber);
             // Przekierowanie na strone glowna po usunieciu klienta
             return "redirect:/";
         }
-        else {
-            model.addAttribute("errorMessage", "Klient o numerze " + clientNumber + " nie istnieje");
+        catch (ClientNotFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("clients", clientService.getClientList());
-
-            // Zwroc delete_client.html
-            return "delete_client";
+            return "delete_client"; // Zwroc delete_client.html
         }
     }
 
@@ -81,24 +77,15 @@ public class FormContoller {
 
     @PutMapping("/edit")
     public String updateClient(@ModelAttribute("client") ClientDTO updatedClientDTO, Model model) {
-        // Sprawdz czy klient o podanym numerze istnieje
-        if (!clientService.clientExistsByClientNumber(updatedClientDTO.getClientNumber())) {
-            model.addAttribute("errorMessage", "Klient o numerze " + updatedClientDTO.getClientNumber() + " nie istnieje");
+        try {
+            // Zaktualizuj dane klienta
+            clientService.updateClientData(updatedClientDTO);
+            return "redirect:/";
+        }
+        catch (ClientNotFoundException | ClientAlreadyExistsException e) {
+            model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("clients", clientService.getClientList());
             return "edit_client";
         }
-
-        // Sprawdz czy nazwa jest unikalna
-        if (clientService.getClientByName(updatedClientDTO.getName())
-                .filter(client -> !client.getClientNumber().equals(updatedClientDTO.getClientNumber()))
-                .isPresent()) {
-            model.addAttribute("errorMessage", "Klient o nazwie - " + updatedClientDTO.getName() + " - już istnieje");
-            model.addAttribute("clients", clientService.getClientList());
-            return "edit_client";
-        }
-
-        // Zaktualizuj dane klienta
-        clientService.updateClientData(updatedClientDTO);
-        return "redirect:/";
     }
 }
