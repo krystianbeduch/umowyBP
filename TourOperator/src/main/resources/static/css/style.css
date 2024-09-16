@@ -286,11 +286,19 @@ input[type="radio"]:checked + label.radio-label {
     color: #007bff;
 }
 
-.error-message {
+span.error-message {
     color: red;
     font-size: 0.875em;
     font-weight: bold;
     margin-bottom: 20px;
+    display: block;
+}
+
+p#client-error-message{
+    color: red;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 10px;
     display: block;
 }
 

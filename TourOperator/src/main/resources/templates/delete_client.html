@@ -17,7 +17,7 @@
     <main id="delete-main">
         <!-- Sekcja skrócona tabela klientów -->
         <section id="client-overview">
-            <a th:href="@{/}" class="back-button">Powrót</a>
+            <a th:href="@{/admin/}" class="back-button">Powrót</a>
             <h2>Lista klientów</h2>
             <table id="client-overview-table">
                 <thead>
@@ -44,7 +44,7 @@
             <label for="delete-by-id" class="radio-label">Usuń według numeru klienta</label>
             <input type="radio" name="delete-method" id="delete-by-name" value="name">
             <label for="delete-by-name" class="radio-label">Usuń według nazwy</label>
-            <form id="client-form" th:action="@{'/form/delete/' + ${selectedClientNumber}}" method="post">
+            <form id="client-form" th:action="@{'/admin/form/delete/' + ${selectedClientNumber}}" method="post">
                 <!-- Wymagane dla Springa -->
                 <input type="hidden" name="_method" value="delete">
 
@@ -58,7 +58,7 @@
             </form>
 
             <div>
-                <p th:text="${errorMessage}" style="color: red;" id="error-message"></p>
+                <p th:text="${errorMessage}" id="client-error-message"></p>
             </div>
         </section>
     </main>

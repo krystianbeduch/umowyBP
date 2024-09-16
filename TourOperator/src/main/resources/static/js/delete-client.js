@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (radioById.checked && clientNumberInput.value) {
 
             // Wyslij zapytanie do API o dane klienta na podstawie jego numeru
-            fetch(`/api/client/${clientNumberInput.value}`)
+            fetch(`/api/admin/client/${clientNumberInput.value}`)
                 .then(response => {
                     // Jesli odpowiedz jest prawidlowa (status OK), zwroc dane w formacie JSON
                     if(response.ok) {
@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const name = encodeURIComponent(clientNameInput.value.trim());
 
             // Wyslij zapytanie do API o dane klienta na podstawie jego nazwy
-            fetch(`/api/client/name/${name}`)
+            fetch(`/api/admin/client/name/${name}`)
                 .then(response => {
                     // Jesli odpowiedz jest prawidlowa (status OK), zwroc dane w formacie JSON
                     if(response.ok) {
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // przekierowanie formularza
     form.addEventListener("submit", function(event) {
        if (clientNumberInput.value) {
-           form.action= `/form/delete/${clientNumberInput.value}`
+           form.action= `/admin/form/delete/${clientNumberInput.value}`
        }
        else {
            event.preventDefault();
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Wyslij zapytanie API aby pobrac maksymalny numer klienta w bazie
-    fetch('/api/client/max-client-number')
+    fetch('/api/admin/client/max-client-number')
         .then(response => response.json())
         .then(maxClientNumber => {
             if (maxClientNumber > 0) {

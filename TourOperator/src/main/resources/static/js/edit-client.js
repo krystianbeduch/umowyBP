@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
       const clientNumber = row.getAttribute("data-client-number");
 
-      fetch(`/api/client/${clientNumber}`)
+      fetch(`/api/admin/client/${clientNumber}`)
           .then(response => response.json())
           .then(client => {
              if (client) {
@@ -57,20 +57,6 @@ document.addEventListener("DOMContentLoaded", function() {
    } // selectClient()
 
    function populateForm(client) {
-      // document.getElementById('edit-client-id').value = client.clientNumber;
-      // document.getElementById('edit-name').value = client.name;
-      // document.getElementById('edit-alias').value = client?.alias || '';
-      // document.getElementById('edit-street').value = client.street;
-      // document.getElementById('edit-number').value = client.number;
-      // document.getElementById('edit-post-code').value = client.postCode;
-      // document.getElementById('edit-city').value = client.city;
-      //
-      // document.getElementById('edit-pickup-location').value = client.pickupLocation?.pickupLocation || '';
-      // document.getElementById('edit-pickup-street').value = client.pickupLocation?.pickupStreet || '';
-      // document.getElementById('edit-pickup-number').value = client.pickupLocation?.pickupNumber || '';
-      // document.getElementById('edit-pickup-post-code').value = client.pickupLocation?.pickupPostCode || '';
-      // document.getElementById('edit-pickup-city').value = client.pickupLocation?.pickupCity || '';
-
       const fields = {
          'edit-client-id' : client.clientNumber,
          'edit-name' : client.name,

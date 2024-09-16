@@ -10,7 +10,7 @@ import pl.bpwesley.TourOperator.exception.ClientNotFoundException;
 import pl.bpwesley.TourOperator.service.ClientService;
 
 @Controller
-@RequestMapping("/form")
+@RequestMapping("/admin/form") // Prefiks dla formularzy /admin/form
 public class FormContoller {
 
     private final ClientService clientService;
@@ -25,6 +25,8 @@ public class FormContoller {
         // Zaladuj liste klientow
         model.addAttribute("clients", clientService.getClientList());
 
+        model.addAttribute("client", new ClientDTO());
+
         // Zwroc add_client.html
         return "add_client";
     }
@@ -34,12 +36,15 @@ public class FormContoller {
         try {
             // Dodanie klienta do bazy
             clientService.addClient(clientDTO);
-            return "redirect:/"; // przekierowanie na strone glowna po dodaniu klienta
+            return "redirect:/admin/"; // przekierowanie na strone glowna po dodaniu klienta
         }
         catch (ClientAlreadyExistsException e) {
             // Klient istnieje, wyswietl komunikat o bledzie
             model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("clients", clientService.getClientList());
+
+            // Zaladuj wpisane dane do formularza
+            model.addAttribute("client", clientDTO);
             return "add_client"; // Zwroc add_client.html
         }
     }
@@ -57,7 +62,7 @@ public class FormContoller {
         try {
             clientService.deleteClient(clientNumber);
             // Przekierowanie na strone glowna po usunieciu klienta
-            return "redirect:/";
+            return "redirect:/admin/";
         }
         catch (ClientNotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -80,7 +85,7 @@ public class FormContoller {
         try {
             // Zaktualizuj dane klienta
             clientService.updateClientData(updatedClientDTO);
-            return "redirect:/";
+            return "redirect:/admin/";
         }
         catch (ClientNotFoundException | ClientAlreadyExistsException e) {
             model.addAttribute("errorMessage", e.getMessage());

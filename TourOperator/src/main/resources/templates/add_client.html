@@ -17,7 +17,7 @@
     <main id="add-main">
         <!-- Sekcja skrócona tabela klientów -->
         <section id="client-overview">
-            <a th:href="@{/}" class="back-button">Powrót</a>
+            <a th:href="@{/admin/}" class="back-button">Powrót</a>
             <h2>Lista klientów</h2>
             <table id="client-overview-table">
                 <thead>
@@ -40,29 +40,29 @@
         <section id="add-client">
             <h2>Dodaj nowego klienta</h2>
             <!-- th:action - przekieruj formularz do FormControllera na mapping /add-->
-            <form id="client-form" th:action="@{/form/add}" method="post">
+            <form id="client-form" th:action="@{/admin/form/add}" th:object="${client}" method="post">
 
                 <label for="add-name">Nazwa Instytucji:</label>
-                <input type="text" id="add-name" name="name" required>
+                <input type="text" id="add-name" name="name" th:field="*{name}" required>
 
                 <label for="add-alias">Nazwa Potoczna: (nieobowiązkowe)</label>
-                <input type="text" id="add-alias" name="alias">
+                <input type="text" id="add-alias" name="alias" th:field="*{alias}">
 
                 <fieldset class="form-group address-group">
                     <legend>Adres</legend>    
                     <label for="add-street">Ulica:</label>
-                    <input type="text" id="add-street" name="street" required>
+                    <input type="text" id="add-street" name="street" th:field="*{street}" required>
                     
                     <label for="add-number">Numer:</label>
-                    <input type="text" id="add-number" name="number" required>
+                    <input type="text" id="add-number" name="number" th:field="*{number}" required>
                     <span class="error-message" id="error-add-number"></span>
                     
                     <label for="add-post-code">Kod Pocztowy:</label>
-                    <input type="text" id="add-post-code" name="postCode" required>
+                    <input type="text" id="add-post-code" name="postCode" th:field="*{postCode}" required>
                     <span class="error-message" id="error-add-post-code"></span>
                     
                     <label for="add-city">Miejscowość:</label>
-                    <input type="text" id="add-city" name="city" required>
+                    <input type="text" id="add-city" name="city" th:field="*{city}" required>
                 </fieldset>
 
                 <div class="checkbox-group">
@@ -71,30 +71,30 @@
                 </div>
                 <fieldset class="form-group pickup-location-group">
                     <legend>Miejsce Odbioru</legend>
-                    
+                    <!-- PickupLocation po resecie kasuje sie -->
                     <label for="add-pickup-location">Miejsce:</label>
-                    <input type="text" id="add-pickup-location" name="pickupLocation.pickupLocation">
+                    <input type="text" id="add-pickup-location" name="pickupLocation.pickupLocation" th:field="*{pickupLocation.pickupLocation}">
                     
                     <label for="add-pickup-street">Ulica:</label>
-                    <input type="text" id="add-pickup-street" name="pickupLocation.pickupStreet">
+                    <input type="text" id="add-pickup-street" name="pickupLocation.pickupStreet" th:field="*{pickupLocation.pickupStreet}">
                     
                     <label for="add-pickup-number">Numer: (nieobowiązkowe)</label>
-                    <input type="text" id="add-pickup-number" name="pickupLocation.pickupNumber">
+                    <input type="text" id="add-pickup-number" name="pickupLocation.pickupNumber" th:field="*{pickupLocation.pickupNumber}">
                     <span class="error-message" id="error-add-pickup-number"></span>
 
                     <label for="add-pickup-post-code">Kod Pocztowy:</label>
-                    <input type="text" id="add-pickup-post-code" name="pickupLocation.pickupPostCode">
+                    <input type="text" id="add-pickup-post-code" name="pickupLocation.pickupPostCode" th:field="*{pickupLocation.pickupPostCode}">
                     <span class="error-message" id="error-add-pickup-post-code"></span>
 
                     <label for="add-pickup-city">Miejscowość:</label>
-                    <input type="text" id="add-pickup-city" name="pickupLocation.pickupCity">
+                    <input type="text" id="add-pickup-city" name="pickupLocation.pickupCity" th:field="*{pickupLocation.pickupCity}">
                 </fieldset>
 
                 <button type="submit">Dodaj Nowego Klienta</button>
             </form>
 
             <div th:if="${errorMessage != null}">
-                <p th:text="${errorMessage}" style="color: red;"></p>
+                <p th:text="${errorMessage}" id="client-error-message"></p>
             </div>
         </section>
     </main>

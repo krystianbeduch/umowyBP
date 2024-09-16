@@ -4,33 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import pl.bpwesley.TourOperator.entity.Client;
 import pl.bpwesley.TourOperator.repository.ClientRepository;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/admin") // Wszystkie sciezki w tym kontrolerze beda prefiksowane /admin
 public class HomeController {
-//    static List<Client> clientList = new ArrayList<>();
-//    static {
-//        clientList.add(
-//                new Client("Zakład Opieki Zdrowotnej Szpital im. Jana Pawła II we Włoszczowie", "ul. Żeromskiego", "28", "29-100", "Włoszczowa",
-//                        new PickupLocation())
-//        );
-//        clientList.add(
-//                new Client("Zespół Szkolno-Przedszkolny nr 5", "ul. Św.Barbary", "32", "42-200", "Częstochowa",
-//                        new PickupLocation("Plac", "ul. Jakas tam", "30", "42-200", "Częstochowa"))
-//        );
-//        clientList.add(
-//                new Client("SP2", "ul. Baczyńskiego", "2", "42-224", "Częstochowa",
-//                        new PickupLocation())
-//        );
-//        clientList.add(
-//                new Client("ZST", "al. Jana Pawła II", "126/130", "42-220", "Częstochowa",
-//                        new PickupLocation())
-//        );
-//    }
-
     private final ClientRepository clientRepository;
 
     @Autowired
@@ -38,7 +20,7 @@ public class HomeController {
         this.clientRepository = clientRepository;
     }
 
-    @GetMapping("/") // strona dostepna pod URL /
+    @GetMapping("/") // strona dostepna pod URL /admin/
     public String home(Model model) {
         // Zaladuj liste klientow
         List<Client> clientList = clientRepository.findAllByOrderByClientNumberAsc();
@@ -47,29 +29,4 @@ public class HomeController {
         // Zwroc home.html
         return "home";
     }
-
-//    @GetMapping("/add-client") // strona dostepna pod URL /add-client
-//    public String addClientForm(Model model) {
-//         Zaladuj liste klientow
-//        List<Client> clientList = clientRepository.findAll();
-//        model.addAttribute("clients", clientList);
-
-        // Zwroc add_client.html
-//        return "add_client";
-//        return "redirect:/form/add";
-//    }
-
-//    @GetMapping("/edit-client")
-//    public String editClientForm(Model model) {
-//        List<Client> clientList = clientRepository.findAll();
-//        model.addAttribute("clients", clientList);
-//        return "edit_client";
-//    }
-
-//    @GetMapping("/delete-client")
-//    public String deleteClientForm(Model model) {
-//        List<Client> clientList = clientRepository.findAll();
-//        model.addAttribute("clients", clientList);
-//        return "delete_client";
-//    }
 }

@@ -17,7 +17,7 @@
     <main id="edit-main">
         <!-- Sekcja skrócona tabela klientów -->
         <section id="client-overview">
-            <a th:href="@{/}" class="back-button">Powrót</a>
+            <a th:href="@{/admin/}" class="back-button">Powrót</a>
             <h2>Lista klientów</h2>
             <table id="client-overview-table">
                 <thead>
@@ -40,7 +40,7 @@
         <!-- Sekcja formularz edycji klienta -->
         <section id="edit-client">
             <h2>Edytuj klienta</h2>
-            <form id="client-form" th:action="@{'/form/edit'}" method="post">
+            <form id="client-form" th:action="@{'/admin/form/edit'}" method="post">
                 <!-- Wymagane dla Springa -->
                 <input type="hidden" name="_method" value="put">
 
@@ -48,7 +48,7 @@
                 <input type="text" id="edit-client-id" name="clientNumber" readonly>
                     
                 <label for="edit-name">Nazwa Instytucji:</label>
-                <input type="text" id="edit-name" name="name" required>
+                <input type="text" id="edit-name" name="name"required>
 
                 <label for="edit-alias">Nazwa Potoczna:</label>
                 <input type="text" id="edit-alias" name="alias">
@@ -99,7 +99,7 @@
             </form>
 
             <div>
-                <p th:text="${errorMessage}" style="color: red;" id="error-message"></p>
+                <p th:text="${errorMessage}" id="client-error-message"></p>
             </div>
         </section>
     </main>

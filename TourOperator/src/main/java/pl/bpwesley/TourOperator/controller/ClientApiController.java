@@ -14,7 +14,7 @@ import pl.bpwesley.TourOperator.service.ClientService;
 import java.util.List;
 
 @RestController // klasa jest kontrolerem REST, ktory obsluguje zapytania HTTP i zwraca dane
-@RequestMapping("/api/client") // bazowy URL dla wszystkich metod w tym kontrolerze
+@RequestMapping("/api/admin/client") // bazowy URL dla wszystkich metod w tym kontrolerze
 public class ClientApiController {
     private final ClientRepository clientRepository;
     private final ClientService clientService;
