@@ -12,11 +12,11 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin") // Wszystkie sciezki w tym kontrolerze beda prefiksowane /admin
-public class HomeController {
+public class AdminController {
     private final ClientRepository clientRepository;
 
     @Autowired
-    public HomeController(ClientRepository clientRepository) {
+    public AdminController(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
     }
 
@@ -26,7 +26,7 @@ public class HomeController {
         List<Client> clientList = clientRepository.findAllByOrderByClientNumberAsc();
         model.addAttribute("clients", clientList);
 
-        // Zwroc home.html
-        return "home";
+        // Zwroc admin/home.html
+        return "admin/home";
     }
 }

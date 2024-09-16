@@ -11,12 +11,12 @@ import pl.bpwesley.TourOperator.service.ClientService;
 
 @Controller
 @RequestMapping("/admin/form") // Prefiks dla formularzy /admin/form
-public class FormContoller {
+public class AdminFormContoller {
 
     private final ClientService clientService;
 
     @Autowired
-    public FormContoller(ClientService clientService) {
+    public AdminFormContoller(ClientService clientService) {
         this.clientService = clientService;
     }
 
@@ -27,8 +27,8 @@ public class FormContoller {
 
         model.addAttribute("client", new ClientDTO());
 
-        // Zwroc add_client.html
-        return "add_client";
+        // Zwroc admin/add_client.html
+        return "admin/add_client";
     }
 
     @PostMapping("/add") // obsluga wyslania formularza add-client
@@ -45,7 +45,7 @@ public class FormContoller {
 
             // Zaladuj wpisane dane do formularza
             model.addAttribute("client", clientDTO);
-            return "add_client"; // Zwroc add_client.html
+            return "admin/add_client"; // Zwroc admin/add_client.html
         }
     }
 
@@ -54,7 +54,7 @@ public class FormContoller {
         // Zaladuj liste klientow
         model.addAttribute("clients", clientService.getClientList());
         model.addAttribute("selectedClientNumber", null);
-        return "delete_client"; // Zwroc delete_client.html
+        return "admin/delete_client"; // Zwroc admin/delete_client.html
     }
 
     @DeleteMapping("/delete/{clientNumber}") // obsluga wyslania formularza delete-client
@@ -67,7 +67,7 @@ public class FormContoller {
         catch (ClientNotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("clients", clientService.getClientList());
-            return "delete_client"; // Zwroc delete_client.html
+            return "admin/delete_client"; // Zwroc admin/delete_client.html
         }
     }
 
@@ -76,8 +76,8 @@ public class FormContoller {
         // Zaladuj liste klientow
         model.addAttribute("clients", clientService.getClientList());
 
-        // Zwroc edit_client.html
-        return "edit_client";
+        // Zwroc admin/edit_client.html
+        return "admin/edit_client";
     }
 
     @PutMapping("/edit")
@@ -90,7 +90,7 @@ public class FormContoller {
         catch (ClientNotFoundException | ClientAlreadyExistsException e) {
             model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("clients", clientService.getClientList());
-            return "edit_client";
+            return "admin/edit_client"; // Zwroc admin/edit_client.html
         }
     }
 }

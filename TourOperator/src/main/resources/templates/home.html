@@ -3,170 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baza klientów</title>
-         <link rel="stylesheet" type="text/css" href="/css/style.css">
-<!--<link rel="stylesheet" type="text/css" href="../static/css/style.css">-->
+    <title>Strona Główna</title>
+    <link rel="stylesheet" type="text/css" href="/css/home-style.css">
+    <!--<link rel="stylesheet" type="text/css" href="../static/css/admin-style.css">-->
 </head>
 <body>
-    <header>
-        <span class="title">Przeglądaj Bazę Klientów</span>
-    </header>
-    <main>
-        <section id="view-clients">
-            <h2>Lista klientów</h2>
-            <table id="view-clients-table">
-                <thead>
-                    <tr>
-                        <th>Numer klienta</th>
-                        <th>Nazwa instytucji</th>
-                        <!-- Adres -->
-                        <th>Ulica</th>
-                        <th>Numer</th>
-                        <th>Kod pocztowy</th>
-                        <th>Miejscowość</th>
-                        <!-- Adres odbioru -->
-                        <th>Miejsce odbioru</th>
-                        <th>Ulica</th>
-                        <th>Numer</th>
-                        <th>Kod pocztowy</th>
-                        <th>Miejscowość</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="client, stat: ${clients}">
-                        <td th:text="${client.clientNumber}"></td>
-                        <td th:if="${client.alias == null or client.alias.equals('')}" th:text="${client.name}"></td>
-                        <td th:unless="${client.alias == null or client.alias.equals('')}" th:text="${client.name} + ' (' + ${client.alias} + ')'"></td>
-                        <!-- Adres -->
-                        <td th:text="${client.street}"></td>
-                        <td th:text="${client.number}"></td>
-                        <td th:text="${client.postCode}"></td>
-                        <td th:text="${client.city}"></td>
-                        <!-- Adres odbioru -->
-                        <td th:text="${client.pickupLocation.pickupLocation}"></td>
-                        <td th:text="${client.pickupLocation.pickupStreet}"></td>
-                        <td th:text="${client.pickupLocation.pickupNumber}"></td>
-                        <td th:text="${client.pickupLocation.pickupPostCode}"></td>
-                        <td th:text="${client.pickupLocation.pickupCity}"></td>
-                    </tr>
-                    <tr>
-<!--                        <td>1</td>-->
-<!--                        <td>Zakład Opieki Zdrowotnej Szpital im. Jana Pawła II we Włoszczowie</td>-->
-<!--                        <td>ul. Żeromskiego</td>-->
-<!--                        <td>28</td>-->
-<!--                        <td>29-100</td>-->
-<!--                        <td>Włoszczowa</td>-->
-<!--                        <td>*Adres*</td>-->
-<!--                        <td></td>-->
-<!--                        <td></td>-->
-<!--                        <td></td>-->
-<!--                        <td></td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <td>2</td>-->
-<!--                        <td>Zespół Szkolno-Przedszkolny nr 5</td>-->
-<!--                        <td>ul. Św. Barbary</td>-->
-<!--                        <td>32</td>-->
-<!--                        <td>42-200</td>-->
-<!--                        <td>Częstochowa</td>-->
-<!--                        <td>Plac</td>-->
-<!--                        <td>ul. Jakas tam</td>-->
-<!--                        <td>30</td>-->
-<!--                        <td>42-200</td>-->
-<!--                        <td>Częstochowa</td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <td>1</td>-->
-<!--                        <td>Zakład Opieki Zdrowotnej Szpital im. Jana Pawła II we Włoszczowie</td>-->
-<!--                        <td>ul. Żeromskiego</td>-->
-<!--                        <td>28</td>-->
-<!--                        <td>29-100</td>-->
-<!--                        <td>Włoszczowa</td>-->
-<!--                        <td>*Adres*</td>-->
-<!--                        <td></td>-->
-<!--                        <td></td>-->
-<!--                        <td></td>-->
-<!--                        <td></td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <td>2</td>-->
-<!--                        <td>Zespół Szkolno-Przedszkolny nr 5</td>-->
-<!--                        <td>ul. Św. Barbary</td>-->
-<!--                        <td>32</td>-->
-<!--                        <td>42-200</td>-->
-<!--                        <td>Częstochowa</td>-->
-<!--                        <td>Plac</td>-->
-<!--                        <td>ul. Jakas tam</td>-->
-<!--                        <td>30</td>-->
-<!--                        <td>42-200</td>-->
-<!--                        <td>Częstochowa</td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <td>1</td>-->
-<!--                        <td>Zakład Opieki Zdrowotnej Szpital im. Jana Pawła II we Włoszczowie</td>-->
-<!--                        <td>ul. Żeromskiego</td>-->
-<!--                        <td>28</td>-->
-<!--                        <td>29-100</td>-->
-<!--                        <td>Włoszczowa</td>-->
-<!--                        <td>*Adres*</td>-->
-<!--                        <td></td>-->
-<!--                        <td></td>-->
-<!--                        <td></td>-->
-<!--                        <td></td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <td>2</td>-->
-<!--                        <td>Zespół Szkolno-Przedszkolny nr 5</td>-->
-<!--                        <td>ul. Św. Barbary</td>-->
-<!--                        <td>32</td>-->
-<!--                        <td>42-200</td>-->
-<!--                        <td>Częstochowa</td>-->
-<!--                        <td>Plac</td>-->
-<!--                        <td>ul. Jakas tam</td>-->
-<!--                        <td>30</td>-->
-<!--                        <td>42-200</td>-->
-<!--                        <td>Częstochowa</td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <td>1</td>-->
-<!--                        <td>Zakład Opieki Zdrowotnej Szpital im. Jana Pawła II we Włoszczowie</td>-->
-<!--                        <td>ul. Żeromskiego</td>-->
-<!--                        <td>28</td>-->
-<!--                        <td>29-100</td>-->
-<!--                        <td>Włoszczowa</td>-->
-<!--                        <td>*Adres*</td>-->
-<!--                        <td></td>-->
-<!--                        <td></td>-->
-<!--                        <td></td>-->
-<!--                        <td></td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <td>2</td>-->
-<!--                        <td>Zespół Szkolno-Przedszkolny nr 5</td>-->
-<!--                        <td>ul. Św. Barbary</td>-->
-<!--                        <td>32</td>-->
-<!--                        <td>42-200</td>-->
-<!--                        <td>Częstochowa</td>-->
-<!--                        <td>Plac</td>-->
-<!--                        <td>ul. Jakas tam</td>-->
-<!--                        <td>30</td>-->
-<!--                        <td>42-200</td>-->
-<!--                        <td>Częstochowa</td>-->
-<!--                    </tr>-->
-                </tbody>
-            </table>
-        </section>
+<header>
+    <span class="title">Strona Główna</span>
+</header>
+<main id="home-main">
+    <nav id="home-navigation">
+        <div class="buttons-container">
+            <a th:href="@{/mail}" class="button">Mail</a>
+            <a th:href="@{/admin}" class="button">Admin</a>
+        </div>
+    </nav>
+</main>
 
-        <nav id="home-navigation">
-            <div class="buttons-container">
-                <a th:href="@{/admin/form/add}" class="button">Dodaj nowego klienta</a>
-                <a th:href="@{/admin/form/edit}" class="button">Edytuj klienta</a>
-                <a th:href="@{/admin/form/delete}" class="button">Usuń klienta</a>
-            </div>
-        </nav>
-        
-    </main>
-
-    <footer th:replace="~{fragments/footer :: CopyrightFooter}"></footer>
+<footer th:replace="~{fragments/footer :: CopyrightFooter}"></footer>
 </body>
 </html>

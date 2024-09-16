@@ -5,12 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import pl.bpwesley.TourOperator.controller.FormContoller;
 import pl.bpwesley.TourOperator.dto.ClientDTO;
 import pl.bpwesley.TourOperator.entity.Client;
 import pl.bpwesley.TourOperator.entity.PickupLocation;
@@ -18,8 +12,6 @@ import pl.bpwesley.TourOperator.exception.ClientAlreadyExistsException;
 import pl.bpwesley.TourOperator.mapper.ClientMapper;
 import pl.bpwesley.TourOperator.repository.ClientRepository;
 import pl.bpwesley.TourOperator.service.ClientService;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
