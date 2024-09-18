@@ -38,3 +38,7 @@ out/
 
 ### Configuration Data ###
 application-secrets.properties
+
+### Private Data ###
+*.png
+*.pdf
