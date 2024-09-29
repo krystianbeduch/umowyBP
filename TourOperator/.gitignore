@@ -40,5 +40,4 @@ out/
 application-secrets.properties
 
 ### Private Data ###
-*.png
-*.pdf
+Umowa.pdf

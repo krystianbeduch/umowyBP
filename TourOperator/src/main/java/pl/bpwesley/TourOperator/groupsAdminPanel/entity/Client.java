@@ -1,4 +1,4 @@
-package pl.bpwesley.TourOperator.entity;
+package pl.bpwesley.TourOperator.groupsAdminPanel.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

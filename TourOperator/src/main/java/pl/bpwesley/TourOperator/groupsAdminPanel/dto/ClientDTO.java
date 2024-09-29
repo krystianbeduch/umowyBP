@@ -1,10 +1,10 @@
-package pl.bpwesley.TourOperator.dto;
+package pl.bpwesley.TourOperator.groupsAdminPanel.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.bpwesley.TourOperator.entity.PickupLocation;
+import pl.bpwesley.TourOperator.groupsAdminPanel.entity.PickupLocation;
 
 @Getter
 @Setter

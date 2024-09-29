@@ -1,4 +1,4 @@
-package pl.bpwesley.TourOperator.controller;
+package pl.bpwesley.TourOperator.email.controller;
 
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import pl.bpwesley.TourOperator.service.EmailService;
+import pl.bpwesley.TourOperator.email.service.EmailService;
 
 import java.io.IOException;
 import java.util.HashMap;

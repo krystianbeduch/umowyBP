@@ -1,13 +1,13 @@
-package pl.bpwesley.TourOperator.service;
+package pl.bpwesley.TourOperator.groupsAdminPanel.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.bpwesley.TourOperator.dto.ClientDTO;
-import pl.bpwesley.TourOperator.exception.ClientAlreadyExistsException;
-import pl.bpwesley.TourOperator.exception.ClientNotFoundException;
-import pl.bpwesley.TourOperator.mapper.ClientMapper;
-import pl.bpwesley.TourOperator.entity.Client;
-import pl.bpwesley.TourOperator.repository.ClientRepository;
+import pl.bpwesley.TourOperator.groupsAdminPanel.dto.ClientDTO;
+import pl.bpwesley.TourOperator.groupsAdminPanel.exception.ClientAlreadyExistsException;
+import pl.bpwesley.TourOperator.groupsAdminPanel.exception.ClientNotFoundException;
+import pl.bpwesley.TourOperator.groupsAdminPanel.mapper.ClientMapper;
+import pl.bpwesley.TourOperator.groupsAdminPanel.entity.Client;
+import pl.bpwesley.TourOperator.groupsAdminPanel.repository.ClientRepository;
 
 import java.util.List;
 import java.util.Optional;

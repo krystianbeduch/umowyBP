@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Szablony email</title>
+    <link rel="stylesheet" type="text/css" href="/css/home-style.css">
+</head>
+<body>
+<nav th:replace="~{fragments :: SidebarMenu}"></nav>
+
+<main id="home-main">
+    <header th:replace="~{fragments :: header(headerTitle='Szablony mailowe')}"></header>
+
+    <!--    <div th:fragment="content"></div>-->
+
+    <footer th:replace="~{fragments :: CopyrightFooter}"></footer>
+</main>
+
+</body>
+</html>

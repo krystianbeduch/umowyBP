@@ -1,4 +1,4 @@
-package pl.bpwesley.TourOperator.service;
+package pl.bpwesley.TourOperator.email.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;

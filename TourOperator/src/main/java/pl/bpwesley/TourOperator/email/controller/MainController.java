@@ -1,4 +1,4 @@
-package pl.bpwesley.TourOperator.controller;
+package pl.bpwesley.TourOperator.email.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,10 +12,9 @@ public class MainController {
         return "home";
     }
 
-    @GetMapping("/mail")
-    @ResponseBody
-    public String mail() {
-        return "mail sent";
+    @GetMapping("/email/home")
+    public String emailHome() {
+        return "email/home";
     }
     @GetMapping("/admin/home")
     public String adminHome() {

@@ -36,17 +36,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 populateForm(client);
                 if (client.pickupLocation.pickupLocation === "*Adres*") {
                    checkbox.checked = true;
-                   // pickupLocationGroup.style.display = "none";
                    slideUp(pickupLocationGroup);
-                   // pickupLocationGroup.classList.add("fade-out");
-                   // pickupLocationGroup.classList.remove("fade-in");
                 }
                 else {
                    checkbox.checked = false;
-                   // pickupLocationGroup.style.display = "block";
                    slideDown(pickupLocationGroup);
-                   // pickupLocationGroup.classList.add("fade-in");
-                   // pickupLocationGroup.classList.remove("fade-out");
                 }
              }
              else {

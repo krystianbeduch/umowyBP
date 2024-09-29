@@ -1,15 +1,14 @@
-package pl.bpwesley.TourOperator.controller;
+package pl.bpwesley.TourOperator.groupsAdminPanel.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.bpwesley.TourOperator.dto.ClientDTO;
-import pl.bpwesley.TourOperator.entity.Client;
-import pl.bpwesley.TourOperator.repository.ClientRepository;
+import pl.bpwesley.TourOperator.groupsAdminPanel.dto.ClientDTO;
+import pl.bpwesley.TourOperator.groupsAdminPanel.service.ClientService;
+import pl.bpwesley.TourOperator.groupsAdminPanel.repository.ClientRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
-import pl.bpwesley.TourOperator.service.ClientService;
 
 import java.util.List;
 

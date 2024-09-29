@@ -208,7 +208,6 @@ fieldset {
 
 fieldset.pickup-location-group { 
     /*margin-top: 20px;*/
-    margin-bottom: 20px;
     opacity: 0;
     height: 0;
     overflow: hidden;

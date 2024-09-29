@@ -1,12 +1,12 @@
-package pl.bpwesley.TourOperator.controller;
+package pl.bpwesley.TourOperator.groupsAdminPanel.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.bpwesley.TourOperator.entity.Client;
-import pl.bpwesley.TourOperator.repository.ClientRepository;
+import pl.bpwesley.TourOperator.groupsAdminPanel.entity.Client;
+import pl.bpwesley.TourOperator.groupsAdminPanel.repository.ClientRepository;
 
 import java.util.List;
 

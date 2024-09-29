@@ -1,9 +1,9 @@
-package pl.bpwesley.TourOperator.mapper;
+package pl.bpwesley.TourOperator.groupsAdminPanel.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import pl.bpwesley.TourOperator.dto.ClientDTO;
-import pl.bpwesley.TourOperator.entity.Client;
+import pl.bpwesley.TourOperator.groupsAdminPanel.dto.ClientDTO;
+import pl.bpwesley.TourOperator.groupsAdminPanel.entity.Client;
 
 @Mapper
 public interface ClientMapper {

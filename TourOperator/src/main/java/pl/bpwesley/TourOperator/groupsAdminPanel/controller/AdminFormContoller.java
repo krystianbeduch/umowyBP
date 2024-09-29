@@ -1,13 +1,13 @@
-package pl.bpwesley.TourOperator.controller;
+package pl.bpwesley.TourOperator.groupsAdminPanel.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pl.bpwesley.TourOperator.dto.ClientDTO;
-import pl.bpwesley.TourOperator.exception.ClientAlreadyExistsException;
-import pl.bpwesley.TourOperator.exception.ClientNotFoundException;
-import pl.bpwesley.TourOperator.service.ClientService;
+import pl.bpwesley.TourOperator.groupsAdminPanel.dto.ClientDTO;
+import pl.bpwesley.TourOperator.groupsAdminPanel.exception.ClientAlreadyExistsException;
+import pl.bpwesley.TourOperator.groupsAdminPanel.exception.ClientNotFoundException;
+import pl.bpwesley.TourOperator.groupsAdminPanel.service.ClientService;
 
 @Controller
 @RequestMapping("/admin/form") // Prefiks dla formularzy /admin/form

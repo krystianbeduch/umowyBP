@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+    <nav id="sidebar-menu" th:fragment="SidebarMenu">
+        <a th:href="@{/}"
+           class="button"
+           th:classappend="${currentPage == 'mail' ? 'active' : ''}">
+            Strona Główna</a>
+        <a th:href="@{/email/home}" class="button">Szablony email</a>
+        <a th:href="@{/admin/home}" class="button">Panel administracyjny</a>
+    </nav>
+
+    <header th:fragment="header(headerTitle)">
+        <h1 th:text="${headerTitle}">Nagłówek Strony</h1>
+    </header>
+
+
+    <footer th:fragment="CopyrightFooter">
+        <p>&copy; September 2024 Krystian Będuch</p>
+    </footer>
+</body>
+</html>
