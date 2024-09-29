@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/mail")
+@RequestMapping("/email")
 public class MailController {
 
     private final EmailService emailService;
@@ -21,6 +21,11 @@ public class MailController {
     @Autowired
     public MailController(EmailService emailService) {
         this.emailService = emailService;
+    }
+
+    @GetMapping("/edit-template")
+    public String editEmailTemplate() {
+        return "email/edit_template";
     }
 
     @ResponseBody

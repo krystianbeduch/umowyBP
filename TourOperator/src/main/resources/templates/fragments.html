@@ -3,10 +3,7 @@
 <body>
 
     <nav id="sidebar-menu" th:fragment="SidebarMenu">
-        <a th:href="@{/}"
-           class="button"
-           th:classappend="${currentPage == 'mail' ? 'active' : ''}">
-            Strona Główna</a>
+        <a th:href="@{/}" class="button">Strona Główna</a>
         <a th:href="@{/email/home}" class="button">Szablony email</a>
         <a th:href="@{/admin/home}" class="button">Panel administracyjny</a>
     </nav>

@@ -5,17 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Szablony email</title>
     <link rel="stylesheet" type="text/css" href="/css/home-style.css">
+    <link rel="stylesheet" type="text/css" href="/css/email-style.css">
+    <script type="module" src="/js/sidebar.js"></script>
 </head>
 <body>
-<nav th:replace="~{fragments :: SidebarMenu}"></nav>
+    <nav th:replace="~{fragments :: SidebarMenu}"></nav>
 
-<main id="home-main">
-    <header th:replace="~{fragments :: header(headerTitle='Szablony mailowe')}"></header>
+    <main id="home-main">
+        <header th:replace="~{fragments :: header(headerTitle='Szablony email')}"></header>
 
-    <!--    <div th:fragment="content"></div>-->
+        <section>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tytuł szablonu</th>
+                        <th>Data modyfikacji</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a th:href="@{/email/edit-template}">Potwierdzenie rezerwacji</a></td>
+                        <td>2024-09-29 19:07</td>
+                    </tr>
+                    <tr>
+                        <td><a th:href="@{/email_templates/}">Potwierdzenie 2</a></td>
+                        <td>2024-09-29</td>
+                    </tr>
+                    <tr>
+                        <td><a th:href="@{/email_templates/}">Potwierdzenie 3</a></td>
+                        <td>2024-09-29</td>
+                    </tr>
+                    <tr>
+                        <td><a th:href="@{/email/send}">Wyślij testowego maila</a></td>
+                        <td>2024-09-29</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
 
-    <footer th:replace="~{fragments :: CopyrightFooter}"></footer>
-</main>
+        <footer th:replace="~{fragments :: CopyrightFooter}"></footer>
+    </main>
 
 </body>
 </html>
