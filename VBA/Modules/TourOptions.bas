@@ -120,9 +120,9 @@ Sub SetInsurance()
     
     Dim insuranceText As String
     If locationOfTour Then  ' True - Polska
-        insuranceText = "NNW (100 000,- z³) i KL (10 000,- z³)"
+        insuranceText = "NNW (100 000 z³), KL (5 000 z³), OC (100 000 z³)"
     Else                    ' False - Europa
-        insuranceText = "NNW (100 000,- z³) i KL (10 000,- z³) Europa"
+        insuranceText = "NNW (20 000 z³), KL (20 000 €), OC (25 000 €)"
     End If
     
     ' Ustaw tekst ubezpieczenia
