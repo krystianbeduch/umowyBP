@@ -13,9 +13,9 @@ body {
     flex-direction: row;
     min-height: 100vh;
 }
-
+/* MENU */
 nav#sidebar-menu {
-    width: 250px;
+    width: 150px;
     background-color: #509bf1;
     padding: 20px;
     color: white;
@@ -33,14 +33,13 @@ nav#sidebar-menu a {
     color: white;
     text-decoration: none;
     padding: 10px 5px;
-    font-size: 1.2em;
+    font-size: 0.9em;
     margin-bottom: 5px;
 }
 
 nav#sidebar-menu a:hover {
     background-color: #0056b3;
     cursor: pointer;
-    padding-left: 20px;
     transition: all 0.3s ease;
 }
 
@@ -50,7 +49,7 @@ nav#sidebar-menu a.active {
 }
 
 main#home-main {
-    margin-left: 250px; /* Tworzy miejsce na menu po lewej */
+    margin-left: 150px; /* Tworzy miejsce na menu po lewej */
     flex-grow: 1;
     padding: 20px;
     display: flex;

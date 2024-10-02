@@ -1,10 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edycja email</title>
+    <link rel="stylesheet" type="text/css" href="/css/home-style.css">
+    <link rel="stylesheet" type="text/css" href="/css/email-style.css">
+    <script type="module" src="/js/sidebar.js"></script>
 </head>
 <body>
+<nav th:replace="~{fragments :: SidebarMenu}"></nav>
+
+<main id="home-main">
+    <header th:replace="~{fragments :: header(headerTitle='Edycja email')}"></header>
+
+    <section>
+        <form id="edit-template-form" th:action="@{'/email/edit-template'}" method="post">
+            <!-- Wymagane dla Springa -->
+            <input type="hidden" name="_method" value="put">
+            <input type="hidden" th:value="${emailTemplateId}" name="templateId" readonly>
+            <textarea id="ta-edit-template" name="content" th:text="${emailTemplateContent}" rows="40" cols="140"></textarea>
+            <br/>
+            <button type="submit">Zapisz Zmiany</button>
+        </form>
+
+    </section>
+
+    <footer th:replace="~{fragments :: CopyrightFooter}"></footer>
+</main>
 
 </body>
 </html>

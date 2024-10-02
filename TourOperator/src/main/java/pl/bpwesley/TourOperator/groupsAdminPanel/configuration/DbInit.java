@@ -1,4 +1,4 @@
-package pl.bpwesley.TourOperator.groupsAdminPanel;
+package pl.bpwesley.TourOperator.groupsAdminPanel.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
