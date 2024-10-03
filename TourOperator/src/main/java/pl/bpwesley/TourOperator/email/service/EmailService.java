@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -83,6 +84,10 @@ public class EmailService {
 
         // Wyslij emaila
         mailSender.send(message);
+    }
+
+    public List<EmailTemplate> getEmailTemplateList() {
+        return emailTemplateRepository.findAll();
     }
 
     public String getEmailTemplateContent(Long templateId) {

@@ -23,10 +23,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><a th:href="@{/email/edit-template}">Potwierdzenie rezerwacji</a></td>
-                        <td>2024-09-29 19:07</td>
-                    </tr>
+                    <tr th:each="emailTemplate, stat: ${emailTemplates}">
+                        <td><a th:href="@{/email/edit-template}" th:text="${emailTemplate.name}"></a></td>
+                        <td th:text="${#temporals.format(emailTemplate.updateDate, 'dd.MM.yyyy HH:mm')}"></td>
+<!--                    <tr>-->
+<!--                        <td><a th:href="@{/email/edit-template}" th:text="${name}"></a></td>-->
+<!--                        <d>2024-09-29 19:07</td>-->
+<!--                    </tr>-->
                     <tr>
                         <td><a th:href="@{/email_templates/}">Potwierdzenie 2</a></td>
                         <td>2024-09-29</td>

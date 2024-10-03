@@ -1,11 +1,20 @@
 package pl.bpwesley.TourOperator.email.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import pl.bpwesley.TourOperator.email.service.EmailService;
 
 @Controller
 public class MainController {
+    private final EmailService emailService;
+
+    @Autowired
+    public MainController(EmailService emailService) {
+        this.emailService = emailService;
+    }
 
     @GetMapping("/")
     public String home() {
@@ -13,7 +22,10 @@ public class MainController {
     }
 
     @GetMapping("/email/home")
-    public String emailHome() {
+    public String emailHome(Model model) {
+        // Zaladuj liste szablonow
+        model.addAttribute("emailTemplates", emailService.getEmailTemplateList());
+
         return "email/home";
     }
     @GetMapping("/admin/home")

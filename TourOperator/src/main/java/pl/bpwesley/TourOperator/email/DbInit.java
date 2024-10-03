@@ -31,6 +31,7 @@ public class DbInit implements CommandLineRunner {
             emailTemplateRepository.save(
                     new EmailTemplate(
                             null,
+                            "Potwierdzenie rezerwacji",
                             content,
                             LocalDateTime.now()
                     )

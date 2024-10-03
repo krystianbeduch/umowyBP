@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -19,10 +18,10 @@ public class EmailTemplate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long emailTemplateId;
+    private String name;
 
-    // Pole przechowujace kod HTML
     @Lob // Large Object
-    private String content;
+    private String content; // Pole przechowujace kod HTML
     private LocalDateTime updateDate;
 }
 
