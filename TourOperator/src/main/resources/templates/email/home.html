@@ -26,10 +26,6 @@
                     <tr th:each="emailTemplate, stat: ${emailTemplates}">
                         <td><a th:href="@{/email/edit-template}" th:text="${emailTemplate.name}"></a></td>
                         <td th:text="${#temporals.format(emailTemplate.updateDate, 'dd.MM.yyyy HH:mm')}"></td>
-<!--                    <tr>-->
-<!--                        <td><a th:href="@{/email/edit-template}" th:text="${name}"></a></td>-->
-<!--                        <d>2024-09-29 19:07</td>-->
-<!--                    </tr>-->
                     <tr>
                         <td><a th:href="@{/email_templates/}">Potwierdzenie 2</a></td>
                         <td>2024-09-29</td>
@@ -39,9 +35,14 @@
                         <td>2024-09-29</td>
                     </tr>
                     <tr>
-                        <td><a th:href="@{/email/send}">Wyślij testowego maila</a></td>
+                        <td><a th:href="@{/email/send/reservation-confirmation}">Wyślij potwierdzenie rezeracji</a></td>
                         <td>2024-09-29</td>
                     </tr>
+                    <tr>
+                        <td><a th:href="@{/email/send/advance-payment-confirmation}">Wyślij potwierdzenie płatności zaliczki</a></td>
+                        <td>2024-09-29</td>
+                    </tr>
+
                 </tbody>
             </table>
         </section>

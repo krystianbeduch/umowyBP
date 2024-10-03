@@ -31,7 +31,6 @@ public class EmailService {
     private final JavaMailSender mailSender;
 
     private final TemplateEngine templateEngine;
-//    private final HtmlReader htmlFileReader;
 
     @Autowired
     public EmailService(EmailTemplateRepository emailTemplateRepository, JavaMailSender mailSender, TemplateEngine templateEngine) {
@@ -49,42 +48,42 @@ public class EmailService {
         mailSender.send(message);
     }
 
-    public void sendEmailWithReservationConfirmation(String to, String subject, Map<String, Object> variables) throws MessagingException, UnsupportedEncodingException {
-        // Utworz i przetworz szablon emaila
-        Context context = new Context();
-        context.setVariables(variables);
-        String body = templateEngine.process("email_templates/reservation_confirmation.html", context);
-
-        // Utworz wiadomosc email
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        helper.setFrom(new InternetAddress("beduch.krystian@gmail.com", "Krystian"));
-        helper.setTo(to);
-        helper.setSubject(subject + variables.get("tour_name"));
-        helper.setText(body, true);
-
-        // Dodaj zalaczniki pdf
-        String[] attachments = {
-                "Andrzejki-w-stylu-Country-3545i.pdf",
-                "OWU_BP_Wesley.pdf",
-                "OWU_PZU_NNW.pdf",
-                "Polityka_prywatnosci.pdf",
-                "Regulamin_serwisu.pdf",
-                "Umowa.pdf"
-        };
-
-        for (String fileName : attachments) {
-            ClassPathResource attachment = new ClassPathResource("templates/email_templates/attachments/" + fileName);
-            helper.addAttachment(attachment.getFilename(), attachment);
-        }
-
-        // Zaladuj logo do maila
-        ClassPathResource image = new ClassPathResource("static/images/Logo_Wesley_mini.png");
-        helper.addInline("logoImage", image);
-
-        // Wyslij emaila
-        mailSender.send(message);
-    }
+//    public void sendEmailWithReservationConfirmation(String to, String subject, Map<String, Object> variables) throws MessagingException, UnsupportedEncodingException {
+//        // Utworz i przetworz szablon emaila
+//        Context context = new Context();
+//        context.setVariables(variables);
+//        String body = templateEngine.process("email_templates/reservation_confirmation.html", context);
+//
+//        // Utworz wiadomosc email
+//        MimeMessage message = mailSender.createMimeMessage();
+//        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+//        helper.setFrom(new InternetAddress("beduch.krystian@gmail.com", "Krystian"));
+//        helper.setTo(to);
+//        helper.setSubject(subject + variables.get("tour_name"));
+//        helper.setText(body, true);
+//
+//        // Dodaj zalaczniki pdf
+//        String[] attachments = {
+//                "Andrzejki-w-stylu-Country-3545i.pdf",
+//                "OWU_BP_Wesley.pdf",
+//                "OWU_PZU_NNW.pdf",
+//                "Polityka_prywatnosci.pdf",
+//                "Regulamin_serwisu.pdf",
+//                "Umowa.pdf"
+//        };
+//
+//        for (String fileName : attachments) {
+//            ClassPathResource attachment = new ClassPathResource("templates/email_templates/attachments/" + fileName);
+//            helper.addAttachment(attachment.getFilename(), attachment);
+//        }
+//
+//        // Zaladuj logo do maila
+//        ClassPathResource image = new ClassPathResource("static/images/Logo_Wesley_mini.png");
+//        helper.addInline("logoImage", image);
+//
+//        // Wyslij emaila
+//        mailSender.send(message);
+//    }
 
     public List<EmailTemplate> getEmailTemplateList() {
         return emailTemplateRepository.findAll();
