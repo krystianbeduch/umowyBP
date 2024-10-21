@@ -31,6 +31,7 @@ public class EmailSendingService {
         Context context = new Context();
         context.setVariables(variables);
         String body = templateEngine.process("email_templates/reservation_confirmation.html", context);
+        // pobieranie body musi się odbywać poprzez pobranie szablonu z bazy
 
         // Utworz wiadomosc email
         MimeMessage message = mailSender.createMimeMessage();
@@ -68,6 +69,7 @@ public class EmailSendingService {
         Context context = new Context();
         context.setVariables(variables);
         String body = templateEngine.process("email_templates/advance_payment_confirmation.html", context);
+        // pobieranie body musi się odbywać poprzez pobranie szablonu z bazy
 
         // Utworz wiadomosc email
         MimeMessage message = mailSender.createMimeMessage();
@@ -86,6 +88,29 @@ public class EmailSendingService {
             ClassPathResource attachment = new ClassPathResource("templates/email_templates/attachments/" + fileName);
             helper.addAttachment(attachment.getFilename(), attachment);
         }
+
+        // Zaladuj logo do maila
+        ClassPathResource image = new ClassPathResource("static/images/Logo_Wesley_mini.png");
+        helper.addInline("logoImage", image);
+
+        // Wyslij emaila
+        mailSender.send(message);
+    }
+
+    public void sendEmailWithPaymentOfTotalConfirmation(String to, String subject, Map<String, Object> variables) throws MessagingException, UnsupportedEncodingException {
+        // Utworz i przetworz szablon emaila
+        Context context = new Context();
+        context.setVariables(variables);
+        String body = templateEngine.process("email_templates/payment_of_total_confirmation.html", context);
+        // pobieranie body musi się odbywać poprzez pobranie szablonu z bazy
+
+        // Utworz wiadomosc email
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+        helper.setFrom(new InternetAddress("beduch.krystian@gmail.com", "Krystian"));
+        helper.setTo(to);
+        helper.setSubject(subject + variables.get("tour_name"));
+        helper.setText(body, true);
 
         // Zaladuj logo do maila
         ClassPathResource image = new ClassPathResource("static/images/Logo_Wesley_mini.png");

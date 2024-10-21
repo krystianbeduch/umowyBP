@@ -69,6 +69,25 @@ public class EmailSendingController {
         return "Potwierdzenie płatności zaliczki wyslane";
     }
 
+    @ResponseBody
+    @GetMapping("/payment-of-total-confirmation")
+    public String sendEmailWithPaymentOfTotalConfirmation() throws MessagingException, UnsupportedEncodingException {
+//        Docelowo DB
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("client_name", "Imie klienta");
+        variables.put("tour_name", "Nazwa wycieczki");
+        variables.put("tour_id", "Id wycieczki");
+        variables.put("tour_location", "Tour location");
+        variables.put("start_date", "dataod: 44");
+
+        emailSendingService.sendEmailWithPaymentOfTotalConfirmation(
+                "beduch_krystian@o2.pl",
+                "Potwierdzenie płatności całości za ",
+                variables
+        );
+        return "Potwierdzenie płatności całości wyslane";
+    }
+
 
 
 }

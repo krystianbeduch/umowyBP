@@ -1,7 +1,7 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Potwierdzenie rezerwacji</title>
+    <title th:text="${emailTemplateName}">[Template Name]</title>
     <style>
         p, li {
             margin-bottom: 20px;
@@ -12,17 +12,28 @@
     </style>
 </head>
 <body>
-    <h1>Witaj <span th:text="${client_name}">[Client Name]</span>!</h1>
-    <p>Gratulacje z okazji rezerwacji wyjazdu <b th:text="${tour_name}">[Tour Name]</b> w terminie od <b th:text="${start_date}">[Start Date]</b> do <b th:text="${end_date}">[End Date]</b>.</p>
+    <h1>Witaj
+        <span th:text="${client_name}">[Client Name]</span>!</h1>
+    <p>Gratulacje z okazji rezerwacji wyjazdu
+        <b th:text="${tour_name}">[Tour Name]</b> w terminie od
+        <b th:text="${start_date}">[Start Date]</b> do
+        <b th:text="${end_date}">[End Date]</b>.
+    </p>
 
     <div style="color: darkblue">
         <p><u>Terminy płatności:</u></p>
         <ol>
             <li>
-                <b>Zaliczka</b> w wysokości: <b th:text="${advance}">[Advance]</b> płatna w ciągu 3 dni od zgłoszenia, tj. do <b th:text="${advance_deadline}">[Advance Deadline]</b>.
+                <b>Zaliczka</b> w wysokości:
+                <b th:text="${advance}">[Advance]</b>
+                płatna w ciągu 3 dni od zgłoszenia, tj. do
+                <b th:text="${advance_deadline}">[Advance Deadline]</b>.
             </li>
             <li>
-                Pozostała kwota <b th:text="${remaining_amount}">[Remaining Amount]</b> płatna do dnia <b th:text="${remaining_amount_deadline}">[Remaining Deadline]</b>.
+                Pozostała kwota
+                <b th:text="${remaining_amount}">[Remaining Amount]</b>
+                płatna do dnia
+                <b th:text="${remaining_amount_deadline}">[Remaining Deadline]</b>.
             </li>
             <li>
                 Płatność za bilety wstępu - <b>płatne gotówką w autokarze</b>.
@@ -37,14 +48,23 @@
 
         <p>W załączeniu przesyłamy program wycieczki, Ogólne Warunki Uczestnictwa oraz Umowę, której nie trzeba podpisywać.</p>
 
-        <p><i><b>Miejsce głównej zbiórki uczestników:</b> Częstochowa, ul. Focha 7 - parking pod marketem Auchan <span th:text="${start_date}">[Start Date]</span></i></p>
+        <p><i><b>Miejsce głównej zbiórki uczestników:</b>
+            Częstochowa, ul. Focha 7 - parking pod marketem Auchan
+            <span th:text="${start_date}">[Start Date]</span></i>
+        </p>
 
-        <p><b>Dodatkowe ustalenia</b> - kopia twoich odpowiedzi: <span th:text="${client_name}">[Client Name]</span>:<br>
-        Wybierz miejsce msiadania - Częstochowa ul. Focha 7 - parking pod marktem Auchan, godz. wyjazdu <span th:text="${departure_time}">[Departure Time]</span> </p>
+        <p><b>Dodatkowe ustalenia</b> - kopia twoich odpowiedzi:
+            <span th:text="${client_name}">[Client Name]</span>:<br>
+        Wybierz miejsce msiadania - Częstochowa ul. Focha 7 - parking pod marktem Auchan, godz. wyjazdu
+            <span th:text="${departure_time}">[Departure Time]</span>
+        </p>
     </div>
 
     <div>
-        <p><i>Powrót do Częstochowy <span th:text="${start_date}">[Start Date]</span> planowany ok. godz <span th:text="${arrival_time}">[Arrival time]</span></i></p>
+        <p><i>Powrót do Częstochowy
+            <span th:text="${start_date}">[Start Date]</span> planowany ok. godz
+            <span th:text="${arrival_time}">[Arrival time]</span></i>
+        </p>
     </div>
 
     <div style="font-size: 0.8em">

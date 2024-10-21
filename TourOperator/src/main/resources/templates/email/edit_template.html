@@ -22,7 +22,8 @@
             <!--    docelowo ID type=hidden -->
 
             <label for="template-name">Tytuł szablonu:</label>
-            <input type="text" id="template-name"  th:value="${emailTemplateName}" name="name" required>
+            <input type="text" id="template-name"  th:value="${emailTemplateName}" name="name" size="50" required>
+            <br><br>
 
             <textarea id="ta-edit-template" th:text="${emailTemplateContent}" name="content" rows="40" cols="140"></textarea>
             <br/>
