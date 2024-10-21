@@ -36,6 +36,17 @@ public class DbInit implements CommandLineRunner {
                             LocalDateTime.now()
                     )
             );
+
+            filePath = Paths.get("src/main/resources/templates/email_templates/advance_payment_confirmation.html");
+            content = Files.readString(filePath);
+            emailTemplateRepository.save(
+                    new EmailTemplate(
+                            null,
+                            "Potwierdzenie płatności zaliczki",
+                            content,
+                            LocalDateTime.now()
+                    )
+            );
         }
         catch (IOException e) {
             e.printStackTrace();

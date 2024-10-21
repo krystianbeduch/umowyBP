@@ -19,7 +19,12 @@
             <!-- Wymagane dla Springa -->
             <input type="hidden" name="_method" value="put">
             <input type="hidden" th:value="${emailTemplateId}" name="templateId" readonly>
-            <textarea id="ta-edit-template" name="content" th:text="${emailTemplateContent}" rows="40" cols="140"></textarea>
+            <!--    docelowo ID type=hidden -->
+
+            <label for="template-name">Tytuł szablonu:</label>
+            <input type="text" id="template-name"  th:value="${emailTemplateName}" name="name" required>
+
+            <textarea id="ta-edit-template" th:text="${emailTemplateContent}" name="content" rows="40" cols="140"></textarea>
             <br/>
             <button type="submit">Zapisz Zmiany</button>
         </form>

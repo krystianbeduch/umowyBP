@@ -24,7 +24,7 @@
                 </thead>
                 <tbody>
                     <tr th:each="emailTemplate, stat: ${emailTemplates}">
-                        <td><a th:href="@{/email/edit-template}" th:text="${emailTemplate.name}"></a></td>
+                        <td><a th:href="@{/email/edit-template/{id}(id=${emailTemplate.emailTemplateId})}" th:text="${emailTemplate.name}"></a></td>
                         <td th:text="${#temporals.format(emailTemplate.updateDate, 'dd.MM.yyyy HH:mm')}"></td>
                     <tr>
                         <td><a th:href="@{/email_templates/}">Potwierdzenie 2</a></td>

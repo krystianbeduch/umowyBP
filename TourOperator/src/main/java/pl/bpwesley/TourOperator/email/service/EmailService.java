@@ -96,6 +96,13 @@ public class EmailService {
         return emailTemplate.map(EmailTemplate::getContent).orElse("");
     }
 
+    public String getEmailTemplateName(Long templateId) {
+        Optional<EmailTemplate> emailTemplate = emailTemplateRepository.findById(templateId);
+
+        // Zwroc nazwe szablonu jesli istnieje
+        return emailTemplate.map(EmailTemplate::getName).orElse("");
+    }
+
     public void updateEmailTemplateContent(EmailTemplate emailTemplate) {
         if (emailTemplateRepository.existsById(emailTemplate.getEmailTemplateId())) {
             emailTemplateRepository.save(emailTemplate);

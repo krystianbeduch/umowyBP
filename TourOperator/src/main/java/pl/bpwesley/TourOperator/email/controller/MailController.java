@@ -24,22 +24,25 @@ public class MailController {
         this.emailService = emailService;
     }
 
-    @GetMapping("/edit-template")
-    public String showEditEmailTemplatePage(Model model) {
-        Long templateId = 1L;
-        // zamienic na wartosc ktora bedzie odczytywana na podstawie otwartego maila
+    @GetMapping("/edit-template/{id}")
+    public String showEditEmailTemplatePage(
+            @PathVariable("id") Long templateId,
+            Model model) {
+        // Pobieramy zawartosc szablonu na podstawie przekazanego ID
 
-        model.addAttribute("emailTemplateContent", emailService.getEmailTemplateContent(templateId));
-        model.addAttribute("emailTemplateId", templateId);
+        model.addAttribute("emailTemplateContent", emailService.getEmailTemplateContent(templateId));        model.addAttribute("emailTemplateId", templateId);
+        model.addAttribute("emailTemplateName", emailService.getEmailTemplateName(templateId));
         return "email/edit_template";
     }
 
     @PutMapping("/edit-template")
     @ResponseBody
     public String updateEmailTemplate(@RequestParam("templateId") Long templateId,
+                                      @RequestParam("name") String name,
                                       @RequestParam("content") String content) {
         EmailTemplate emailTemplate = new EmailTemplate();
         emailTemplate.setEmailTemplateId(templateId);
+        emailTemplate.setName(name);
         emailTemplate.setContent(content);
         emailTemplate.setUpdateDate(LocalDateTime.now());
 

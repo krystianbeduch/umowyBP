@@ -51,6 +51,7 @@ public class EmailSendingController {
     @ResponseBody
     @GetMapping("/advance-payment-confirmation")
     public String sendEmailWithAdvancePaymentConfirmation() throws MessagingException, UnsupportedEncodingException {
+//        Docelowo DB
         Map<String, Object> variables = new HashMap<>();
         variables.put("client_name", "Imie");
         variables.put("advance", "kwota zaliczki 200zl");

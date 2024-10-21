@@ -26,8 +26,6 @@ public class EmailSendingService {
         this.templateEngine = templateEngine;
     }
 
-
-
     public void sendEmailWithReservationConfirmation(String to, String subject, Map<String, Object> variables) throws MessagingException, UnsupportedEncodingException {
         // Utworz i przetworz szablon emaila
         Context context = new Context();
