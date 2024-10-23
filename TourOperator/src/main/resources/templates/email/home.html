@@ -26,27 +26,10 @@
                     <tr th:each="emailTemplate, stat: ${emailTemplates}">
                         <td><a th:href="@{/email/edit-template/{id}(id=${emailTemplate.emailTemplateId})}" th:text="${emailTemplate.name}"></a></td>
                         <td th:text="${#temporals.format(emailTemplate.updateDate, 'dd.MM.yyyy HH:mm')}"></td>
-                    <tr>
-                        <td><a th:href="@{/email_templates/}">Potwierdzenie 2</a></td>
-                        <td>2024-09-29</td>
+                    <tr th:each="emailTemplate, stat: ${emailTemplates}">
+                        <td><a th:href="@{/email/send/{id}(id=${emailTemplate.emailTemplateId})}">Wyślij maila: <span th:text="${emailTemplate.name}"></span></a></td>
+                        <td th:text="${#temporals.format(emailTemplate.updateDate, 'dd.MM.yyyy HH:mm')}"></td>
                     </tr>
-                    <tr>
-                        <td><a th:href="@{/email_templates/}">Potwierdzenie 3</a></td>
-                        <td>2024-09-29</td>
-                    </tr>
-                    <tr>
-                        <td><a th:href="@{/email/send/reservation-confirmation}">Wyślij potwierdzenie rezeracji</a></td>
-                        <td>2024-09-29</td>
-                    </tr>
-                    <tr>
-                        <td><a th:href="@{/email/send/advance-payment-confirmation}">Wyślij potwierdzenie płatności zaliczki</a></td>
-                        <td>2024-09-29</td>
-                    </tr>
-                    <tr>
-                        <td><a th:href="@{/email/send/payment-of-total-confirmation}">Wyślij potwierdzenie płatności całości</a></td>
-                        <td>2024-10-21</td>
-                    </tr>
-
                 </tbody>
             </table>
         </section>

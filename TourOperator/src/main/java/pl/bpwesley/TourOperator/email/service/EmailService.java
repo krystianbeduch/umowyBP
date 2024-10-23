@@ -40,60 +40,8 @@ public class EmailService {
 //        this.htmlFileReader = htmlFileReader;
     }
 
-    public void sendSimpleMessage(String to, String subject, String text) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
-        mailSender.send(message);
-    }
-
-//    public void sendEmailWithReservationConfirmation(String to, String subject, Map<String, Object> variables) throws MessagingException, UnsupportedEncodingException {
-//        // Utworz i przetworz szablon emaila
-//        Context context = new Context();
-//        context.setVariables(variables);
-//        String body = templateEngine.process("email_templates/reservation_confirmation.html", context);
-//
-//        // Utworz wiadomosc email
-//        MimeMessage message = mailSender.createMimeMessage();
-//        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-//        helper.setFrom(new InternetAddress("beduch.krystian@gmail.com", "Krystian"));
-//        helper.setTo(to);
-//        helper.setSubject(subject + variables.get("tour_name"));
-//        helper.setText(body, true);
-//
-//        // Dodaj zalaczniki pdf
-//        String[] attachments = {
-//                "Andrzejki-w-stylu-Country-3545i.pdf",
-//                "OWU_BP_Wesley.pdf",
-//                "OWU_PZU_NNW.pdf",
-//                "Polityka_prywatnosci.pdf",
-//                "Regulamin_serwisu.pdf",
-//                "Umowa.pdf"
-//        };
-//
-//        for (String fileName : attachments) {
-//            ClassPathResource attachment = new ClassPathResource("templates/email_templates/attachments/" + fileName);
-//            helper.addAttachment(attachment.getFilename(), attachment);
-//        }
-//
-//        // Zaladuj logo do maila
-//        ClassPathResource image = new ClassPathResource("static/images/Logo_Wesley_mini.png");
-//        helper.addInline("logoImage", image);
-//
-//        // Wyslij emaila
-//        mailSender.send(message);
-//    }
-
     public List<EmailTemplate> getEmailTemplateList() {
         return emailTemplateRepository.findAll();
-    }
-
-    public String getEmailTemplateContent(Long templateId) {
-        Optional<EmailTemplate> emailTemplate = emailTemplateRepository.findById(templateId);
-
-        // Zwroc zawartosc szablonu jesli istnieje
-        return emailTemplate.map(EmailTemplate::getContent).orElse("");
     }
 
     public String getEmailTemplateName(Long templateId) {
@@ -101,6 +49,22 @@ public class EmailService {
 
         // Zwroc nazwe szablonu jesli istnieje
         return emailTemplate.map(EmailTemplate::getName).orElse("");
+    }
+
+    public String getEmailTemplateContent(Long templateId) {
+        Optional<EmailTemplate> emailTemplate = emailTemplateRepository.findById(templateId);
+
+        // Zwroc nazwe szablonu jesli istnieje
+        return emailTemplate.map(EmailTemplate::getContent).orElse("");
+    }
+    public String getEmailTemplateContentBody(Long templateId, Map<String, Object> variables) {
+        Optional<EmailTemplate> emailTemplate = emailTemplateRepository.findById(templateId);
+
+
+        return null;
+
+        // Zwroc zawartosc szablonu jesli istnieje
+//        return templateEngine.process(getEmailTemplateContent(templateId), context);
     }
 
     public void updateEmailTemplateContent(EmailTemplate emailTemplate) {

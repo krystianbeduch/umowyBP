@@ -19,7 +19,7 @@
         footer span {
             display: block; /* Każdy span w osobnej linijce */
         }
-        footer span:nth-child(-n+2)  {
+        footer span:nth-child(-n+2) {
             color: red;
         }
         footer a {
@@ -30,22 +30,34 @@
 </head>
 <body>
     <h1>Witaj <span>${client_name!}</span>,</h1>
-    <p>Dziękujemy za terminową wpłatę zaliczki w wysokości
-        <span>${advance!}</span> za
+    <p>Przypominamy, że już
+        <span>${start_date!}</span>
+        wyjeżdżamy na wycieczkę
         <span>${tour_name!}</span>
         <span>${tour_id!}</span>
         <span>${tour_location!}</span>
     </p>
-    <p>Pozostałą kwotę
-        <span>${remaining_ammount!}</span>
-        możesz uregulować klikając w <a href="">Link do płatności</a>
+
+    <p>
+        <b>TWOJE MIEJSCE ZBIÓRKI i dodatkowe ustalenia</b> - kopia Twoich odpowiedzi:<br>
+        <span>${client_name!}</span>:<br>
+        Wybierz miejsce msiadania - Częstochowa ul. Focha 7 - parking pod marktem Auchan, godz. wyjazdu
+        <span>${departure_time!}</span>
     </p>
-    <p>Termin płatności:
-        <span>${remaining_amount_deadline!}</span>
+
+    <p style="color: red; font-weight: bold">Nie zapomnij zabrać paszportu lub dowodu osobistego!</p>
+    <p>
+        <span>${client_name!}</span>
+        poinformuj swoich współtowarzyszy o zbiórce. Życzymy udanego wyjazdu i dobrych wrażeń z wycieczki!
     </p>
+
+    <div>
+        <p>
+            <i>Nie prowadzimy rezerwacji miejsc w autokarze. Pilot wyczytuje uczestników zgodnie z kolejnością zapisywania. Wyczytane osoby wchodzą do autokaru i zajmują wolne miejsca wedle własnego uznania. Jest to swego rodzaju BONUS dla tych, którzy zapisują się jako pierwsi.</i>
+        </p>
+    </div>
 
     <p>Pozdrawiamy,</p>
-
     <img src="cid:logoImage" alt="Logo Wesley">
     <footer>
         <span>Biuro Podróży Wesley</span>

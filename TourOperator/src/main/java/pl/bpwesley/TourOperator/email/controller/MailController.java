@@ -26,12 +26,13 @@ public class MailController {
 
     @GetMapping("/edit-template/{id}")
     public String showEditEmailTemplatePage(
-            @PathVariable("id") Long templateId,
+            @PathVariable("id") Long emailTemplateId,
             Model model) {
-        // Pobieramy zawartosc szablonu na podstawie przekazanego ID
 
-        model.addAttribute("emailTemplateContent", emailService.getEmailTemplateContent(templateId));        model.addAttribute("emailTemplateId", templateId);
-        model.addAttribute("emailTemplateName", emailService.getEmailTemplateName(templateId));
+        // Pobieramy zawartosc szablonu na podstawie przekazanego ID
+        model.addAttribute("emailTemplateId", emailTemplateId);
+        model.addAttribute("emailTemplateContent", emailService.getEmailTemplateContent(emailTemplateId));
+        model.addAttribute("emailTemplateName", emailService.getEmailTemplateName(emailTemplateId));
         return "email/edit_template";
     }
 

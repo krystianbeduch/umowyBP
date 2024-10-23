@@ -1,5 +1,9 @@
 package pl.bpwesley.TourOperator.email.service;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -8,52 +12,63 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
-import java.io.UnsupportedEncodingException;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class EmailSendingService {
     private final JavaMailSender mailSender;
-
-    private final TemplateEngine templateEngine;
+    private final EmailService emailService;
+    private final Configuration freemarkerConfig;
 
     @Autowired
-    public EmailSendingService(JavaMailSender mailSender, TemplateEngine templateEngine) {
+    public EmailSendingService(JavaMailSender mailSender, EmailService emailService, Configuration freemarkerConfig) {
         this.mailSender = mailSender;
-        this.templateEngine = templateEngine;
+        this.emailService = emailService;
+        this.freemarkerConfig = freemarkerConfig;
     }
 
-    public void sendEmailWithReservationConfirmation(String to, String subject, Map<String, Object> variables) throws MessagingException, UnsupportedEncodingException {
-        // Utworz i przetworz szablon emaila
-        Context context = new Context();
-        context.setVariables(variables);
-        String body = templateEngine.process("email_templates/reservation_confirmation.html", context);
-        // pobieranie body musi się odbywać poprzez pobranie szablonu z bazy
+
+    public void sendEmail(Long templateId, String to, String subject, Map<String, Object> variables, List<String> attachments) throws MessagingException, IOException {
+        // Pobierz html szablonu szablonu z bazy
+        String templateContent = emailService.getEmailTemplateContent(templateId);
+
+        // Inicjalizuj szablon FreeMarker
+        String templateName = emailService.getEmailTemplateName(templateId);
+        Template template = new Template(templateName, new StringReader(templateContent), freemarkerConfig);
+        StringWriter writer = new StringWriter();
+
+        try {
+            // Wypełnij szablon danymi
+            template.process(variables, writer);
+        }
+        catch (TemplateException | IOException e) {
+            throw new RuntimeException("Błąd podczas przetwarzania szablonu", e);
+        }
+
+        String body = writer.toString();
 
         // Utworz wiadomosc email
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(new InternetAddress("beduch.krystian@gmail.com", "Krystian"));
         helper.setTo(to);
-        helper.setSubject(subject + variables.get("tour_name"));
+        helper.setSubject(subject);
         helper.setText(body, true);
 
         // Dodaj zalaczniki pdf
-        String[] attachments = {
-                "Andrzejki-w-stylu-Country-3545i.pdf",
-                "OWU_BP_Wesley.pdf",
-                "OWU_PZU_NNW.pdf",
-                "Polityka_prywatnosci.pdf",
-                "Regulamin_serwisu.pdf",
-                "Umowa.pdf"
-        };
-
-        for (String fileName : attachments) {
-            ClassPathResource attachment = new ClassPathResource("templates/email_templates/attachments/" + fileName);
-            helper.addAttachment(attachment.getFilename(), attachment);
+        if (attachments != null && !attachments.isEmpty()) {
+            for (String fileName : attachments) {
+                ClassPathResource attachment = new ClassPathResource("templates/email_templates/attachments/" + fileName);
+                File file = Objects.requireNonNull(attachment.getFile(), "Załącznik nie znaleziony");
+                helper.addAttachment(file.getName(), attachment);
+            }
         }
 
         // Zaladuj logo do maila
@@ -64,59 +79,4 @@ public class EmailSendingService {
         mailSender.send(message);
     }
 
-    public void sendEmailWithAdvancePaymentConfirmation(String to, String subject, Map<String, Object> variables) throws MessagingException, UnsupportedEncodingException {
-        // Utworz i przetworz szablon emaila
-        Context context = new Context();
-        context.setVariables(variables);
-        String body = templateEngine.process("email_templates/advance_payment_confirmation.html", context);
-        // pobieranie body musi się odbywać poprzez pobranie szablonu z bazy
-
-        // Utworz wiadomosc email
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        helper.setFrom(new InternetAddress("beduch.krystian@gmail.com", "Krystian"));
-        helper.setTo(to);
-        helper.setSubject(subject + variables.get("tour_name"));
-        helper.setText(body, true);
-
-        // Dodaj zalaczniki pdf
-        String[] attachments = {
-                "Umowa.pdf"
-        };
-
-        for (String fileName : attachments) {
-            ClassPathResource attachment = new ClassPathResource("templates/email_templates/attachments/" + fileName);
-            helper.addAttachment(attachment.getFilename(), attachment);
-        }
-
-        // Zaladuj logo do maila
-        ClassPathResource image = new ClassPathResource("static/images/Logo_Wesley_mini.png");
-        helper.addInline("logoImage", image);
-
-        // Wyslij emaila
-        mailSender.send(message);
-    }
-
-    public void sendEmailWithPaymentOfTotalConfirmation(String to, String subject, Map<String, Object> variables) throws MessagingException, UnsupportedEncodingException {
-        // Utworz i przetworz szablon emaila
-        Context context = new Context();
-        context.setVariables(variables);
-        String body = templateEngine.process("email_templates/payment_of_total_confirmation.html", context);
-        // pobieranie body musi się odbywać poprzez pobranie szablonu z bazy
-
-        // Utworz wiadomosc email
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        helper.setFrom(new InternetAddress("beduch.krystian@gmail.com", "Krystian"));
-        helper.setTo(to);
-        helper.setSubject(subject + variables.get("tour_name"));
-        helper.setText(body, true);
-
-        // Zaladuj logo do maila
-        ClassPathResource image = new ClassPathResource("static/images/Logo_Wesley_mini.png");
-        helper.addInline("logoImage", image);
-
-        // Wyslij emaila
-        mailSender.send(message);
-    }
 }

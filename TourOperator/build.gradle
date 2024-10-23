@@ -41,6 +41,7 @@ dependencies {
 	testImplementation 'org.mockito:mockito-junit-jupiter:5.13.0'
 
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.freemarker:freemarker:2.3.33'
 }
 
 tasks.named('test') {

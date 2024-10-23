@@ -58,6 +58,18 @@ public class DbInit implements CommandLineRunner {
                             LocalDateTime.now()
                     )
             );
+
+            filePath = Paths.get("src/main/resources/templates/email_templates/meeting-point-reminder.html");
+            content = Files.readString(filePath);
+            emailTemplateRepository.save(
+                    new EmailTemplate(
+                            null,
+                            "Przypomnienie o zbiórce na wycieczkę",
+                            content,
+                            LocalDateTime.now()
+                    )
+            );
+
         }
         catch (IOException e) {
             e.printStackTrace();

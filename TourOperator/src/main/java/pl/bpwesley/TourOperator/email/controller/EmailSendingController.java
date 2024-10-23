@@ -4,90 +4,125 @@ import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import pl.bpwesley.TourOperator.email.service.EmailSendingService;
 import pl.bpwesley.TourOperator.email.service.EmailService;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/email/send")
 public class EmailSendingController {
     private final EmailSendingService emailSendingService;
+    private final EmailService emailService;
 
     @Autowired
-    public EmailSendingController(EmailSendingService emailSendingService) {
+    public EmailSendingController(EmailSendingService emailSendingService, EmailService emailService) {
         this.emailSendingService = emailSendingService;
+        this.emailService = emailService;
     }
 
     @ResponseBody
-    @GetMapping("/reservation-confirmation")
-    public String sendEmailWithReservationConfirmation() throws MessagingException, IOException {
-        // Dane do szablonu mailowego (docelowo DB)
+    @GetMapping("/{id}")
+    public String sendEmail(@PathVariable("id") Long id) throws MessagingException, IOException {
+        String emailTemplateName = emailService.getEmailTemplateName(id);
         Map<String, Object> variables = new HashMap<>();
-        variables.put("client_name", "Imie");
-        variables.put("tour_name", "Wycieczka o nazwie");
-        variables.put("start_date", "data_od");
-        variables.put("end_date", "data_do");
-        variables.put("advance", "zaliczka");
-        variables.put("advance_deadline", "zaliczka termin");
-        variables.put("remaining_amount", "pozostala kwota");
-        variables.put("remaining_amount_deadline", "pozostaala kwota deadline");
-        variables.put("departure_time", "06:00");
-        variables.put("arrival_time", "21:00");
+        List<String> attachments = new ArrayList<>();
 
-        emailSendingService.sendEmailWithReservationConfirmation(
-                "beduch_krystian@o2.pl",
-                "Rezerwacja wycieczki ",
-                variables
-        );
-        return "Potwierdzenie rezerwacji wyslane";
+        switch (emailTemplateName) {
+            case "Potwierdzenie rezerwacji":
+                variables.put("client_name", "Imie");
+                variables.put("tour_name", "Wycieczka o nazwie");
+                variables.put("start_date", "data_od");
+                variables.put("end_date", "data_do");
+                variables.put("advance", "zaliczka");
+                variables.put("advance_deadline", "zaliczka termin");
+                variables.put("remaining_amount", "pozostala kwota");
+                variables.put("remaining_amount_deadline", "pozostaala kwota deadline");
+                variables.put("departure_time", "06:00");
+                variables.put("arrival_time", "21:00");
+
+                // Dodaj załączniki
+                Collections.addAll(attachments,
+                        "Andrzejki-w-stylu-Country-3545i.pdf",
+                        "OWU_BP_Wesley.pdf",
+                        "OWU_PZU_NNW.pdf",
+                        "Polityka_prywatnosci.pdf",
+                        "Regulamin_serwisu.pdf",
+                        "Umowa.pdf"
+                );
+                emailSendingService.sendEmail(
+                        id,
+                        "beduch_krystian@o2.pl",
+                        "Rezerwacja wycieczki " + variables.get("tour_name"),
+                        variables,
+                        attachments
+                );
+                break;
+            case "Potwierdzenie płatności zaliczki":
+                variables.put("client_name", "Imie");
+                variables.put("advance", "kwota zaliczki 200zl");
+                variables.put("tour_name", "Nazwa wycieczki");
+                variables.put("tour_id", "Id wycieczki");
+                variables.put("tour_location", "Tour location");
+                variables.put("remaining_ammount", "Pozostala kwota do zaplaty 200zl");
+                variables.put("remaining_amount_deadline", "pozostaala kwota deadline");
+
+                // Dodaj załączniki
+                Collections.addAll(attachments,
+                        "Umowa.pdf"
+                );
+                emailSendingService.sendEmail(
+                        id,
+                        "beduch_krystian@o2.pl",
+                        emailTemplateName + " za " + variables.get("tour_name") + " " + variables.get("tour_id"),
+                        variables,
+                        attachments
+                );
+                break;
+            case "Potwierdzenie płatności całości":
+                variables.put("client_name", "Imie klienta");
+                variables.put("tour_name", "Nazwa wycieczki");
+                variables.put("tour_id", "Id wycieczki");
+                variables.put("tour_location", "Tour location");
+                variables.put("start_date", "dataod: 44");
+
+                // Dodaj załączniki - brak
+
+                emailSendingService.sendEmail(
+                        id,
+                        "beduch_krystian@o2.pl",
+                        emailTemplateName + " za " + variables.get("tour_name") + " " + variables.get("tour_id"),
+                        variables,
+                        attachments
+                );
+                break;
+            case "Przypomnienie o zbiórce na wycieczkę":
+                variables.put("client_name", "Imie klienta");
+                variables.put("start_date", "datazbiorki: 44");
+                variables.put("tour_name", "Nazwa wycieczki");
+                variables.put("tour_id", "Id wycieczki");
+                variables.put("tour_location", "Tour location");
+                variables.put("departure_time", "06:00");
+
+                // Dodaj załączniki
+                Collections.addAll(attachments,
+                        "Umowa.pdf"
+                );
+
+                emailSendingService.sendEmail(
+                        id,
+                        "beduch_krystian@o2.pl",
+                        emailTemplateName + " " + variables.get("tour_name") + " " + variables.get("tour_id"),
+                        variables,
+                        attachments
+                );
+                break;
+
+        }
+        return emailTemplateName + " wysłane";
     }
-
-    @ResponseBody
-    @GetMapping("/advance-payment-confirmation")
-    public String sendEmailWithAdvancePaymentConfirmation() throws MessagingException, UnsupportedEncodingException {
-//        Docelowo DB
-        Map<String, Object> variables = new HashMap<>();
-        variables.put("client_name", "Imie");
-        variables.put("advance", "kwota zaliczki 200zl");
-        variables.put("tour_name", "Nazwa wycieczki");
-        variables.put("tour_id", "Id wycieczki");
-        variables.put("tour_location", "Tour location");
-        variables.put("remaining_ammount", "Pozostala kwota do zaplaty 200zl");
-        variables.put("remaining_amount_deadline", "pozostaala kwota deadline");
-
-        emailSendingService.sendEmailWithAdvancePaymentConfirmation(
-                "beduch_krystian@o2.pl",
-                "Potwierdzenie płatności zaliczki za ",
-                variables
-        );
-        return "Potwierdzenie płatności zaliczki wyslane";
-    }
-
-    @ResponseBody
-    @GetMapping("/payment-of-total-confirmation")
-    public String sendEmailWithPaymentOfTotalConfirmation() throws MessagingException, UnsupportedEncodingException {
-//        Docelowo DB
-        Map<String, Object> variables = new HashMap<>();
-        variables.put("client_name", "Imie klienta");
-        variables.put("tour_name", "Nazwa wycieczki");
-        variables.put("tour_id", "Id wycieczki");
-        variables.put("tour_location", "Tour location");
-        variables.put("start_date", "dataod: 44");
-
-        emailSendingService.sendEmailWithPaymentOfTotalConfirmation(
-                "beduch_krystian@o2.pl",
-                "Potwierdzenie płatności całości za ",
-                variables
-        );
-        return "Potwierdzenie płatności całości wyslane";
-    }
-
-
-
 }

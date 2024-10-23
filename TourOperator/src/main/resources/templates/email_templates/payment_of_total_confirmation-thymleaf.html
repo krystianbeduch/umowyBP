@@ -1,7 +1,7 @@
-<html lang="pl">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>${emailTemplateName!}</title>
+    <title th:text="${emailTemplateName}">[Template Name]</title>
     <style>
         p, li {
             margin-bottom: 20px;
@@ -19,7 +19,7 @@
         footer span {
             display: block; /* Każdy span w osobnej linijce */
         }
-        footer span:nth-child(-n+2)  {
+        footer span:nth-child(-n+2) {
             color: red;
         }
         footer a {
@@ -29,19 +29,13 @@
     </style>
 </head>
 <body>
-    <h1>Witaj <span>${client_name!}</span>,</h1>
-    <p>Dziękujemy za terminową wpłatę zaliczki w wysokości
-        <span>${advance!}</span> za
-        <span>${tour_name!}</span>
-        <span>${tour_id!}</span>
-        <span>${tour_location!}</span>
-    </p>
-    <p>Pozostałą kwotę
-        <span>${remaining_ammount!}</span>
-        możesz uregulować klikając w <a href="">Link do płatności</a>
-    </p>
-    <p>Termin płatności:
-        <span>${remaining_amount_deadline!}</span>
+    <h1>Witaj <span th:text="${client_name}">[Client Name]</span>,</h1>
+    <p>Dziękujemy za opłacenie wyjazdu
+        <span th:text="${tour_name}">[Tour Name]</span>
+        <span th:text="${tour_id}">[Tour Id]</span>
+        <span th:text="${tour_location}">[Tour Location]</span>
+        i do zobaczenia
+        <span th:text="${start_date}"></span>
     </p>
 
     <p>Pozdrawiamy,</p>

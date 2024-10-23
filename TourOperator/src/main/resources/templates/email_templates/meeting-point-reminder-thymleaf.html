@@ -1,0 +1,71 @@
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${emailTemplateName}">[Template Name]</title>
+  <style>
+    p, li {
+      margin-bottom: 20px;
+    }
+    div {
+      margin-bottom: 40px;
+    }
+    img {
+      margin-bottom: 20px;
+    }
+    footer {
+      font-size: 0.9em;
+      font-style: italic;
+    }
+    footer span {
+      display: block; /* Każdy span w osobnej linijce */
+    }
+    footer span:nth-child(-n+2) {
+      color: red;
+    }
+    footer a {
+      color: black;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+    <h1>Witaj <span th:text="${client_name}">[Client Name]</span>,</h1>
+    <p>Przypominamy, że już
+      <span th:text="${start_date}">[Start Date]</span>
+      wyjeżdżamy na wycieczkę
+      <span th:text="${tour_name}">[Tour Name]</span>
+      <span th:text="${tour_id}">[Tour Id]</span>
+      <span th:text="${tour_location}">[Tour Location]</span>
+    </p>
+
+    <p>
+      <b>TWOJE MIEJSCE ZBIÓRKI i dodatkowe ustalenia</b> - kopia Twoich odpowiedzi:<br>
+      <span th:text="${client_name}">[Client Name]</span>:<br>
+      Wybierz miejsce msiadania - Częstochowa ul. Focha 7 - parking pod marktem Auchan, godz. wyjazdu
+      <span th:text="${departure_time}">[Departure Time]</span>
+    </p>
+
+    <p style="color: red; font-weight: bold">Nie zapomnij zabrać paszportu lub dowodu osobistego!</p>
+    <p>
+      <span th:text="${client_name}">[Client Name]</span>
+      poinformuj swoich współtowarzyszy o zbiórce. Życzymy udanego wyjazdu i dobrych wrażeń z wycieczki!
+    </p>
+
+    <p>
+      <i>Nie prowadzimy rezerwacji miejsc w autokarze. Pilot wyczytuje uczestników zgodnie z kolejnością zapisywania. Wyczytane osoby wchodzą do autokaru i zajmują wolne miejsca wedle własnego uznania. Jest to swego rodzaju BONUS dla tych, którzy zapisują sie jako pierwsi.</i>
+    </p>
+
+    <p>Pozdrawiamy,</p>
+    <img src="cid:logoImage" alt="Logo Wesley">
+    <footer>
+      <span>Biuro Podróży Wesley</span>
+      <span>Częstochowa</span>
+      <span><a href="mailto:biuro@bpwesley.pl">biuro@bpwesley.pl</a></span>
+      <span>+48 502 491 545</span>
+      <span>+48 606 450 484</span>
+      <span>+48 694-304-245</span>
+      <span>34 365 63 77</span>
+      <span><a href="https://www.bpwesley.pl" target="_blank">www.bpwesley.pl</a></span>
+    </footer>
+</body>
+</html>
