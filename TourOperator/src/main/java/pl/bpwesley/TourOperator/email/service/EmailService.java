@@ -1,78 +1,47 @@
 package pl.bpwesley.TourOperator.email.service;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
+import pl.bpwesley.TourOperator.email.dto.EmailTemplateDTO;
 import pl.bpwesley.TourOperator.email.entity.EmailTemplate;
+import pl.bpwesley.TourOperator.email.exception.EmailTemplateNotFoundException;
+import pl.bpwesley.TourOperator.email.mapper.EmailTemplateMapper;
 import pl.bpwesley.TourOperator.email.repository.EmailTemplateRepository;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EmailService {
     private final EmailTemplateRepository emailTemplateRepository;
-    private final JavaMailSender mailSender;
-
-    private final TemplateEngine templateEngine;
+    private final EmailTemplateMapper emailTemplateMapper = EmailTemplateMapper.INSTANCE;
 
     @Autowired
-    public EmailService(EmailTemplateRepository emailTemplateRepository, JavaMailSender mailSender, TemplateEngine templateEngine) {
+    public EmailService(EmailTemplateRepository emailTemplateRepository) {
         this.emailTemplateRepository = emailTemplateRepository;
-        this.mailSender = mailSender;
-        this.templateEngine = templateEngine;
-//        this.htmlFileReader = htmlFileReader;
     }
 
-    public List<EmailTemplate> getEmailTemplateList() {
-        return emailTemplateRepository.findAll();
+    public List<EmailTemplateDTO> getEmailTemplateList() {
+        return emailTemplateRepository.findAll().stream()
+                .map(emailTemplateMapper::emailTemplateToEmailTemplateDTO)
+                .collect(Collectors.toList());
     }
 
-    public String getEmailTemplateName(Long templateId) {
-        Optional<EmailTemplate> emailTemplate = emailTemplateRepository.findById(templateId);
-
-        // Zwroc nazwe szablonu jesli istnieje
-        return emailTemplate.map(EmailTemplate::getName).orElse("");
+    public Optional<EmailTemplateDTO> getEmailTemplateById(Long emailTemplateId) {
+        // Znajdz szablon, zmapuj na DTO i zwroc go
+        return emailTemplateRepository.findById(emailTemplateId).
+                map(emailTemplateMapper::emailTemplateToEmailTemplateDTO);
     }
 
-    public String getEmailTemplateContent(Long templateId) {
-        Optional<EmailTemplate> emailTemplate = emailTemplateRepository.findById(templateId);
-
-        // Zwroc nazwe szablonu jesli istnieje
-        return emailTemplate.map(EmailTemplate::getContent).orElse("");
-    }
-    public String getEmailTemplateContentBody(Long templateId, Map<String, Object> variables) {
-        Optional<EmailTemplate> emailTemplate = emailTemplateRepository.findById(templateId);
-
-
-        return null;
-
-        // Zwroc zawartosc szablonu jesli istnieje
-//        return templateEngine.process(getEmailTemplateContent(templateId), context);
-    }
-
-    public void updateEmailTemplateContent(EmailTemplate emailTemplate) {
-        if (emailTemplateRepository.existsById(emailTemplate.getEmailTemplateId())) {
+    public void updateEmailTemplate(EmailTemplateDTO emailTemplateDTO) {
+        if (emailTemplateRepository.existsById(emailTemplateDTO.getEmailTemplateId())) {
+            EmailTemplate emailTemplate = emailTemplateMapper.emailTemplateDTOToEmailTemplate(emailTemplateDTO);
             emailTemplateRepository.save(emailTemplate);
         }
         else {
-            throw new EntityNotFoundException("Szablon od id " + emailTemplate.getEmailTemplateId() + "nie istnieje");
+            throw new EmailTemplateNotFoundException("Szablon o id " + emailTemplateDTO.getEmailTemplateId() + " nie istnieje");
         }
     }
 }

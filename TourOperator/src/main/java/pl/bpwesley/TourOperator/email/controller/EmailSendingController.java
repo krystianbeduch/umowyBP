@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pl.bpwesley.TourOperator.email.dto.EmailTemplateDTO;
+import pl.bpwesley.TourOperator.email.exception.EmailTemplateNotFoundException;
 import pl.bpwesley.TourOperator.email.service.EmailSendingService;
 import pl.bpwesley.TourOperator.email.service.EmailService;
 
@@ -25,10 +28,18 @@ public class EmailSendingController {
         this.emailService = emailService;
     }
 
-    @ResponseBody
     @GetMapping("/{id}")
-    public String sendEmail(@PathVariable("id") Long id) throws MessagingException, IOException {
-        String emailTemplateName = emailService.getEmailTemplateName(id);
+    public String sendEmail(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) throws MessagingException, IOException {
+        // Pobierz szablon email na podstawie ID
+        Optional<EmailTemplateDTO> emailTemplateDtoOptional = emailService.getEmailTemplateById(id);
+
+        // Zabezpieczenie przed brakiem szablonu
+        if (emailTemplateDtoOptional.isEmpty()) {
+            throw new EmailTemplateNotFoundException("Nie istnieje szablon mailowy z ID " + id);
+        }
+        EmailTemplateDTO emailTemplate = emailTemplateDtoOptional.get();
+        String emailTemplateName = emailTemplate.getName();
+
         Map<String, Object> variables = new HashMap<>();
         List<String> attachments = new ArrayList<>();
 
@@ -55,7 +66,7 @@ public class EmailSendingController {
                         "Umowa.pdf"
                 );
                 emailSendingService.sendEmail(
-                        id,
+                        emailTemplate,
                         "beduch_krystian@o2.pl",
                         "Rezerwacja wycieczki " + variables.get("tour_name"),
                         variables,
@@ -76,7 +87,7 @@ public class EmailSendingController {
                         "Umowa.pdf"
                 );
                 emailSendingService.sendEmail(
-                        id,
+                        emailTemplate,
                         "beduch_krystian@o2.pl",
                         emailTemplateName + " za " + variables.get("tour_name") + " " + variables.get("tour_id"),
                         variables,
@@ -93,7 +104,7 @@ public class EmailSendingController {
                 // Dodaj załączniki - brak
 
                 emailSendingService.sendEmail(
-                        id,
+                        emailTemplate,
                         "beduch_krystian@o2.pl",
                         emailTemplateName + " za " + variables.get("tour_name") + " " + variables.get("tour_id"),
                         variables,
@@ -114,7 +125,7 @@ public class EmailSendingController {
                 );
 
                 emailSendingService.sendEmail(
-                        id,
+                        emailTemplate,
                         "beduch_krystian@o2.pl",
                         emailTemplateName + " " + variables.get("tour_name") + " " + variables.get("tour_id"),
                         variables,
@@ -123,6 +134,7 @@ public class EmailSendingController {
                 break;
 
         }
-        return emailTemplateName + " wysłane";
+        redirectAttributes.addFlashAttribute("message", "Email z szablonu o ID " + emailTemplate.getEmailTemplateId() + " wysłany");
+        return "redirect:/email/home";
     }
 }

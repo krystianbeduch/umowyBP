@@ -34,6 +34,15 @@
             </table>
         </section>
 
+        <div th:if="${message}" class="alert information">
+            <p th:text="${message}"></p>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger">
+            <p th:text="${errorMessage}"></p>
+        </div>
+
+
         <footer th:replace="~{fragments :: CopyrightFooter}"></footer>
     </main>
 

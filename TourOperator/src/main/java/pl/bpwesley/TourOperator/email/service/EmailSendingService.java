@@ -12,6 +12,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import pl.bpwesley.TourOperator.email.dto.EmailTemplateDTO;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,12 +36,12 @@ public class EmailSendingService {
     }
 
 
-    public void sendEmail(Long templateId, String to, String subject, Map<String, Object> variables, List<String> attachments) throws MessagingException, IOException {
-        // Pobierz html szablonu szablonu z bazy
-        String templateContent = emailService.getEmailTemplateContent(templateId);
+    public void sendEmail(EmailTemplateDTO emailTemplateDTO, String to, String subject, Map<String, Object> variables, List<String> attachments) throws MessagingException, IOException {
+        // Pobierz nazwe i html szablonu
+        String templateContent = emailTemplateDTO.getContent();
+        String templateName = emailTemplateDTO.getName();
 
         // Inicjalizuj szablon FreeMarker
-        String templateName = emailService.getEmailTemplateName(templateId);
         Template template = new Template(templateName, new StringReader(templateContent), freemarkerConfig);
         StringWriter writer = new StringWriter();
 
@@ -78,5 +79,4 @@ public class EmailSendingService {
         // Wyslij emaila
         mailSender.send(message);
     }
-
 }
