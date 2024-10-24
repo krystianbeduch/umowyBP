@@ -31,7 +31,7 @@
 <body>
     <h1>Witaj <span>${client_name!}</span>!</h1>
     <p>Gratulacje z okazji rezerwacji wyjazdu
-        <b>${tour_name!}</b> w terminie od
+        <b>${tour_name!}</b> {tour_id!} {tour_location!} w terminie od
         <b>${start_date!}</b> do
         <b>${end_date!}</b>.
     </p>
@@ -49,7 +49,7 @@
                 Pozostała kwota
                 <b>${remaining_amount!}</b>
                 płatna do dnia
-                <b>${remaining_amount_deadline!}</b>.
+                <b>${remaining_ammount_deadline!}</b>.
             </li>
             <li>
                 Płatność za bilety wstępu - <b>płatne gotówką w autokarze</b>.

@@ -34,11 +34,11 @@
             </table>
         </section>
 
-        <div th:if="${message}" class="alert information">
-            <p th:text="${message}"></p>
+        <div th:if="${successMessage}" class="alert alert-success">
+            <p th:text="${successMessage}"></p>
         </div>
 
-        <div th:if="${errorMessage}" class="alert alert-danger">
+        <div th:if="${errorMessage}" class="alert alert-error">
             <p th:text="${errorMessage}"></p>
         </div>
 

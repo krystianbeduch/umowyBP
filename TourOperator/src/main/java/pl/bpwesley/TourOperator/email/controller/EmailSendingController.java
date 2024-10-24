@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.bpwesley.TourOperator.email.dto.EmailTemplateDTO;
+import pl.bpwesley.TourOperator.email.entity.EmailTemplateVariable;
 import pl.bpwesley.TourOperator.email.exception.EmailTemplateNotFoundException;
 import pl.bpwesley.TourOperator.email.service.EmailSendingService;
 import pl.bpwesley.TourOperator.email.service.EmailService;
@@ -35,13 +36,23 @@ public class EmailSendingController {
 
         // Zabezpieczenie przed brakiem szablonu
         if (emailTemplateDtoOptional.isEmpty()) {
-            throw new EmailTemplateNotFoundException("Nie istnieje szablon mailowy z ID " + id);
+            throw new EmailTemplateNotFoundException("BŁĄD PODCZAS WYSYŁANIA MAILA: nie istnieje szablon o id " + id);
         }
         EmailTemplateDTO emailTemplate = emailTemplateDtoOptional.get();
         String emailTemplateName = emailTemplate.getName();
 
+        // Pobierz zmienne powiązane z szablonem z bazy danych
+        List<EmailTemplateVariable> emailTemplateVariables = emailService.getEmailTemplateVariablesByTemplateId(emailTemplate.getEmailTemplateId());
+
         Map<String, Object> variables = new HashMap<>();
         List<String> attachments = new ArrayList<>();
+
+        // Przypisz wartości zmiennych z bazy danych
+//        for (EmailTemplateVariable emailTemplateVariable : emailTemplateVariables) {
+//            String variableName = emailTemplateVariable.getVariable().getName();
+////            String variableValue = getVariableValueFromDatabase(variableName); // Funkcja zwracająca wartość zmiennej z bazy danych
+////            variables.put(variableName, variableValue);
+//        }
 
         switch (emailTemplateName) {
             case "Potwierdzenie rezerwacji":
@@ -134,7 +145,7 @@ public class EmailSendingController {
                 break;
 
         }
-        redirectAttributes.addFlashAttribute("message", "Email z szablonu o ID " + emailTemplate.getEmailTemplateId() + " wysłany");
+        redirectAttributes.addFlashAttribute("successMessage", "Email z szablonu o id " + emailTemplate.getEmailTemplateId() + " wysłany");
         return "redirect:/email/home";
     }
 }

@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface EmailTemplateRepository extends JpaRepository<EmailTemplate, Long> {
-    List<EmailTemplate> findAllByOrderByUpdateDateAsc();
+    List<EmailTemplate> findAllByOrderByUpdateDateDesc();
 }

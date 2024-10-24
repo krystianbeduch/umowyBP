@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,6 +24,9 @@ public class EmailTemplate {
     @Lob // Large Object
     private String content; // Pole przechowujace kod HTML
     private LocalDateTime updateDate;
+
+    @OneToMany(mappedBy = "emailTemplate")
+    private List<EmailTemplateVariable> emailTemplateVariables;
 }
 
 

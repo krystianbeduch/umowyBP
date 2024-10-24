@@ -37,7 +37,7 @@ public class EmailController {
             model.addAttribute("emailTemplateName", emailTemplateDTO.getName());
         }
         else {
-            throw new EmailTemplateNotFoundException("Szablon o id " + emailTemplateId + " nnie istnieje");
+            throw new EmailTemplateNotFoundException("BŁĄD SZABLONU: szablon o id " + emailTemplateId + " nie istnieje");
         }
 
         return "email/edit_template";
@@ -57,7 +57,7 @@ public class EmailController {
 
         emailService.updateEmailTemplate(emailTemplateDTO);
 
-        redirectAttributes.addFlashAttribute("message", "Szablon o ID " + emailTemplateDTO.getEmailTemplateId() + " zaktualizowany");
+        redirectAttributes.addFlashAttribute("successMessage", "Szablon o id " + emailTemplateDTO.getEmailTemplateId() + " zaktualizowany");
         return "redirect:/email/home";
     }
 }
