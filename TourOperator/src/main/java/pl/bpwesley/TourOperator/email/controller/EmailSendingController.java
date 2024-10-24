@@ -80,7 +80,7 @@ public class EmailSendingController {
                         emailTemplate,
                         "beduch_krystian@o2.pl",
                         "Rezerwacja wycieczki " + variables.get("tour_name"),
-                        variables,
+                        emailTemplateVariables,
                         attachments
                 );
                 break;
@@ -101,7 +101,7 @@ public class EmailSendingController {
                         emailTemplate,
                         "beduch_krystian@o2.pl",
                         emailTemplateName + " za " + variables.get("tour_name") + " " + variables.get("tour_id"),
-                        variables,
+                        emailTemplateVariables,
                         attachments
                 );
                 break;
@@ -118,7 +118,7 @@ public class EmailSendingController {
                         emailTemplate,
                         "beduch_krystian@o2.pl",
                         emailTemplateName + " za " + variables.get("tour_name") + " " + variables.get("tour_id"),
-                        variables,
+                        emailTemplateVariables,
                         attachments
                 );
                 break;
@@ -139,7 +139,7 @@ public class EmailSendingController {
                         emailTemplate,
                         "beduch_krystian@o2.pl",
                         emailTemplateName + " " + variables.get("tour_name") + " " + variables.get("tour_id"),
-                        variables,
+                        emailTemplateVariables,
                         attachments
                 );
                 break;

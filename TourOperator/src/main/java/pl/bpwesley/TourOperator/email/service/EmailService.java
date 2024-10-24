@@ -54,6 +54,6 @@ public class EmailService {
 
     // VARIABLES
     public List<EmailTemplateVariable> getEmailTemplateVariablesByTemplateId(Long emailTemplateId) {
-        return emailTemplateVariableRepository.findByEmailTemplate_Id(emailTemplateId);
+        return emailTemplateVariableRepository.findByEmailTemplate_EmailTemplateId(emailTemplateId);
     }
 }

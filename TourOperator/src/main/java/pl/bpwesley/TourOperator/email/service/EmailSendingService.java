@@ -13,11 +13,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import pl.bpwesley.TourOperator.email.dto.EmailTemplateDTO;
+import pl.bpwesley.TourOperator.email.entity.EmailTemplateVariable;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -36,7 +38,7 @@ public class EmailSendingService {
     }
 
 
-    public void sendEmail(EmailTemplateDTO emailTemplateDTO, String to, String subject, Map<String, Object> variables, List<String> attachments) throws MessagingException, IOException {
+    public void sendEmail(EmailTemplateDTO emailTemplateDTO, String to, String subject, List<EmailTemplateVariable> emailTemplateVariables, List<String> attachments) throws MessagingException, IOException {
         // Pobierz nazwe i html szablonu
         String templateContent = emailTemplateDTO.getContent();
         String templateName = emailTemplateDTO.getName();
@@ -44,6 +46,14 @@ public class EmailSendingService {
         // Inicjalizuj szablon FreeMarker
         Template template = new Template(templateName, new StringReader(templateContent), freemarkerConfig);
         StringWriter writer = new StringWriter();
+        Map<String, Object> variables = new HashMap<>(); // mapa wymagana przez FreeMarker
+
+        // Przypisz wartości zmiennych do mapy
+        for (EmailTemplateVariable emailTemplateVariable : emailTemplateVariables) {
+            String variableName = emailTemplateVariable.getVariable().getName();
+            String variableValue = emailTemplateVariable.getVariable().getValue();
+            variables.put(variableName, variableValue);
+        }
 
         try {
             // Wypełnij szablon danymi
