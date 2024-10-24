@@ -44,29 +44,11 @@ public class EmailSendingController {
         // Pobierz zmienne powiązane z szablonem z bazy danych
         List<EmailTemplateVariable> emailTemplateVariables = emailService.getEmailTemplateVariablesByTemplateId(emailTemplate.getEmailTemplateId());
 
-        Map<String, Object> variables = new HashMap<>();
         List<String> attachments = new ArrayList<>();
-
-        // Przypisz wartości zmiennych z bazy danych
-//        for (EmailTemplateVariable emailTemplateVariable : emailTemplateVariables) {
-//            String variableName = emailTemplateVariable.getVariable().getName();
-////            String variableValue = getVariableValueFromDatabase(variableName); // Funkcja zwracająca wartość zmiennej z bazy danych
-////            variables.put(variableName, variableValue);
-//        }
+//        List<String> attachmentUrls = new ArrayList<>(); // Lista załącznikow z URL
 
         switch (emailTemplateName) {
             case "Potwierdzenie rezerwacji":
-                variables.put("client_name", "Imie");
-                variables.put("tour_name", "Wycieczka o nazwie");
-                variables.put("start_date", "data_od");
-                variables.put("end_date", "data_do");
-                variables.put("advance", "zaliczka");
-                variables.put("advance_deadline", "zaliczka termin");
-                variables.put("remaining_amount", "pozostala kwota");
-                variables.put("remaining_amount_deadline", "pozostaala kwota deadline");
-                variables.put("departure_time", "06:00");
-                variables.put("arrival_time", "21:00");
-
                 // Dodaj załączniki
                 Collections.addAll(attachments,
                         "Andrzejki-w-stylu-Country-3545i.pdf",
@@ -76,23 +58,22 @@ public class EmailSendingController {
                         "Regulamin_serwisu.pdf",
                         "Umowa.pdf"
                 );
+//                Collections.addAll(attachmentUrls,
+//                        "https://bpwesley.pl/images/dokumenty/polityka_prywatnosci_RODO.pdf",
+//                        "https://bpwesley.pl/images/dokumenty/regulamin_serwisu_BP_Wesley.pdf",
+//                        "https://bpwesley.pl/images/dokumenty/OWU_BP_Wesley_2023.pdf",
+//                        "https://"
+//                );
+//
                 emailSendingService.sendEmail(
                         emailTemplate,
                         "beduch_krystian@o2.pl",
-                        "Rezerwacja wycieczki " + variables.get("tour_name"),
+                        "Rezerwacja wycieczki ",
                         emailTemplateVariables,
                         attachments
                 );
                 break;
             case "Potwierdzenie płatności zaliczki":
-                variables.put("client_name", "Imie");
-                variables.put("advance", "kwota zaliczki 200zl");
-                variables.put("tour_name", "Nazwa wycieczki");
-                variables.put("tour_id", "Id wycieczki");
-                variables.put("tour_location", "Tour location");
-                variables.put("remaining_ammount", "Pozostala kwota do zaplaty 200zl");
-                variables.put("remaining_amount_deadline", "pozostaala kwota deadline");
-
                 // Dodaj załączniki
                 Collections.addAll(attachments,
                         "Umowa.pdf"
@@ -100,36 +81,23 @@ public class EmailSendingController {
                 emailSendingService.sendEmail(
                         emailTemplate,
                         "beduch_krystian@o2.pl",
-                        emailTemplateName + " za " + variables.get("tour_name") + " " + variables.get("tour_id"),
+                        emailTemplateName + " za ",
                         emailTemplateVariables,
                         attachments
                 );
                 break;
             case "Potwierdzenie płatności całości":
-                variables.put("client_name", "Imie klienta");
-                variables.put("tour_name", "Nazwa wycieczki");
-                variables.put("tour_id", "Id wycieczki");
-                variables.put("tour_location", "Tour location");
-                variables.put("start_date", "dataod: 44");
-
                 // Dodaj załączniki - brak
 
                 emailSendingService.sendEmail(
                         emailTemplate,
                         "beduch_krystian@o2.pl",
-                        emailTemplateName + " za " + variables.get("tour_name") + " " + variables.get("tour_id"),
+                        emailTemplateName + " za ",
                         emailTemplateVariables,
                         attachments
                 );
                 break;
             case "Przypomnienie o zbiórce na wycieczkę":
-                variables.put("client_name", "Imie klienta");
-                variables.put("start_date", "datazbiorki: 44");
-                variables.put("tour_name", "Nazwa wycieczki");
-                variables.put("tour_id", "Id wycieczki");
-                variables.put("tour_location", "Tour location");
-                variables.put("departure_time", "06:00");
-
                 // Dodaj załączniki
                 Collections.addAll(attachments,
                         "Umowa.pdf"
@@ -138,7 +106,7 @@ public class EmailSendingController {
                 emailSendingService.sendEmail(
                         emailTemplate,
                         "beduch_krystian@o2.pl",
-                        emailTemplateName + " " + variables.get("tour_name") + " " + variables.get("tour_id"),
+                        emailTemplateName + " ",
                         emailTemplateVariables,
                         attachments
                 );

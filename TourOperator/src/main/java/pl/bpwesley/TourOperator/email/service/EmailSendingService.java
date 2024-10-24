@@ -47,12 +47,21 @@ public class EmailSendingService {
         Template template = new Template(templateName, new StringReader(templateContent), freemarkerConfig);
         StringWriter writer = new StringWriter();
         Map<String, Object> variables = new HashMap<>(); // mapa wymagana przez FreeMarker
+        String tourName = "";
+        String tourId = "";
 
         // Przypisz wartości zmiennych do mapy
         for (EmailTemplateVariable emailTemplateVariable : emailTemplateVariables) {
             String variableName = emailTemplateVariable.getVariable().getName();
             String variableValue = emailTemplateVariable.getVariable().getValue();
             variables.put(variableName, variableValue);
+
+            if (variableName.equals("tour_name")) {
+                tourName = variableValue;
+            }
+            else if(variableName.equals("tour_id")) {
+                tourId = variableValue;
+            }
         }
 
         try {
@@ -70,7 +79,7 @@ public class EmailSendingService {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(new InternetAddress("beduch.krystian@gmail.com", "Krystian"));
         helper.setTo(to);
-        helper.setSubject(subject);
+        helper.setSubject(subject + tourName + " " + tourId);
         helper.setText(body, true);
 
         // Dodaj zalaczniki pdf
