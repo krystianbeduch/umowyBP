@@ -21,5 +21,5 @@ public class EmailTemplateDTO {
     private String content;
     private LocalDateTime updateDate;
     private List<EmailTemplateVariable> emailTemplateVariables;
-//    private List<Attachment> attachments;
+    private List<Attachment> attachments;
 }

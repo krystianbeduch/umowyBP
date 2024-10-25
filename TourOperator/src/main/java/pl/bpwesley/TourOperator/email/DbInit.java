@@ -131,21 +131,21 @@ public class DbInit implements CommandLineRunner {
             // Zapisz powiązania do bazy danych
             emailTemplateVariableRepository.saveAll(emailTemplateVariables);
 
-//            // Dodaj zalaczniki
-//            addAttachmentsToTemplate(reservationConfirmationTemplate,
-//                    "Andrzejki-w-stylu-Country-3545i.pdf", "OWU_BP_Wesley.pdf",
-//                    "OWU_PZU_NNW.pdf", "Polityka_prywatnosci.pdf", "Regulamin_serwisu.pdf", "Umowa.pdf");
-//            addAttachmentsToTemplate(advancePaymentConfirmationTemplate, "Umowa.pdf");
-//            // addAttachmentsToTemplate(paymentOfTotalConfirmationTemplate, "Umowa.pdf");
-//            addAttachmentsToTemplate(meetingPointReminderTemplate, "Umowa.pdf");
-//
-//            // Zapisanie załączników
-//            emailTemplateRepository.saveAll(Arrays.asList(
-//                    reservationConfirmationTemplate,
-//                    advancePaymentConfirmationTemplate,
-//                    paymentOfTotalConfirmationTemplate,
-//                    meetingPointReminderTemplate
-//            ));
+            // Dodaj zalaczniki
+            addAttachmentsToTemplate(reservationConfirmationTemplate,
+                    "Andrzejki-w-stylu-Country-3545i.pdf", "OWU_BP_Wesley.pdf",
+                    "OWU_PZU_NNW.pdf", "Polityka_prywatnosci.pdf", "Regulamin_serwisu.pdf", "Umowa.pdf");
+            addAttachmentsToTemplate(advancePaymentConfirmationTemplate, "Umowa.pdf");
+            // addAttachmentsToTemplate(paymentOfTotalConfirmationTemplate, "Umowa.pdf");
+            addAttachmentsToTemplate(meetingPointReminderTemplate, "Umowa.pdf");
+
+            // Zapisanie załączników
+            emailTemplateRepository.saveAll(Arrays.asList(
+                    reservationConfirmationTemplate,
+                    advancePaymentConfirmationTemplate,
+                    paymentOfTotalConfirmationTemplate,
+                    meetingPointReminderTemplate
+            ));
 
         }
         catch (IOException e) {
@@ -154,18 +154,21 @@ public class DbInit implements CommandLineRunner {
 
     }
 
-//    private void addAttachmentsToTemplate(EmailTemplate emailTemplate, String... fileNames) {
-//        for (String fileName : fileNames) {
-//            try {
-//                Path filePath = Paths.get("src/main/resources/templates/email_templates/attachments/" + fileName);
-//                byte[] data = Files.readAllBytes(filePath);
-//                Attachment attachment = new Attachment(fileName, data, emailTemplate);
-//                attachmentRepository.save(attachment); // Zapisz załącznik w repozytorium
-//                emailTemplate.getAttachments().add(attachment); // Dodaj załącznik do szablonu
-//            } catch (IOException e) {
-//                System.err.println("Błąd przy wczytywaniu załącznika: " + fileName);
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+    private void addAttachmentsToTemplate(EmailTemplate emailTemplate, String... fileNames) {
+        for (String fileName : fileNames) {
+            try {
+                Path filePath = Paths.get("src/main/resources/templates/email_templates/attachments/" + fileName);
+                byte[] data = Files.readAllBytes(filePath);
+                Attachment attachment = new Attachment(fileName, data, emailTemplate);
+                attachmentRepository.save(attachment); // Zapisz załącznik w repozytorium
+                if (emailTemplate.getAttachments() == null) {
+                    emailTemplate.setAttachments(new ArrayList<>());
+                }
+                emailTemplate.getAttachments().add(attachment); // Dodaj załącznik do szablonu
+            } catch (IOException e) {
+                System.err.println("Błąd przy wczytywaniu załącznika: " + fileName);
+                e.printStackTrace();
+            }
+        }
+    }
 }

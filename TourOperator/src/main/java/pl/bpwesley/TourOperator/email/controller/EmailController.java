@@ -5,12 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.bpwesley.TourOperator.email.dto.EmailTemplateDTO;
+import pl.bpwesley.TourOperator.email.entity.Attachment;
 import pl.bpwesley.TourOperator.email.exception.EmailTemplateNotFoundException;
 import pl.bpwesley.TourOperator.email.service.EmailService;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -25,7 +30,7 @@ public class EmailController {
     }
 
     @GetMapping("/edit-template/{id}")
-//    @Transactional
+    @Transactional
     public String showEditEmailTemplatePage(
             @PathVariable("id") Long emailTemplateId,
             Model model) {
@@ -37,7 +42,7 @@ public class EmailController {
             model.addAttribute("emailTemplateId", emailTemplateDTO.getEmailTemplateId());
             model.addAttribute("emailTemplateContent", emailTemplateDTO.getContent());
             model.addAttribute("emailTemplateName", emailTemplateDTO.getTemplateName());
-//            model.addAttribute("attachments", emailTemplateDTO.getAttachments());
+            model.addAttribute("attachments", emailTemplateDTO.getAttachments());
         }
         else {
             throw new EmailTemplateNotFoundException("BŁĄD SZABLONU: szablon o id " + emailTemplateId + " nie istnieje");
@@ -48,15 +53,33 @@ public class EmailController {
 
     @PutMapping("/edit-template")
     public String updateEmailTemplate(@RequestParam("templateId") Long templateId,
-                                      @RequestParam("name") String templateName,
+                                      @RequestParam("templateName") String templateName,
                                       @RequestParam("content") String content,
-                                      RedirectAttributes redirectAttributes) {
+                                      @RequestParam(value = "attachments", required = false) List<MultipartFile> attachments,
+                                      RedirectAttributes redirectAttributes) throws IOException {
 
         EmailTemplateDTO emailTemplateDTO = new EmailTemplateDTO();
         emailTemplateDTO.setEmailTemplateId(templateId);
         emailTemplateDTO.setTemplateName(templateName);
         emailTemplateDTO.setContent(content);
         emailTemplateDTO.setUpdateDate(LocalDateTime.now());
+
+        // Przetwarzanie załączników i dodawanie ich do DTO
+        if (attachments != null && !attachments.isEmpty()) {
+//            List<AttachmentDTO> attachmentDTOs = new ArrayList<>();
+            List<Attachment> attachmentDTOs = new ArrayList<>();
+            for (MultipartFile file : attachments) {
+                if (!file.isEmpty()) {
+//                AttachmentDTO attachmentDTO = new AttachmentDTO();
+                    Attachment attachmentDTO = new Attachment();
+                    attachmentDTO.setFilename(file.getOriginalFilename());
+                    attachmentDTO.setFileData(file.getBytes()); // Możliwe przekształcenie danych na byte[]
+                    attachmentDTOs.add(attachmentDTO);
+                }
+            }
+
+            emailTemplateDTO.setAttachments(attachmentDTOs);
+        }
 
         emailService.updateEmailTemplate(emailTemplateDTO);
 

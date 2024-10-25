@@ -33,14 +33,14 @@ public class AttachmentService {
         return attachmentRepository.findById(attachmentId).orElse(null);
     }
 
-//    @Transactional
-//    public void addAttachmentToTemplate(Long emailTemplateId, String filename, byte[] fileData) {
-//        EmailTemplate emailTemplate = emailTemplateRepository.findById(emailTemplateId).orElse(null);
-//        if (emailTemplate != null) {
-//            Attachment attachment = new Attachment(filename, fileData, null);
-//            emailTemplate.getAttachments().add(attachment);
-//            emailTemplateRepository.save(emailTemplate);
-//        }
-//
-//    }
+    @Transactional
+    public void addAttachmentToTemplate(Long emailTemplateId, String filename, byte[] fileData) {
+        EmailTemplate emailTemplate = emailTemplateRepository.findById(emailTemplateId).orElse(null);
+        if (emailTemplate != null) {
+            Attachment attachment = new Attachment(filename, fileData);
+            emailTemplate.getAttachments().add(attachment);
+            emailTemplateRepository.save(emailTemplate);
+        }
+
+    }
 }

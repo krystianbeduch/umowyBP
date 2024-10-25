@@ -5,10 +5,12 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.bpwesley.TourOperator.email.dto.EmailTemplateDTO;
+import pl.bpwesley.TourOperator.email.entity.Attachment;
 import pl.bpwesley.TourOperator.email.entity.EmailTemplate;
 import pl.bpwesley.TourOperator.email.entity.EmailTemplateVariable;
 import pl.bpwesley.TourOperator.email.exception.EmailTemplateNotFoundException;
 import pl.bpwesley.TourOperator.email.mapper.EmailTemplateMapper;
+import pl.bpwesley.TourOperator.email.repository.AttachmentRepository;
 import pl.bpwesley.TourOperator.email.repository.EmailTemplateRepository;
 import pl.bpwesley.TourOperator.email.repository.EmailTemplateVariableRepository;
 
@@ -22,11 +24,13 @@ public class EmailService {
     private final EmailTemplateRepository emailTemplateRepository;
     private final EmailTemplateMapper emailTemplateMapper = EmailTemplateMapper.INSTANCE;
     private final EmailTemplateVariableRepository emailTemplateVariableRepository;
+    private final AttachmentRepository attachmentRepository;
 
     @Autowired
-    public EmailService(EmailTemplateRepository emailTemplateRepository, EmailTemplateVariableRepository emailTemplateVariableRepository) {
+    public EmailService(EmailTemplateRepository emailTemplateRepository, EmailTemplateVariableRepository emailTemplateVariableRepository, AttachmentRepository attachmentRepository) {
         this.emailTemplateRepository = emailTemplateRepository;
         this.emailTemplateVariableRepository = emailTemplateVariableRepository;
+        this.attachmentRepository = attachmentRepository;
     }
 
     @Transactional
@@ -42,9 +46,20 @@ public class EmailService {
                 map(emailTemplateMapper::emailTemplateToEmailTemplateDTO);
     }
 
+//    @Transactional
     public void updateEmailTemplate(EmailTemplateDTO emailTemplateDTO) {
         if (emailTemplateRepository.existsById(emailTemplateDTO.getEmailTemplateId())) {
             EmailTemplate emailTemplate = emailTemplateMapper.emailTemplateDTOToEmailTemplate(emailTemplateDTO);
+
+            // Przetwarzanie zalacznikow jesli sa obecne w DTO
+            if (emailTemplateDTO.getAttachments() != null && !emailTemplateDTO.getAttachments().isEmpty()) {
+                List<Attachment> attachments = emailTemplateDTO.getAttachments().stream()
+                        .map(dto -> new Attachment(dto.getFilename(), dto.getFileData(), emailTemplate))
+                        .collect(Collectors.toList());
+                emailTemplate.setAttachments(attachments);
+//                attachmentRepository.saveAll(attachments);
+            }
+
             emailTemplateRepository.save(emailTemplate);
         }
         else {

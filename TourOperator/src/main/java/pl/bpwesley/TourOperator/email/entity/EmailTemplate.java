@@ -28,9 +28,9 @@ public class EmailTemplate {
     @OneToMany(mappedBy = "emailTemplate")
     private List<EmailTemplateVariable> emailTemplateVariables;
 
-//    @OneToMany(mappedBy = "emailTemplate")
-//    private List<Attachment> attachments = new ArrayList<>();
-//    private List<Attachment> attachments;
+    @OneToMany(mappedBy = "emailTemplate", cascade = CascadeType.ALL, orphanRemoval = false)
+    private List<Attachment> attachments;
+
 
     public EmailTemplate(String templateName, String content, LocalDateTime updateDate) {
         this.templateName = templateName;

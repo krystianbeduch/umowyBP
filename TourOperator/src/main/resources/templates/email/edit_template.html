@@ -22,25 +22,25 @@
             <!--    docelowo ID type=hidden -->
 
             <label for="template-name">Tytuł szablonu:</label>
-            <input type="text" id="template-name"  th:value="${emailTemplateName}" name="name" size="50" required>
+            <input type="text" id="template-name"  th:value="${emailTemplateName}" name="templateName" size="50" required>
             <br><br>
 
-            <label for="ta-edit-template">Edycja szablonu:</label>
+            <label for="ta-edit-template">Edycja szablonu:</label><br>
             <textarea id="ta-edit-template" th:text="${emailTemplateContent}" name="content" rows="40" cols="140"></textarea>
             <br/>
 
 <!--            <form action="/email/attachments/upload" method="post" enctype="multipart/form-data">-->
-<!--            <h3>Załączniki:</h3>-->
-<!--            <ul>-->
-<!--                <li th:each="attachment : ${attachments}">-->
-<!--                    <a th:href="@{/attachments/show/{id}(id=${attachment.attachmentId})}"-->
-<!--                       th:text="${attachment.filename}" target="_blank"></a>-->
-<!--&lt;!&ndash;                    <span th:text="${attachment.uploadDate}"></span>&ndash;&gt;-->
-<!--                    &lt;!&ndash; Opcjonalnie: przycisk do usunięcia załącznika &ndash;&gt;-->
-<!--                    <button type="button" th:onclick="'deleteAttachment(' + ${attachment.attachmentId} + ')'">Usuń załącznik</button>-->
-<!--                </li>-->
-<!--            </ul>-->
-            <input type="file" id="attachment" name="attachment" accept="application/pdf">
+            <h3>Załączniki:</h3>
+            <ul>
+                <li th:each="attachment : ${attachments}">
+                    <a th:href="@{/attachments/show/{id}(id=${attachment.attachmentId})}"
+                       th:text="${attachment.filename}" target="_blank"></a>
+<!--                    <span th:text="${attachment.uploadDate}"></span>-->
+                    <!-- Opcjonalnie: przycisk do usunięcia załącznika -->
+                    <button type="button" th:onclick="'deleteAttachment(' + ${attachment.attachmentId} + ')'">Usuń załącznik</button>
+                </li>
+            </ul>
+            <input type="file" id="attachments" name="attachments" accept="application/pdf" multiple>
 <!--            </form>-->
             <button type="submit">Zapisz Zmiany</button>
         </form>
