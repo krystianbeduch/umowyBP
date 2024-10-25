@@ -3,49 +3,88 @@ document.addEventListener("DOMContentLoaded", () => {
     const newAttachmentInput = document.getElementById("new-attachment");
     const addAttachmentButton = document.getElementById("add-attachment-button");
 
-    // Zdarzenie przycisku dodawnania zalacznika
     addAttachmentButton.addEventListener("click", () => {
-        const files = newAttachmentInput.files;
-        // console.log(file);
-        // Sprawdzamy czy wybrano pliki
-        if (files.length > 0 ) {
-            for (let i = 0; i < files.length; i++) {
-                addAttachmentToList(files[i]);
-
-            }
-            // console.log(file);
-            newAttachmentInput.value = "";
-        }
-        else {
-            alert("Proszę wybrać plik do dodania")
-        }
+        newAttachmentInput.click();
     });
 
-    const addAttachmentToList = (file) => {
+    newAttachmentInput.addEventListener("change", () => {
+        Array.from(newAttachmentInput.files).forEach(file => {
+            addAttachmentToList(file);
+        });
+        //newAttachmentInput.value = ""; // Resetuje input po dodaniu plików
+    });
+
+    function addAttachmentToList(file) {
         const listItem = document.createElement("li");
+
+        // Tworzymy link do załącznika
         const link = document.createElement("a");
         link.href = URL.createObjectURL(file);
         link.target = "_blank";
         link.textContent = file.name;
 
+        // Tworzymy ukryty input, który przekaże załącznik do Springa
         const inputFile = document.createElement("input");
-        inputFile.type = "file";
-        inputFile.name = "attachments"
-        inputFile.files = file;
-        inputFile.accept = 'accept="application/pdf"';
-
-        // inputFile.style.display = "none";
+        inputFile.type = "hidden";
+        inputFile.name = "attachments";
+        inputFile.value = file.name; // Użyjemy nazwy pliku jako placeholdera
 
         const deleteButton = document.createElement("button");
         deleteButton.type = "button";
         deleteButton.textContent = "Usuń załącznik";
         deleteButton.addEventListener("click", () => {
-           attachmentList.remove(listItem);
+            listItem.remove();
         });
 
         listItem.appendChild(link);
         listItem.appendChild(inputFile);
         listItem.appendChild(deleteButton);
         attachmentList.appendChild(listItem);
-    };
+    }
+    // // Zdarzenie przycisku dodawnania zalacznika
+    // addAttachmentButton.addEventListener("click", () => {
+    //     const files = newAttachmentInput.files;
+    //     // console.log(file);
+    //     // Sprawdzamy czy wybrano pliki
+    //     if (files.length > 0 ) {
+    //         for (let i = 0; i < files.length; i++) {
+    //             addAttachmentToList(files[i]);
+    //
+    //         }
+    //         // console.log(file);
+    //         newAttachmentInput.value = "";
+    //     }
+    //     else {
+    //         alert("Proszę wybrać plik do dodania")
+    //     }
+    // });
+    //
+    // // const addAttachmentToList = (file) => {
+    // //     const listItem = document.createElement("li");
+    // //     const link = document.createElement("a");
+    // //     link.href = URL.createObjectURL(file);
+    // //     link.target = "_blank";
+    // //     link.textContent = file.name;
+    // //
+    // //     const inputFile = document.createElement("input");
+    // //     inputFile.type = "hidden";
+    // //     inputFile.name = "attachments"
+    // //     // inputFile.files = [file];
+    // //     inputFile.value = file.name;
+    // //     // inputFile.accept = 'accept="application/pdf"';
+    // //
+    // //     // inputFile.style.display = "none";
+    // //
+    // //     const deleteButton = document.createElement("button");
+    // //     deleteButton.type = "button";
+    // //     deleteButton.textContent = "Usuń załącznik";
+    // //     deleteButton.addEventListener("click", () => {
+    // //        attachmentList.remove(listItem);
+    // //     });
+    // //
+    // //     listItem.appendChild(link);
+    // //     listItem.appendChild(inputFile);
+    // //     listItem.appendChild(deleteButton);
+    // //     attachmentList.appendChild(listItem);
+    // // };
 });

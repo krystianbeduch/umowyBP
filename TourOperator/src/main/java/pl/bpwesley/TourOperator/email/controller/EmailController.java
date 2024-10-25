@@ -73,15 +73,15 @@ public class EmailController {
 
         List<Attachment> attachmentDTOs = new ArrayList<>();
 
-        // Dodawanie istniejacych zalacznikow
-        if (existingAttachmentIds != null && !existingAttachmentIds.isEmpty()) {
-            for (Long attachmentId : existingAttachmentIds) {
-                Attachment attachment = attachmentService.getAttachmentById(attachmentId);
-                if (attachment != null) {
-                    attachmentDTOs.add(attachment);
-                }
-            }
-        }
+//        // Dodawanie istniejacych zalacznikow
+//        if (existingAttachmentIds != null && !existingAttachmentIds.isEmpty()) {
+//            for (Long attachmentId : existingAttachmentIds) {
+//                Attachment attachment = attachmentService.getAttachmentById(attachmentId);
+//                if (attachment != null) {
+//                    attachmentDTOs.add(attachment);
+//                }
+//            }
+//        }
 
         // Przetwarzanie nowych zalacznikow
         if (newAttachments != null && !newAttachments.isEmpty()) {

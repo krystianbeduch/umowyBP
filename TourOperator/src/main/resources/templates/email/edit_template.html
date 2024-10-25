@@ -39,10 +39,11 @@
                         <button type="button" class="delete-attachment-button" th:onclick="'deleteAttachment(' + ${attachment.attachmentId} + ')'">Usuń załącznik</button>
                     </li>
                 </ul>
-                <input type="file" id="new-attachment" name="attachments" accept="application/pdf" multiple >
+                <input type="file" id="new-attachment" name="attachments" accept="application/pdf" multiple>
+<!--                hidden -->
 <!--                style="display: none"-->
 <!--                <button type="button" class="add-attachment-button" onclick="document.getElementById('attachments').click();">Dodaj załącznik</button>-->
-                <button type="button" id="add-attachment-button">Dodaj załącznik</button>
+                <button type="button" id="add-attachment-button">Dodaj załączniki</button>
             </fieldset>
 
             <button type="submit">Zapisz Zmiany</button>
