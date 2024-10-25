@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @Getter
 @Setter
@@ -18,6 +20,7 @@ public class Attachment {
 
     @Lob // Large Object
     private byte[] fileData; // Pole przechowujace zawartosc pliku
+    private LocalDateTime updateDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "email_template_id")
@@ -32,5 +35,11 @@ public class Attachment {
         this.filename = filename;
         this.fileData = fileData;
         this.emailTemplate = emailTemplate;
+    }
+
+    public Attachment(String filename, byte[] fileData, LocalDateTime updateDate) {
+        this.filename = filename;
+        this.fileData = fileData;
+        this.updateDate = updateDate;
     }
 }

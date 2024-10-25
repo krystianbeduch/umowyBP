@@ -10,6 +10,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.bpwesley.TourOperator.email.dto.EmailTemplateDTO;
 import pl.bpwesley.TourOperator.email.entity.Attachment;
 import pl.bpwesley.TourOperator.email.exception.EmailTemplateNotFoundException;
+import pl.bpwesley.TourOperator.email.repository.AttachmentRepository;
+import pl.bpwesley.TourOperator.email.service.AttachmentService;
 import pl.bpwesley.TourOperator.email.service.EmailService;
 
 import java.io.IOException;
@@ -23,10 +25,14 @@ import java.util.Optional;
 public class EmailController {
 
     private final EmailService emailService;
+    private final AttachmentRepository attachmentRepository;
+    private final AttachmentService attachmentService;
 
     @Autowired
-    public EmailController(EmailService emailService) {
+    public EmailController(EmailService emailService, AttachmentRepository attachmentRepository, AttachmentService attachmentService) {
         this.emailService = emailService;
+        this.attachmentRepository = attachmentRepository;
+        this.attachmentService = attachmentService;
     }
 
     @GetMapping("/edit-template/{id}")
@@ -55,7 +61,8 @@ public class EmailController {
     public String updateEmailTemplate(@RequestParam("templateId") Long templateId,
                                       @RequestParam("templateName") String templateName,
                                       @RequestParam("content") String content,
-                                      @RequestParam(value = "attachments", required = false) List<MultipartFile> attachments,
+                                      @RequestParam(value = "attachments", required = false) List<MultipartFile> newAttachments,
+                                      @RequestParam(value = "existingAttachments", required = false) List<Long> existingAttachmentIds,
                                       RedirectAttributes redirectAttributes) throws IOException {
 
         EmailTemplateDTO emailTemplateDTO = new EmailTemplateDTO();
@@ -64,23 +71,35 @@ public class EmailController {
         emailTemplateDTO.setContent(content);
         emailTemplateDTO.setUpdateDate(LocalDateTime.now());
 
-        // Przetwarzanie załączników i dodawanie ich do DTO
-        if (attachments != null && !attachments.isEmpty()) {
-//            List<AttachmentDTO> attachmentDTOs = new ArrayList<>();
-            List<Attachment> attachmentDTOs = new ArrayList<>();
-            for (MultipartFile file : attachments) {
+        List<Attachment> attachmentDTOs = new ArrayList<>();
+
+        // Dodawanie istniejacych zalacznikow
+        if (existingAttachmentIds != null && !existingAttachmentIds.isEmpty()) {
+            for (Long attachmentId : existingAttachmentIds) {
+                Attachment attachment = attachmentService.getAttachmentById(attachmentId);
+                if (attachment != null) {
+                    attachmentDTOs.add(attachment);
+                }
+            }
+        }
+
+        // Przetwarzanie nowych zalacznikow
+        if (newAttachments != null && !newAttachments.isEmpty()) {
+//      dto toDo      List<AttachmentDTO> attachmentDTOs = new ArrayList<>();
+            for (MultipartFile file : newAttachments) {
                 if (!file.isEmpty()) {
-//                AttachmentDTO attachmentDTO = new AttachmentDTO();
+//    dto toDo            AttachmentDTO attachmentDTO = new AttachmentDTO();
                     Attachment attachmentDTO = new Attachment();
                     attachmentDTO.setFilename(file.getOriginalFilename());
                     attachmentDTO.setFileData(file.getBytes()); // Możliwe przekształcenie danych na byte[]
+                    attachmentDTO.setUpdateDate(LocalDateTime.now());
                     attachmentDTOs.add(attachmentDTO);
                 }
             }
 
-            emailTemplateDTO.setAttachments(attachmentDTOs);
-        }
 
+        }
+        emailTemplateDTO.setAttachments(attachmentDTOs);
         emailService.updateEmailTemplate(emailTemplateDTO);
 
         redirectAttributes.addFlashAttribute("successMessage", "Szablon o id " + emailTemplateDTO.getEmailTemplateId() + " zaktualizowany");

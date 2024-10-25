@@ -52,12 +52,28 @@ public class EmailService {
             EmailTemplate emailTemplate = emailTemplateMapper.emailTemplateDTOToEmailTemplate(emailTemplateDTO);
 
             // Przetwarzanie zalacznikow jesli sa obecne w DTO
+//            if (emailTemplateDTO.getAttachments() != null && !emailTemplateDTO.getAttachments().isEmpty()) {
+//                List<Attachment> attachments = emailTemplateDTO.getAttachments().stream()
+//                        .map(dto -> new Attachment(dto.getFilename(), dto.getFileData(), emailTemplate))
+//                        .collect(Collectors.toList());
+//                emailTemplate.setAttachments(attachments);
+////                attachmentRepository.saveAll(attachments);
+//            }
             if (emailTemplateDTO.getAttachments() != null && !emailTemplateDTO.getAttachments().isEmpty()) {
-                List<Attachment> attachments = emailTemplateDTO.getAttachments().stream()
-                        .map(dto -> new Attachment(dto.getFilename(), dto.getFileData(), emailTemplate))
-                        .collect(Collectors.toList());
-                emailTemplate.setAttachments(attachments);
-//                attachmentRepository.saveAll(attachments);
+                List<Attachment> newAttachments = new ArrayList<>();
+
+                for (Attachment attachment : emailTemplateDTO.getAttachments()) {
+                    Optional<Attachment> existingAttachment = attachmentRepository.findById(attachment.getAttachmentId());
+                    if (existingAttachment.isEmpty()) {
+                        newAttachments.add(attachment);
+                    }
+                }
+
+                // Ustaw nowe załączniki tylko, jeżeli są
+                if (!newAttachments.isEmpty()) {
+                    emailTemplate.setAttachments(newAttachments);
+                    //attachmentRepository.saveAll(newAttachments); // Zapisujemy nowe załączniki do bazy
+                }
             }
 
             emailTemplateRepository.save(emailTemplate);

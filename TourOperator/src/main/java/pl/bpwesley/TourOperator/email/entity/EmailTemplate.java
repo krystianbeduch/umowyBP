@@ -28,9 +28,9 @@ public class EmailTemplate {
     @OneToMany(mappedBy = "emailTemplate")
     private List<EmailTemplateVariable> emailTemplateVariables;
 
-    @OneToMany(mappedBy = "emailTemplate", cascade = CascadeType.ALL, orphanRemoval = false)
+    // CascadeType.ALL - wszystkie operacje na EmailTemplate będą propogawane na Attachment
+    @OneToMany(mappedBy = "emailTemplate", cascade = CascadeType.ALL)
     private List<Attachment> attachments;
-
 
     public EmailTemplate(String templateName, String content, LocalDateTime updateDate) {
         this.templateName = templateName;

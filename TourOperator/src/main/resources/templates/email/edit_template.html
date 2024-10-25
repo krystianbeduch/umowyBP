@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/css/home-style.css">
     <link rel="stylesheet" type="text/css" href="/css/email-style.css">
     <script type="module" src="/js/sidebar.js"></script>
+    <script type="module" src="/js/email-template/add-attachment.js"></script>
 </head>
 <body>
 <nav th:replace="~{fragments :: SidebarMenu}"></nav>
@@ -14,7 +15,7 @@
 <main id="home-main">
     <header th:replace="~{fragments :: header(headerTitle='Edycja email')}"></header>
 
-    <section>
+    <section id="edit-template-section">
         <form id="edit-template-form" th:action="@{'/email/edit-template'}" method="post" enctype="multipart/form-data">
             <!-- Wymagane dla Springa -->
             <input type="hidden" name="_method" value="put">
@@ -23,28 +24,29 @@
 
             <label for="template-name">Tytuł szablonu:</label>
             <input type="text" id="template-name"  th:value="${emailTemplateName}" name="templateName" size="50" required>
-            <br><br>
 
-            <label for="ta-edit-template">Edycja szablonu:</label><br>
+            <label for="ta-edit-template">Edycja szablonu:</label>
             <textarea id="ta-edit-template" th:text="${emailTemplateContent}" name="content" rows="40" cols="140"></textarea>
-            <br/>
 
-<!--            <form action="/email/attachments/upload" method="post" enctype="multipart/form-data">-->
-            <h3>Załączniki:</h3>
-            <ul>
-                <li th:each="attachment : ${attachments}">
-                    <a th:href="@{/attachments/show/{id}(id=${attachment.attachmentId})}"
-                       th:text="${attachment.filename}" target="_blank"></a>
-<!--                    <span th:text="${attachment.uploadDate}"></span>-->
-                    <!-- Opcjonalnie: przycisk do usunięcia załącznika -->
-                    <button type="button" th:onclick="'deleteAttachment(' + ${attachment.attachmentId} + ')'">Usuń załącznik</button>
-                </li>
-            </ul>
-            <input type="file" id="attachments" name="attachments" accept="application/pdf" multiple>
-<!--            </form>-->
+            <fieldset class="attachment-fieldset">
+                <legend>Załączniki</legend>
+                <ul id="attachment-list">
+                    <li th:each="attachment : ${attachments}">
+                        <a th:href="@{/email/attachments/{id}(id=${attachment.attachmentId})}"
+                           th:text="${attachment.filename}" target="_blank"></a>
+                        <!-- Opcjonalnie: przycisk do usunięcia załącznika -->
+                        <input type="hidden" name="existingAttachments" th:value="${attachment.attachmentId}">
+                        <button type="button" class="delete-attachment-button" th:onclick="'deleteAttachment(' + ${attachment.attachmentId} + ')'">Usuń załącznik</button>
+                    </li>
+                </ul>
+                <input type="file" id="new-attachment" name="attachments" accept="application/pdf" multiple >
+<!--                style="display: none"-->
+<!--                <button type="button" class="add-attachment-button" onclick="document.getElementById('attachments').click();">Dodaj załącznik</button>-->
+                <button type="button" id="add-attachment-button">Dodaj załącznik</button>
+            </fieldset>
+
             <button type="submit">Zapisz Zmiany</button>
         </form>
-
     </section>
 
     <footer th:replace="~{fragments :: CopyrightFooter}"></footer>

@@ -46,23 +46,13 @@ public class AttachmentController {
     }
 
     @GetMapping("/{id}")
-    public void downloadFile(@PathVariable Long id, HttpServletResponse response) throws IOException {
-        Attachment attachment = attachmentService.getAttachmentById(id);
-        if (attachment != null) {
-            response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=\"" + attachment.getFilename() + "\"");
-            response.getOutputStream().write(attachment.getFileData());
-            response.getOutputStream().flush();
-        }
-    }
-
-    @GetMapping("/show/{id}")
     public ResponseEntity<byte[]> getAttachment(@PathVariable Long id) {
+        // Po kliknieciu na zalacznik zostanie on pobrany z bazy i otworzony w nowej karcie
         Optional<Attachment> attachmentOpt = attachmentRepository.findById(id);
         if (attachmentOpt.isPresent()) {
             Attachment attachment = attachmentOpt.get();
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + attachment.getFilename() + "\"")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + attachment.getFilename() + "\"")
                     .contentType(MediaType.APPLICATION_PDF)
                     .body(attachment.getFileData());
         } else {

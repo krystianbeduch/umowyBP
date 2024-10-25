@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
    const pickupLocation = document.getElementById("edit-pickup-location");
    const form = document.getElementById("client-form");
 
-   const rows = document.querySelectorAll('#client-overview-table tbody tr');
+   const rows = document.querySelectorAll("#client-overview-table tbody tr");
    rows.forEach(row => {
       row.addEventListener("click", function() {
          selectClient(this);
