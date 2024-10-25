@@ -39,7 +39,7 @@ public class EmailSendingController {
             throw new EmailTemplateNotFoundException("BŁĄD PODCZAS WYSYŁANIA MAILA: nie istnieje szablon o id " + id);
         }
         EmailTemplateDTO emailTemplate = emailTemplateDtoOptional.get();
-        String emailTemplateName = emailTemplate.getName();
+        String emailTemplateName = emailTemplate.getTemplateName();
 
         // Pobierz zmienne powiązane z szablonem z bazy danych
         List<EmailTemplateVariable> emailTemplateVariables = emailService.getEmailTemplateVariablesByTemplateId(emailTemplate.getEmailTemplateId());

@@ -5,9 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import pl.bpwesley.TourOperator.email.entity.Attachment;
 import pl.bpwesley.TourOperator.email.entity.EmailTemplate;
 import pl.bpwesley.TourOperator.email.entity.EmailTemplateVariable;
 import pl.bpwesley.TourOperator.email.entity.Variable;
+import pl.bpwesley.TourOperator.email.repository.AttachmentRepository;
 import pl.bpwesley.TourOperator.email.repository.EmailTemplateRepository;
 import pl.bpwesley.TourOperator.email.repository.EmailTemplateVariableRepository;
 import pl.bpwesley.TourOperator.email.repository.VariableRepository;
@@ -27,19 +29,19 @@ public class DbInit implements CommandLineRunner {
     private final EmailTemplateRepository emailTemplateRepository;
     private final EmailTemplateVariableRepository emailTemplateVariableRepository;
     private final VariableRepository variableRepository;
+    private final AttachmentRepository attachmentRepository;
 
     @Autowired
-    public DbInit(EmailTemplateRepository emailTemplateRepository, EmailTemplateVariableRepository emailTemplateVariableRepository, VariableRepository variableRepository) {
+    public DbInit(EmailTemplateRepository emailTemplateRepository, EmailTemplateVariableRepository emailTemplateVariableRepository, VariableRepository variableRepository, AttachmentRepository attachmentRepository) {
         this.emailTemplateRepository = emailTemplateRepository;
         this.emailTemplateVariableRepository = emailTemplateVariableRepository;
         this.variableRepository = variableRepository;
+        this.attachmentRepository = attachmentRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
         try {
-            List<EmailTemplateVariable> emailTemplates = new ArrayList<>();
-
             Variable clientNameVar = new Variable(null, "client_name", "Imie klienta");
             Variable tourNameVar = new Variable(null, "tour_name", "Nazwa_wycieczki");
             Variable tourIdVar = new Variable(null, "tour_id", "Id wycieczki");
@@ -62,19 +64,19 @@ public class DbInit implements CommandLineRunner {
 
             Path filePath = Paths.get("src/main/resources/templates/email_templates/reservation_confirmation.html");
             String content = Files.readString(filePath);
-            EmailTemplate reservationConfirmationTemplate = new EmailTemplate(null, "Potwierdzenie rezerwacji", content, LocalDateTime.now(), emailTemplates);
+            EmailTemplate reservationConfirmationTemplate = new EmailTemplate("Potwierdzenie rezerwacji", content, LocalDateTime.now());
 
             filePath = Paths.get("src/main/resources/templates/email_templates/advance_payment_confirmation.html");
             content = Files.readString(filePath);
-            EmailTemplate advancePaymentConfirmationTemplate = new EmailTemplate(null, "Potwierdzenie płatności zaliczki", content, LocalDateTime.now(), emailTemplates);
+            EmailTemplate advancePaymentConfirmationTemplate = new EmailTemplate("Potwierdzenie płatności zaliczki", content, LocalDateTime.now());
 
             filePath = Paths.get("src/main/resources/templates/email_templates/payment_of_total_confirmation.html");
             content = Files.readString(filePath);
-            EmailTemplate paymentOfTotalConfirmationTemplate = new EmailTemplate(null, "Potwierdzenie płatności całości", content, LocalDateTime.now(), emailTemplates);
+            EmailTemplate paymentOfTotalConfirmationTemplate = new EmailTemplate("Potwierdzenie płatności całości", content, LocalDateTime.now());
 
             filePath = Paths.get("src/main/resources/templates/email_templates/meeting-point-reminder.html");
             content = Files.readString(filePath);
-            EmailTemplate meetingPointReminderTemplate = new EmailTemplate(null, "Przypomnienie o zbiórce na wycieczkę", content, LocalDateTime.now(), emailTemplates);
+            EmailTemplate meetingPointReminderTemplate = new EmailTemplate("Przypomnienie o zbiórce na wycieczkę", content, LocalDateTime.now());
 
              // Zapisz szablony do bazy danych
             emailTemplateRepository.saveAll(Arrays.asList(
@@ -100,7 +102,6 @@ public class DbInit implements CommandLineRunner {
             emailTemplateVariables.add(new EmailTemplateVariable(null, reservationConfirmationTemplate, remainingAmmountDeadlineVar));
             emailTemplateVariables.add(new EmailTemplateVariable(null, reservationConfirmationTemplate, departureTimeVar));
             emailTemplateVariables.add(new EmailTemplateVariable(null, reservationConfirmationTemplate, arrivalTimeVar));
-
 
             // Potwierdzenie płatności zaliczki
             emailTemplateVariables.add(new EmailTemplateVariable(null, advancePaymentConfirmationTemplate, clientNameVar));
@@ -129,10 +130,42 @@ public class DbInit implements CommandLineRunner {
 
             // Zapisz powiązania do bazy danych
             emailTemplateVariableRepository.saveAll(emailTemplateVariables);
+
+//            // Dodaj zalaczniki
+//            addAttachmentsToTemplate(reservationConfirmationTemplate,
+//                    "Andrzejki-w-stylu-Country-3545i.pdf", "OWU_BP_Wesley.pdf",
+//                    "OWU_PZU_NNW.pdf", "Polityka_prywatnosci.pdf", "Regulamin_serwisu.pdf", "Umowa.pdf");
+//            addAttachmentsToTemplate(advancePaymentConfirmationTemplate, "Umowa.pdf");
+//            // addAttachmentsToTemplate(paymentOfTotalConfirmationTemplate, "Umowa.pdf");
+//            addAttachmentsToTemplate(meetingPointReminderTemplate, "Umowa.pdf");
+//
+//            // Zapisanie załączników
+//            emailTemplateRepository.saveAll(Arrays.asList(
+//                    reservationConfirmationTemplate,
+//                    advancePaymentConfirmationTemplate,
+//                    paymentOfTotalConfirmationTemplate,
+//                    meetingPointReminderTemplate
+//            ));
+
         }
         catch (IOException e) {
             e.printStackTrace();
         }
 
     }
+
+//    private void addAttachmentsToTemplate(EmailTemplate emailTemplate, String... fileNames) {
+//        for (String fileName : fileNames) {
+//            try {
+//                Path filePath = Paths.get("src/main/resources/templates/email_templates/attachments/" + fileName);
+//                byte[] data = Files.readAllBytes(filePath);
+//                Attachment attachment = new Attachment(fileName, data, emailTemplate);
+//                attachmentRepository.save(attachment); // Zapisz załącznik w repozytorium
+//                emailTemplate.getAttachments().add(attachment); // Dodaj załącznik do szablonu
+//            } catch (IOException e) {
+//                System.err.println("Błąd przy wczytywaniu załącznika: " + fileName);
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 }

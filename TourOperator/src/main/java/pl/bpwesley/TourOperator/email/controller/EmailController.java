@@ -1,5 +1,6 @@
 package pl.bpwesley.TourOperator.email.controller;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,7 @@ public class EmailController {
     }
 
     @GetMapping("/edit-template/{id}")
+//    @Transactional
     public String showEditEmailTemplatePage(
             @PathVariable("id") Long emailTemplateId,
             Model model) {
@@ -34,7 +36,8 @@ public class EmailController {
             EmailTemplateDTO emailTemplateDTO = emailTemplateDtoOptional.get();
             model.addAttribute("emailTemplateId", emailTemplateDTO.getEmailTemplateId());
             model.addAttribute("emailTemplateContent", emailTemplateDTO.getContent());
-            model.addAttribute("emailTemplateName", emailTemplateDTO.getName());
+            model.addAttribute("emailTemplateName", emailTemplateDTO.getTemplateName());
+//            model.addAttribute("attachments", emailTemplateDTO.getAttachments());
         }
         else {
             throw new EmailTemplateNotFoundException("BŁĄD SZABLONU: szablon o id " + emailTemplateId + " nie istnieje");
@@ -45,13 +48,13 @@ public class EmailController {
 
     @PutMapping("/edit-template")
     public String updateEmailTemplate(@RequestParam("templateId") Long templateId,
-                                      @RequestParam("name") String name,
+                                      @RequestParam("name") String templateName,
                                       @RequestParam("content") String content,
                                       RedirectAttributes redirectAttributes) {
 
         EmailTemplateDTO emailTemplateDTO = new EmailTemplateDTO();
         emailTemplateDTO.setEmailTemplateId(templateId);
-        emailTemplateDTO.setName(name);
+        emailTemplateDTO.setTemplateName(templateName);
         emailTemplateDTO.setContent(content);
         emailTemplateDTO.setUpdateDate(LocalDateTime.now());
 

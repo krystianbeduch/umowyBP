@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edycja email</title>
+    <title>Edycja szablonu email</title>
     <link rel="stylesheet" type="text/css" href="/css/home-style.css">
     <link rel="stylesheet" type="text/css" href="/css/email-style.css">
     <script type="module" src="/js/sidebar.js"></script>
@@ -15,7 +15,7 @@
     <header th:replace="~{fragments :: header(headerTitle='Edycja email')}"></header>
 
     <section>
-        <form id="edit-template-form" th:action="@{'/email/edit-template'}" method="post">
+        <form id="edit-template-form" th:action="@{'/email/edit-template'}" method="post" enctype="multipart/form-data">
             <!-- Wymagane dla Springa -->
             <input type="hidden" name="_method" value="put">
             <input type="hidden" th:value="${emailTemplateId}" name="templateId" readonly>
@@ -25,8 +25,23 @@
             <input type="text" id="template-name"  th:value="${emailTemplateName}" name="name" size="50" required>
             <br><br>
 
+            <label for="ta-edit-template">Edycja szablonu:</label>
             <textarea id="ta-edit-template" th:text="${emailTemplateContent}" name="content" rows="40" cols="140"></textarea>
             <br/>
+
+<!--            <form action="/email/attachments/upload" method="post" enctype="multipart/form-data">-->
+<!--            <h3>Załączniki:</h3>-->
+<!--            <ul>-->
+<!--                <li th:each="attachment : ${attachments}">-->
+<!--                    <a th:href="@{/attachments/show/{id}(id=${attachment.attachmentId})}"-->
+<!--                       th:text="${attachment.filename}" target="_blank"></a>-->
+<!--&lt;!&ndash;                    <span th:text="${attachment.uploadDate}"></span>&ndash;&gt;-->
+<!--                    &lt;!&ndash; Opcjonalnie: przycisk do usunięcia załącznika &ndash;&gt;-->
+<!--                    <button type="button" th:onclick="'deleteAttachment(' + ${attachment.attachmentId} + ')'">Usuń załącznik</button>-->
+<!--                </li>-->
+<!--            </ul>-->
+            <input type="file" id="attachment" name="attachment" accept="application/pdf">
+<!--            </form>-->
             <button type="submit">Zapisz Zmiany</button>
         </form>
 

@@ -41,7 +41,7 @@ public class EmailSendingService {
     public void sendEmail(EmailTemplateDTO emailTemplateDTO, String to, String subject, List<EmailTemplateVariable> emailTemplateVariables, List<String> attachments) throws MessagingException, IOException {
         // Pobierz nazwe i html szablonu
         String templateContent = emailTemplateDTO.getContent();
-        String templateName = emailTemplateDTO.getName();
+        String templateName = emailTemplateDTO.getTemplateName();
 
         // Inicjalizuj szablon FreeMarker
         Template template = new Template(templateName, new StringReader(templateContent), freemarkerConfig);

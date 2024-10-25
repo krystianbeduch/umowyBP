@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -19,7 +19,7 @@ public class EmailTemplate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long emailTemplateId;
-    private String name;
+    private String templateName;
 
     @Lob // Large Object
     private String content; // Pole przechowujace kod HTML
@@ -27,6 +27,16 @@ public class EmailTemplate {
 
     @OneToMany(mappedBy = "emailTemplate")
     private List<EmailTemplateVariable> emailTemplateVariables;
+
+//    @OneToMany(mappedBy = "emailTemplate")
+//    private List<Attachment> attachments = new ArrayList<>();
+//    private List<Attachment> attachments;
+
+    public EmailTemplate(String templateName, String content, LocalDateTime updateDate) {
+        this.templateName = templateName;
+        this.content = content;
+        this.updateDate = updateDate;
+    }
 }
 
 

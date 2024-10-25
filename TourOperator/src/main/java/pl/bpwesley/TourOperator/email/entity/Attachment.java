@@ -1,7 +1,6 @@
 package pl.bpwesley.TourOperator.email.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,13 +14,23 @@ public class Attachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long attachmentId;
-    private String fileName;
+    private String filename;
 
     @Lob // Large Object
     private byte[] fileData; // Pole przechowujace zawartosc pliku
 
-    public Attachment(String fileName, byte[] fileData) {
-        this.fileName = fileName;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "email_template_id")
+//    private EmailTemplate emailTemplate;
+
+    public Attachment(String filename, byte[] fileData) {
+        this.filename = filename;
         this.fileData = fileData;
     }
+
+//    public Attachment(String filename, byte[] fileData, EmailTemplate emailTemplate) {
+//        this.filename = filename;
+//        this.fileData = fileData;
+//        this.emailTemplate = emailTemplate;
+//    }
 }

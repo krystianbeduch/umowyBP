@@ -24,10 +24,10 @@
                 </thead>
                 <tbody>
                     <tr th:each="emailTemplate, stat: ${emailTemplates}">
-                        <td><a th:href="@{/email/edit-template/{id}(id=${emailTemplate.emailTemplateId})}" th:text="${emailTemplate.name}"></a></td>
+                        <td><a th:href="@{/email/edit-template/{id}(id=${emailTemplate.emailTemplateId})}" th:text="${emailTemplate.templateName}"></a></td>
                         <td th:text="${#temporals.format(emailTemplate.updateDate, 'dd.MM.yyyy HH:mm')}"></td>
                     <tr th:each="emailTemplate, stat: ${emailTemplates}">
-                        <td><a th:href="@{/email/send/{id}(id=${emailTemplate.emailTemplateId})}">Wyślij maila: <span th:text="${emailTemplate.name}"></span></a></td>
+                        <td><a th:href="@{/email/send/{id}(id=${emailTemplate.emailTemplateId})}">Wyślij maila: <span th:text="${emailTemplate.templateName}"></span></a></td>
                         <td th:text="${#temporals.format(emailTemplate.updateDate, 'dd.MM.yyyy HH:mm')}"></td>
                     </tr>
                 </tbody>
