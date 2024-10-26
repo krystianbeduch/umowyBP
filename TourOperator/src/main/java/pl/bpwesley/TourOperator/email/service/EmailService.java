@@ -14,12 +14,14 @@ import pl.bpwesley.TourOperator.email.repository.AttachmentRepository;
 import pl.bpwesley.TourOperator.email.repository.EmailTemplateRepository;
 import pl.bpwesley.TourOperator.email.repository.EmailTemplateVariableRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class EmailService {
     private final EmailTemplateRepository emailTemplateRepository;
     private final EmailTemplateMapper emailTemplateMapper = EmailTemplateMapper.INSTANCE;
@@ -33,13 +35,14 @@ public class EmailService {
         this.attachmentRepository = attachmentRepository;
     }
 
-    @Transactional
+//    @Transactional
     public List<EmailTemplateDTO> getEmailTemplateList() {
         return emailTemplateRepository.findAllByOrderByUpdateDateDesc().stream()
                 .map(emailTemplateMapper::emailTemplateToEmailTemplateDTO)
                 .collect(Collectors.toList());
     }
 
+//    @Transactional
     public Optional<EmailTemplateDTO> getEmailTemplateById(Long emailTemplateId) {
         // Znajdz szablon, zmapuj na DTO i zwroc go
         return emailTemplateRepository.findById(emailTemplateId).
@@ -54,7 +57,7 @@ public class EmailService {
             // Przetwarzanie zalacznikow jesli sa obecne w DTO
             if (emailTemplateDTO.getAttachments() != null && !emailTemplateDTO.getAttachments().isEmpty()) {
                 List<Attachment> attachments = emailTemplateDTO.getAttachments().stream()
-                        .map(dto -> new Attachment(dto.getFilename(), dto.getFileData(), emailTemplate))
+                        .map(dto -> new Attachment(dto.getFilename(), dto.getFileData(), LocalDateTime.now(), emailTemplate))
                         .collect(Collectors.toList());
                 emailTemplate.setAttachments(attachments);
                 emailTemplateRepository.save(emailTemplate);

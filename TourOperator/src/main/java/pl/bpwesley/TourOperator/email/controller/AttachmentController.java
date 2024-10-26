@@ -30,11 +30,13 @@ public class AttachmentController {
 
     @GetMapping("/upload")
     public String showUploadFile() {
+        // nic nie korzysta
         return "email/upload";
     }
 
     @PostMapping("/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file, Model model) {
+        // nic nie korzysta
         try {
             Attachment savedAttachment = attachmentService.saveAttachment(file);
             model.addAttribute("successMessage", "Plik " + savedAttachment.getFilename() + " został zapisany!");

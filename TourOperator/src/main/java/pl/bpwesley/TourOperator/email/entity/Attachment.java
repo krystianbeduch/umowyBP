@@ -37,9 +37,10 @@ public class Attachment {
         this.emailTemplate = emailTemplate;
     }
 
-    public Attachment(String filename, byte[] fileData, LocalDateTime updateDate) {
+    public Attachment(String filename, byte[] fileData, LocalDateTime updateDate, EmailTemplate emailTemplate) {
         this.filename = filename;
         this.fileData = fileData;
         this.updateDate = updateDate;
+        this.emailTemplate = emailTemplate;
     }
 }

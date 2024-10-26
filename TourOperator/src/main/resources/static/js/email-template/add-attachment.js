@@ -11,10 +11,10 @@ document.addEventListener("DOMContentLoaded", () => {
         Array.from(newAttachmentInput.files).forEach(file => {
             addAttachmentToList(file);
         });
-        //newAttachmentInput.value = ""; // Resetuje input po dodaniu plików
     });
 
-    function addAttachmentToList(file) {
+
+    const addAttachmentToList = (file) => {
         const listItem = document.createElement("li");
 
         // Tworzymy link do załącznika
@@ -24,23 +24,29 @@ document.addEventListener("DOMContentLoaded", () => {
         link.textContent = file.name;
 
         // Tworzymy ukryty input, który przekaże załącznik do Springa
-        const inputFile = document.createElement("input");
-        inputFile.type = "hidden";
-        inputFile.name = "attachments";
-        inputFile.value = file.name; // Użyjemy nazwy pliku jako placeholdera
+        ///????????????????
+        // const inputFile = document.createElement("input");
+        // inputFile.type = "hidden";
+        // inputFile.name = "attachments";
+        // inputFile.value = file.name; // Użyjemy nazwy pliku jako placeholdera
+        ////////////
+
 
         const deleteButton = document.createElement("button");
         deleteButton.type = "button";
         deleteButton.textContent = "Usuń załącznik";
+        deleteButton.classList.add("delete-attachment-button");
         deleteButton.addEventListener("click", () => {
             listItem.remove();
         });
 
+        // class="delete-attachment-button"
+
         listItem.appendChild(link);
-        listItem.appendChild(inputFile);
+        // listItem.appendChild(inputFile);
         listItem.appendChild(deleteButton);
         attachmentList.appendChild(listItem);
-    }
+    };
     // // Zdarzenie przycisku dodawnania zalacznika
     // addAttachmentButton.addEventListener("click", () => {
     //     const files = newAttachmentInput.files;

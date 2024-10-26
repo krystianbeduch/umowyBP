@@ -36,7 +36,7 @@ public class EmailController {
     }
 
     @GetMapping("/edit-template/{id}")
-    @Transactional
+//    @Transactional
     public String showEditEmailTemplatePage(
             @PathVariable("id") Long emailTemplateId,
             Model model) {
@@ -71,7 +71,8 @@ public class EmailController {
         emailTemplateDTO.setContent(content);
         emailTemplateDTO.setUpdateDate(LocalDateTime.now());
 
-        List<Attachment> attachmentDTOs = new ArrayList<>();
+        List<Attachment> attachmentDTOs = attachmentService.processAttachments(newAttachments);
+//        emailTemplateDTO.setAttachments(attachmentDTOs);
 
 //        // Dodawanie istniejacych zalacznikow
 //        if (existingAttachmentIds != null && !existingAttachmentIds.isEmpty()) {
@@ -84,21 +85,21 @@ public class EmailController {
 //        }
 
         // Przetwarzanie nowych zalacznikow
-        if (newAttachments != null && !newAttachments.isEmpty()) {
-//      dto toDo      List<AttachmentDTO> attachmentDTOs = new ArrayList<>();
-            for (MultipartFile file : newAttachments) {
-                if (!file.isEmpty()) {
-//    dto toDo            AttachmentDTO attachmentDTO = new AttachmentDTO();
-                    Attachment attachmentDTO = new Attachment();
-                    attachmentDTO.setFilename(file.getOriginalFilename());
-                    attachmentDTO.setFileData(file.getBytes()); // Możliwe przekształcenie danych na byte[]
-                    attachmentDTO.setUpdateDate(LocalDateTime.now());
-                    attachmentDTOs.add(attachmentDTO);
-                }
-            }
-
-
-        }
+//        if (newAttachments != null && !newAttachments.isEmpty()) {
+////      dto toDo      List<AttachmentDTO> attachmentDTOs = new ArrayList<>();
+//            for (MultipartFile file : newAttachments) {
+//                if (!file.isEmpty()) {
+////    dto toDo            AttachmentDTO attachmentDTO = new AttachmentDTO();
+//                    Attachment attachmentDTO = new Attachment();
+//                    attachmentDTO.setFilename(file.getOriginalFilename());
+//                    attachmentDTO.setFileData(file.getBytes()); // Możliwe przekształcenie danych na byte[]
+//                    attachmentDTO.setUpdateDate(LocalDateTime.now());
+//                    attachmentDTOs.add(attachmentDTO);
+//                }
+//            }
+//
+//
+//        }
         emailTemplateDTO.setAttachments(attachmentDTOs);
         emailService.updateEmailTemplate(emailTemplateDTO);
 

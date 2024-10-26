@@ -10,11 +10,14 @@ import pl.bpwesley.TourOperator.email.repository.AttachmentRepository;
 import pl.bpwesley.TourOperator.email.repository.EmailTemplateRepository;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AttachmentService {
     private final EmailTemplateRepository emailTemplateRepository;
-    private AttachmentRepository attachmentRepository;
+    private final AttachmentRepository attachmentRepository;
 
     @Autowired
     public AttachmentService(AttachmentRepository attachmentRepository, EmailTemplateRepository emailTemplateRepository) {
@@ -23,6 +26,7 @@ public class AttachmentService {
     }
 
     public Attachment saveAttachment(MultipartFile file) throws IOException {
+        // używa metoda ktora bedzie usunieta
         String fileName = file.getOriginalFilename();
         byte[] fileData = file.getBytes();
         Attachment attachment = new Attachment(fileName, fileData);
@@ -42,5 +46,24 @@ public class AttachmentService {
             emailTemplateRepository.save(emailTemplate);
         }
 
+    }
+    public List<Attachment> processAttachments(List<MultipartFile> newAttachments) throws IOException {
+        List<Attachment> attachments = new ArrayList<>();
+
+        // Przetworzenie nowych zalacznikow
+        if (newAttachments != null && !newAttachments.isEmpty()) {
+//      dto toDo      List<AttachmentDTO> attachmentDTOs = new ArrayList<>();
+            for (MultipartFile file : newAttachments) {
+                if (!file.isEmpty()) {
+//    dto toDo            AttachmentDTO attachmentDTO = new AttachmentDTO();
+                    Attachment attachmentDTO = new Attachment();
+                    attachmentDTO.setFilename(file.getOriginalFilename());
+                    attachmentDTO.setFileData(file.getBytes()); // Możliwe przekształcenie danych na byte[]
+                    attachmentDTO.setUpdateDate(LocalDateTime.now());
+                    attachments.add(attachmentDTO);
+                }
+            }
+        }
+        return attachments;
     }
 }
