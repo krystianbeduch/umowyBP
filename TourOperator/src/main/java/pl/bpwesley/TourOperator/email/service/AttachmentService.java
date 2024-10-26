@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import pl.bpwesley.TourOperator.email.dto.AttachmentDto;
 import pl.bpwesley.TourOperator.email.entity.Attachment;
 import pl.bpwesley.TourOperator.email.entity.EmailTemplate;
 import pl.bpwesley.TourOperator.email.repository.AttachmentRepository;
@@ -47,23 +48,21 @@ public class AttachmentService {
         }
 
     }
-    public List<Attachment> processAttachments(List<MultipartFile> newAttachments) throws IOException {
-        List<Attachment> attachments = new ArrayList<>();
+    public List<AttachmentDto> processAttachments(List<MultipartFile> newAttachments) throws IOException {
+        List<AttachmentDto> attachmentDtos = new ArrayList<>();
 
         // Przetworzenie nowych zalacznikow
         if (newAttachments != null && !newAttachments.isEmpty()) {
-//      dto toDo      List<AttachmentDTO> attachmentDTOs = new ArrayList<>();
             for (MultipartFile file : newAttachments) {
                 if (!file.isEmpty()) {
-//    dto toDo            AttachmentDTO attachmentDTO = new AttachmentDTO();
-                    Attachment attachmentDTO = new Attachment();
-                    attachmentDTO.setFilename(file.getOriginalFilename());
-                    attachmentDTO.setFileData(file.getBytes()); // Możliwe przekształcenie danych na byte[]
-                    attachmentDTO.setUpdateDate(LocalDateTime.now());
-                    attachments.add(attachmentDTO);
+                    AttachmentDto attachmentDto = new AttachmentDto();
+                    attachmentDto.setFilename(file.getOriginalFilename());
+                    attachmentDto.setFileData(file.getBytes());
+                    attachmentDto.setUpdateDate(LocalDateTime.now());
+                    attachmentDtos.add(attachmentDto);
                 }
             }
         }
-        return attachments;
+        return attachmentDtos;
     }
 }

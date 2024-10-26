@@ -12,7 +12,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import pl.bpwesley.TourOperator.email.dto.EmailTemplateDTO;
+import pl.bpwesley.TourOperator.email.dto.EmailTemplateDto;
 import pl.bpwesley.TourOperator.email.entity.EmailTemplateVariable;
 
 import java.io.File;
@@ -38,7 +38,7 @@ public class EmailSendingService {
     }
 
 
-    public void sendEmail(EmailTemplateDTO emailTemplateDTO, String to, String subject, List<EmailTemplateVariable> emailTemplateVariables, List<String> attachments) throws MessagingException, IOException {
+    public void sendEmail(EmailTemplateDto emailTemplateDTO, String to, String subject, List<EmailTemplateVariable> emailTemplateVariables, List<String> attachments) throws MessagingException, IOException {
         // Pobierz nazwe i html szablonu
         String templateContent = emailTemplateDTO.getContent();
         String templateName = emailTemplateDTO.getTemplateName();

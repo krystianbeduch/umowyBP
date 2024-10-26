@@ -1,14 +1,13 @@
 package pl.bpwesley.TourOperator.email.controller;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.bpwesley.TourOperator.email.dto.EmailTemplateDTO;
-import pl.bpwesley.TourOperator.email.entity.Attachment;
+import pl.bpwesley.TourOperator.email.dto.AttachmentDto;
+import pl.bpwesley.TourOperator.email.dto.EmailTemplateDto;
 import pl.bpwesley.TourOperator.email.exception.EmailTemplateNotFoundException;
 import pl.bpwesley.TourOperator.email.repository.AttachmentRepository;
 import pl.bpwesley.TourOperator.email.service.AttachmentService;
@@ -16,7 +15,6 @@ import pl.bpwesley.TourOperator.email.service.EmailService;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,15 +38,15 @@ public class EmailController {
     public String showEditEmailTemplatePage(
             @PathVariable("id") Long emailTemplateId,
             Model model) {
-        Optional<EmailTemplateDTO> emailTemplateDtoOptional = emailService.getEmailTemplateById(emailTemplateId);
+        Optional<EmailTemplateDto> emailTemplateDtoOptional = emailService.getEmailTemplateById(emailTemplateId);
 
         if (emailTemplateDtoOptional.isPresent()) {
             // Pobieramy zawartosc szablonu na podstawie przekazanego ID
-            EmailTemplateDTO emailTemplateDTO = emailTemplateDtoOptional.get();
+            EmailTemplateDto emailTemplateDTO = emailTemplateDtoOptional.get();
             model.addAttribute("emailTemplateId", emailTemplateDTO.getEmailTemplateId());
             model.addAttribute("emailTemplateContent", emailTemplateDTO.getContent());
             model.addAttribute("emailTemplateName", emailTemplateDTO.getTemplateName());
-            model.addAttribute("attachments", emailTemplateDTO.getAttachments());
+            model.addAttribute("attachments", emailTemplateDTO.getAttachmentDtos());
         }
         else {
             throw new EmailTemplateNotFoundException("BŁĄD SZABLONU: szablon o id " + emailTemplateId + " nie istnieje");
@@ -65,13 +63,13 @@ public class EmailController {
                                       @RequestParam(value = "existingAttachments", required = false) List<Long> existingAttachmentIds,
                                       RedirectAttributes redirectAttributes) throws IOException {
 
-        EmailTemplateDTO emailTemplateDTO = new EmailTemplateDTO();
-        emailTemplateDTO.setEmailTemplateId(templateId);
-        emailTemplateDTO.setTemplateName(templateName);
-        emailTemplateDTO.setContent(content);
-        emailTemplateDTO.setUpdateDate(LocalDateTime.now());
+        EmailTemplateDto emailTemplateDto = new EmailTemplateDto();
+        emailTemplateDto.setEmailTemplateId(templateId);
+        emailTemplateDto.setTemplateName(templateName);
+        emailTemplateDto.setContent(content);
+        emailTemplateDto.setUpdateDate(LocalDateTime.now());
 
-        List<Attachment> attachmentDTOs = attachmentService.processAttachments(newAttachments);
+        List<AttachmentDto> attachmentDtos = attachmentService.processAttachments(newAttachments);
 //        emailTemplateDTO.setAttachments(attachmentDTOs);
 
 //        // Dodawanie istniejacych zalacznikow
@@ -86,10 +84,8 @@ public class EmailController {
 
         // Przetwarzanie nowych zalacznikow
 //        if (newAttachments != null && !newAttachments.isEmpty()) {
-////      dto toDo      List<AttachmentDTO> attachmentDTOs = new ArrayList<>();
 //            for (MultipartFile file : newAttachments) {
 //                if (!file.isEmpty()) {
-////    dto toDo            AttachmentDTO attachmentDTO = new AttachmentDTO();
 //                    Attachment attachmentDTO = new Attachment();
 //                    attachmentDTO.setFilename(file.getOriginalFilename());
 //                    attachmentDTO.setFileData(file.getBytes()); // Możliwe przekształcenie danych na byte[]
@@ -100,10 +96,10 @@ public class EmailController {
 //
 //
 //        }
-        emailTemplateDTO.setAttachments(attachmentDTOs);
-        emailService.updateEmailTemplate(emailTemplateDTO);
+        emailTemplateDto.setAttachmentDtos(attachmentDtos);
+        emailService.updateEmailTemplate(emailTemplateDto);
 
-        redirectAttributes.addFlashAttribute("successMessage", "Szablon o id " + emailTemplateDTO.getEmailTemplateId() + " zaktualizowany");
+        redirectAttributes.addFlashAttribute("successMessage", "Szablon o id " + emailTemplateDto.getEmailTemplateId() + " zaktualizowany");
         return "redirect:/email/home";
     }
 }

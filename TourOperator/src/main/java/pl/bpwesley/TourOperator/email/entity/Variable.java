@@ -20,4 +20,9 @@ public class Variable {
     @Column(nullable = false, unique = true)
     private String name;
     private String value;
+
+    public Variable(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
 }

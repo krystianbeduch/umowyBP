@@ -23,18 +23,13 @@ public class Attachment {
     private LocalDateTime updateDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne
     @JoinColumn(name = "email_template_id")
     private EmailTemplate emailTemplate;
 
     public Attachment(String filename, byte[] fileData) {
         this.filename = filename;
         this.fileData = fileData;
-    }
-
-    public Attachment(String filename, byte[] fileData, EmailTemplate emailTemplate) {
-        this.filename = filename;
-        this.fileData = fileData;
-        this.emailTemplate = emailTemplate;
     }
 
     public Attachment(String filename, byte[] fileData, LocalDateTime updateDate, EmailTemplate emailTemplate) {

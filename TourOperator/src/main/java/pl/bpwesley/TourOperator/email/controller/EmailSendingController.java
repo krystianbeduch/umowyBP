@@ -6,9 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.bpwesley.TourOperator.email.dto.EmailTemplateDTO;
+import pl.bpwesley.TourOperator.email.dto.EmailTemplateDto;
 import pl.bpwesley.TourOperator.email.entity.EmailTemplateVariable;
 import pl.bpwesley.TourOperator.email.exception.EmailTemplateNotFoundException;
 import pl.bpwesley.TourOperator.email.service.EmailSendingService;
@@ -32,16 +31,17 @@ public class EmailSendingController {
     @GetMapping("/{id}")
     public String sendEmail(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) throws MessagingException, IOException {
         // Pobierz szablon email na podstawie ID
-        Optional<EmailTemplateDTO> emailTemplateDtoOptional = emailService.getEmailTemplateById(id);
+        Optional<EmailTemplateDto> emailTemplateDtoOptional = emailService.getEmailTemplateById(id);
 
         // Zabezpieczenie przed brakiem szablonu
         if (emailTemplateDtoOptional.isEmpty()) {
             throw new EmailTemplateNotFoundException("BŁĄD PODCZAS WYSYŁANIA MAILA: nie istnieje szablon o id " + id);
         }
-        EmailTemplateDTO emailTemplate = emailTemplateDtoOptional.get();
+        EmailTemplateDto emailTemplate = emailTemplateDtoOptional.get();
         String emailTemplateName = emailTemplate.getTemplateName();
 
         // Pobierz zmienne powiązane z szablonem z bazy danych
+        // zmienne są już pobrane przy emailService.getEmailTemplateById
         List<EmailTemplateVariable> emailTemplateVariables = emailService.getEmailTemplateVariablesByTemplateId(emailTemplate.getEmailTemplateId());
 
         List<String> attachments = new ArrayList<>();

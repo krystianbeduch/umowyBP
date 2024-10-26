@@ -1,10 +1,9 @@
 package pl.bpwesley.TourOperator.email.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.bpwesley.TourOperator.email.dto.EmailTemplateDTO;
+import pl.bpwesley.TourOperator.email.dto.EmailTemplateDto;
 import pl.bpwesley.TourOperator.email.entity.Attachment;
 import pl.bpwesley.TourOperator.email.entity.EmailTemplate;
 import pl.bpwesley.TourOperator.email.entity.EmailTemplateVariable;
@@ -15,7 +14,6 @@ import pl.bpwesley.TourOperator.email.repository.EmailTemplateRepository;
 import pl.bpwesley.TourOperator.email.repository.EmailTemplateVariableRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,27 +34,32 @@ public class EmailService {
     }
 
 //    @Transactional
-    public List<EmailTemplateDTO> getEmailTemplateList() {
+    public List<EmailTemplateDto> getEmailTemplateList() {
         return emailTemplateRepository.findAllByOrderByUpdateDateDesc().stream()
-                .map(emailTemplateMapper::emailTemplateToEmailTemplateDTO)
+                .map(emailTemplateMapper::emailTemplateToEmailTemplateDto)
                 .collect(Collectors.toList());
     }
 
 //    @Transactional
-    public Optional<EmailTemplateDTO> getEmailTemplateById(Long emailTemplateId) {
+    public Optional<EmailTemplateDto> getEmailTemplateById(Long emailTemplateId) {
         // Znajdz szablon, zmapuj na DTO i zwroc go
         return emailTemplateRepository.findById(emailTemplateId).
-                map(emailTemplateMapper::emailTemplateToEmailTemplateDTO);
+                map(emailTemplateMapper::emailTemplateToEmailTemplateDto);
+//        return emailTemplateRepository.findById(emailTemplateId).map(emailTemplate -> {
+//            emailTemplate.getAttachments();
+//
+//            return emailTemplateMapper.emailTemplateToEmailTemplateDto(emailTemplate);
+//        });
     }
 
 //    @Transactional
-    public void updateEmailTemplate(EmailTemplateDTO emailTemplateDTO) {
+    public void updateEmailTemplate(EmailTemplateDto emailTemplateDTO) {
         if (emailTemplateRepository.existsById(emailTemplateDTO.getEmailTemplateId())) {
             EmailTemplate emailTemplate = emailTemplateMapper.emailTemplateDTOToEmailTemplate(emailTemplateDTO);
 
             // Przetwarzanie zalacznikow jesli sa obecne w DTO
-            if (emailTemplateDTO.getAttachments() != null && !emailTemplateDTO.getAttachments().isEmpty()) {
-                List<Attachment> attachments = emailTemplateDTO.getAttachments().stream()
+            if (emailTemplateDTO.getAttachmentDtos() != null && !emailTemplateDTO.getAttachmentDtos().isEmpty()) {
+                List<Attachment> attachments = emailTemplateDTO.getAttachmentDtos().stream()
                         .map(dto -> new Attachment(dto.getFilename(), dto.getFileData(), LocalDateTime.now(), emailTemplate))
                         .collect(Collectors.toList());
                 emailTemplate.setAttachments(attachments);

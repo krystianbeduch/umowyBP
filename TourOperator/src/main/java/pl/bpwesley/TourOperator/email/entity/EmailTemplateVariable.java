@@ -26,4 +26,9 @@ public class EmailTemplateVariable {
     @ManyToOne
     @JoinColumn(name = "variable_id", nullable = false)
     private Variable variable;
+
+    public EmailTemplateVariable(EmailTemplate emailTemplate, Variable variable) {
+        this.emailTemplate = emailTemplate;
+        this.variable = variable;
+    }
 }

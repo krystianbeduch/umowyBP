@@ -42,18 +42,18 @@ public class DbInit implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         try {
-            Variable clientNameVar = new Variable(null, "client_name", "Imie klienta");
-            Variable tourNameVar = new Variable(null, "tour_name", "Nazwa_wycieczki");
-            Variable tourIdVar = new Variable(null, "tour_id", "Id wycieczki");
-            Variable tourLocationVar = new Variable(null, "tour_location", "Tour location");
-            Variable startDateVar = new Variable(null, "start_date", "dataod: 44");
-            Variable endDateVar = new Variable(null, "end_date", "datado: 44");
-            Variable advanceVar = new Variable(null, "advance", "kwota zaliczki 200zl");
-            Variable advanceDeadlineVar = new Variable(null, "advance_deadline", "zaliczka termin");
-            Variable remainingAmmountVar = new Variable(null, "remaining_ammount", "Pozostala kwota do zaplaty 200zl");
-            Variable remainingAmmountDeadlineVar = new Variable(null, "remaining_amount_deadline", "pozostaala kwota deadline");
-            Variable departureTimeVar = new Variable(null, "departure_time", "godzina wyjazd: 06:00");
-            Variable arrivalTimeVar = new Variable(null, "arrival_time", "godzina przyjazd: 21:00");
+            Variable clientNameVar = new Variable("client_name", "Imie klienta");
+            Variable tourNameVar = new Variable("tour_name", "Nazwa_wycieczki");
+            Variable tourIdVar = new Variable( "tour_id", "Id wycieczki");
+            Variable tourLocationVar = new Variable("tour_location", "Tour location");
+            Variable startDateVar = new Variable("start_date", "dataod: 44");
+            Variable endDateVar = new Variable("end_date", "datado: 44");
+            Variable advanceVar = new Variable("advance", "kwota zaliczki 200zl");
+            Variable advanceDeadlineVar = new Variable("advance_deadline", "zaliczka termin");
+            Variable remainingAmmountVar = new Variable("remaining_ammount", "Pozostala kwota do zaplaty 200zl");
+            Variable remainingAmmountDeadlineVar = new Variable("remaining_amount_deadline", "pozostaala kwota deadline");
+            Variable departureTimeVar = new Variable("departure_time", "godzina wyjazd: 06:00");
+            Variable arrivalTimeVar = new Variable( "arrival_time", "godzina przyjazd: 21:00");
 
             variableRepository.saveAll(Arrays.asList(
                     clientNameVar, tourNameVar, tourIdVar, tourLocationVar, startDateVar, endDateVar,
@@ -90,42 +90,42 @@ public class DbInit implements CommandLineRunner {
             List<EmailTemplateVariable> emailTemplateVariables = new ArrayList<>();
 
             // Potwierdzenie rezerwacji
-            emailTemplateVariables.add(new EmailTemplateVariable(null, reservationConfirmationTemplate, clientNameVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, reservationConfirmationTemplate, tourNameVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, reservationConfirmationTemplate, tourIdVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, reservationConfirmationTemplate, tourLocationVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, reservationConfirmationTemplate, startDateVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, reservationConfirmationTemplate, endDateVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, reservationConfirmationTemplate, advanceVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, reservationConfirmationTemplate, advanceDeadlineVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, reservationConfirmationTemplate, remainingAmmountVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, reservationConfirmationTemplate, remainingAmmountDeadlineVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, reservationConfirmationTemplate, departureTimeVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, reservationConfirmationTemplate, arrivalTimeVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(reservationConfirmationTemplate, clientNameVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(reservationConfirmationTemplate, tourNameVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(reservationConfirmationTemplate, tourIdVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(reservationConfirmationTemplate, tourLocationVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(reservationConfirmationTemplate, startDateVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(reservationConfirmationTemplate, endDateVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(reservationConfirmationTemplate, advanceVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(reservationConfirmationTemplate, advanceDeadlineVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(reservationConfirmationTemplate, remainingAmmountVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(reservationConfirmationTemplate, remainingAmmountDeadlineVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(reservationConfirmationTemplate, departureTimeVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(reservationConfirmationTemplate, arrivalTimeVar));
 
             // Potwierdzenie płatności zaliczki
-            emailTemplateVariables.add(new EmailTemplateVariable(null, advancePaymentConfirmationTemplate, clientNameVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, advancePaymentConfirmationTemplate, tourNameVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, advancePaymentConfirmationTemplate, tourIdVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, advancePaymentConfirmationTemplate, tourLocationVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, advancePaymentConfirmationTemplate, advanceVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, advancePaymentConfirmationTemplate, remainingAmmountVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, advancePaymentConfirmationTemplate, remainingAmmountDeadlineVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(advancePaymentConfirmationTemplate, clientNameVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(advancePaymentConfirmationTemplate, tourNameVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(advancePaymentConfirmationTemplate, tourIdVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(advancePaymentConfirmationTemplate, tourLocationVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(advancePaymentConfirmationTemplate, advanceVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(advancePaymentConfirmationTemplate, remainingAmmountVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(advancePaymentConfirmationTemplate, remainingAmmountDeadlineVar));
 
             // Potwierdzenie płatności całości
-            emailTemplateVariables.add(new EmailTemplateVariable(null, paymentOfTotalConfirmationTemplate, clientNameVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, paymentOfTotalConfirmationTemplate, tourNameVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, paymentOfTotalConfirmationTemplate, tourIdVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, paymentOfTotalConfirmationTemplate, tourLocationVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, paymentOfTotalConfirmationTemplate, startDateVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(paymentOfTotalConfirmationTemplate, clientNameVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(paymentOfTotalConfirmationTemplate, tourNameVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(paymentOfTotalConfirmationTemplate, tourIdVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(paymentOfTotalConfirmationTemplate, tourLocationVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(paymentOfTotalConfirmationTemplate, startDateVar));
 
             // Przypomnienie o zbiórce
-            emailTemplateVariables.add(new EmailTemplateVariable(null, meetingPointReminderTemplate, clientNameVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, meetingPointReminderTemplate, tourNameVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, meetingPointReminderTemplate, tourIdVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, meetingPointReminderTemplate, tourLocationVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, meetingPointReminderTemplate, startDateVar));
-            emailTemplateVariables.add(new EmailTemplateVariable(null, meetingPointReminderTemplate, departureTimeVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(meetingPointReminderTemplate, clientNameVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(meetingPointReminderTemplate, tourNameVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(meetingPointReminderTemplate, tourIdVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(meetingPointReminderTemplate, tourLocationVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(meetingPointReminderTemplate, startDateVar));
+            emailTemplateVariables.add(new EmailTemplateVariable(meetingPointReminderTemplate, departureTimeVar));
 
 
             // Zapisz powiązania do bazy danych
@@ -159,7 +159,7 @@ public class DbInit implements CommandLineRunner {
             try {
                 Path filePath = Paths.get("src/main/resources/templates/email_templates/attachments/" + fileName);
                 byte[] data = Files.readAllBytes(filePath);
-                Attachment attachment = new Attachment(fileName, data, emailTemplate);
+                Attachment attachment = new Attachment(fileName, data, LocalDateTime.now(), emailTemplate);
                 attachmentRepository.save(attachment); // Zapisz załącznik w repozytorium
                 if (emailTemplate.getAttachments() == null) {
                     emailTemplate.setAttachments(new ArrayList<>());
