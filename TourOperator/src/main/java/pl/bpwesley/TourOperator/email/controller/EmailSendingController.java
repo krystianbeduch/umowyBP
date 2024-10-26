@@ -7,9 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pl.bpwesley.TourOperator.email.dto.AttachmentDto;
 import pl.bpwesley.TourOperator.email.dto.EmailTemplateDto;
+import pl.bpwesley.TourOperator.email.entity.Attachment;
 import pl.bpwesley.TourOperator.email.entity.EmailTemplateVariable;
 import pl.bpwesley.TourOperator.email.exception.EmailTemplateNotFoundException;
+import pl.bpwesley.TourOperator.email.service.AttachmentService;
 import pl.bpwesley.TourOperator.email.service.EmailSendingService;
 import pl.bpwesley.TourOperator.email.service.EmailService;
 
@@ -21,11 +24,13 @@ import java.util.*;
 public class EmailSendingController {
     private final EmailSendingService emailSendingService;
     private final EmailService emailService;
+    private final AttachmentService attachmentService;
 
     @Autowired
-    public EmailSendingController(EmailSendingService emailSendingService, EmailService emailService) {
+    public EmailSendingController(EmailSendingService emailSendingService, EmailService emailService, AttachmentService attachmentService) {
         this.emailSendingService = emailSendingService;
         this.emailService = emailService;
+        this.attachmentService = attachmentService;
     }
 
     @GetMapping("/{id}")
@@ -37,6 +42,7 @@ public class EmailSendingController {
         if (emailTemplateDtoOptional.isEmpty()) {
             throw new EmailTemplateNotFoundException("BŁĄD PODCZAS WYSYŁANIA MAILA: nie istnieje szablon o id " + id);
         }
+        // Zmiana z typu Optional
         EmailTemplateDto emailTemplate = emailTemplateDtoOptional.get();
         String emailTemplateName = emailTemplate.getTemplateName();
 
@@ -44,20 +50,22 @@ public class EmailSendingController {
         // zmienne są już pobrane przy emailService.getEmailTemplateById
         List<EmailTemplateVariable> emailTemplateVariables = emailService.getEmailTemplateVariablesByTemplateId(emailTemplate.getEmailTemplateId());
 
-        List<String> attachments = new ArrayList<>();
+//        List<String> attachments = new ArrayList<>();
 //        List<String> attachmentUrls = new ArrayList<>(); // Lista załącznikow z URL
+        // Pobierz załączniki z bazy danych
+        List<AttachmentDto> attachments = attachmentService.getAttachmentsByEmailTemplateId(emailTemplate.getEmailTemplateId());
 
         switch (emailTemplateName) {
             case "Potwierdzenie rezerwacji":
                 // Dodaj załączniki
-                Collections.addAll(attachments,
-                        "Andrzejki-w-stylu-Country-3545i.pdf",
-                        "OWU_BP_Wesley.pdf",
-                        "OWU_PZU_NNW.pdf",
-                        "Polityka_prywatnosci.pdf",
-                        "Regulamin_serwisu.pdf",
-                        "Umowa.pdf"
-                );
+//                Collections.addAll(attachments,
+//                        "Andrzejki-w-stylu-Country-3545i.pdf",
+//                        "OWU_BP_Wesley.pdf",
+//                        "OWU_PZU_NNW.pdf",
+//                        "Polityka_prywatnosci.pdf",
+//                        "Regulamin_serwisu.pdf",
+//                        "Umowa.pdf"
+//                );
 //                Collections.addAll(attachmentUrls,
 //                        "https://bpwesley.pl/images/dokumenty/polityka_prywatnosci_RODO.pdf",
 //                        "https://bpwesley.pl/images/dokumenty/regulamin_serwisu_BP_Wesley.pdf",
@@ -75,9 +83,9 @@ public class EmailSendingController {
                 break;
             case "Potwierdzenie płatności zaliczki":
                 // Dodaj załączniki
-                Collections.addAll(attachments,
-                        "Umowa.pdf"
-                );
+//                Collections.addAll(attachments,
+//                        "Umowa.pdf"
+//                );
                 emailSendingService.sendEmail(
                         emailTemplate,
                         "beduch_krystian@o2.pl",
@@ -99,9 +107,9 @@ public class EmailSendingController {
                 break;
             case "Przypomnienie o zbiórce na wycieczkę":
                 // Dodaj załączniki
-                Collections.addAll(attachments,
-                        "Umowa.pdf"
-                );
+//                Collections.addAll(attachments,
+//                        "Umowa.pdf"
+//                );
 
                 emailSendingService.sendEmail(
                         emailTemplate,
@@ -113,7 +121,7 @@ public class EmailSendingController {
                 break;
 
         }
-        redirectAttributes.addFlashAttribute("successMessage", "Email z szablonu o id " + emailTemplate.getEmailTemplateId() + " wysłany");
+        redirectAttributes.addFlashAttribute("successMessage", "Email z szablonu \"" + emailTemplate.getTemplateName() + "\" wysłany");
         return "redirect:/email/home";
     }
 }

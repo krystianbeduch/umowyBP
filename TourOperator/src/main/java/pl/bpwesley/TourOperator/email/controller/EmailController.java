@@ -70,36 +70,10 @@ public class EmailController {
         emailTemplateDto.setUpdateDate(LocalDateTime.now());
 
         List<AttachmentDto> attachmentDtos = attachmentService.processAttachments(newAttachments);
-//        emailTemplateDTO.setAttachments(attachmentDTOs);
-
-//        // Dodawanie istniejacych zalacznikow
-//        if (existingAttachmentIds != null && !existingAttachmentIds.isEmpty()) {
-//            for (Long attachmentId : existingAttachmentIds) {
-//                Attachment attachment = attachmentService.getAttachmentById(attachmentId);
-//                if (attachment != null) {
-//                    attachmentDTOs.add(attachment);
-//                }
-//            }
-//        }
-
-        // Przetwarzanie nowych zalacznikow
-//        if (newAttachments != null && !newAttachments.isEmpty()) {
-//            for (MultipartFile file : newAttachments) {
-//                if (!file.isEmpty()) {
-//                    Attachment attachmentDTO = new Attachment();
-//                    attachmentDTO.setFilename(file.getOriginalFilename());
-//                    attachmentDTO.setFileData(file.getBytes()); // Możliwe przekształcenie danych na byte[]
-//                    attachmentDTO.setUpdateDate(LocalDateTime.now());
-//                    attachmentDTOs.add(attachmentDTO);
-//                }
-//            }
-//
-//
-//        }
         emailTemplateDto.setAttachmentDtos(attachmentDtos);
         emailService.updateEmailTemplate(emailTemplateDto);
 
-        redirectAttributes.addFlashAttribute("successMessage", "Szablon o id " + emailTemplateDto.getEmailTemplateId() + " zaktualizowany");
+        redirectAttributes.addFlashAttribute("successMessage", "Szablon \"" + emailTemplateDto.getTemplateName() + "\" zaktualizowany");
         return "redirect:/email/home";
     }
 }

@@ -8,6 +8,7 @@ import pl.bpwesley.TourOperator.email.entity.Attachment;
 import pl.bpwesley.TourOperator.email.entity.EmailTemplate;
 import pl.bpwesley.TourOperator.email.entity.EmailTemplateVariable;
 import pl.bpwesley.TourOperator.email.exception.EmailTemplateNotFoundException;
+import pl.bpwesley.TourOperator.email.mapper.AttachmentMapper;
 import pl.bpwesley.TourOperator.email.mapper.EmailTemplateMapper;
 import pl.bpwesley.TourOperator.email.repository.AttachmentRepository;
 import pl.bpwesley.TourOperator.email.repository.EmailTemplateRepository;
@@ -24,66 +25,55 @@ public class EmailService {
     private final EmailTemplateRepository emailTemplateRepository;
     private final EmailTemplateMapper emailTemplateMapper = EmailTemplateMapper.INSTANCE;
     private final EmailTemplateVariableRepository emailTemplateVariableRepository;
-    private final AttachmentRepository attachmentRepository;
+    private final AttachmentService attachmentService;
+    private final AttachmentMapper attachmentMapper = AttachmentMapper.INSTANCE;
 
     @Autowired
-    public EmailService(EmailTemplateRepository emailTemplateRepository, EmailTemplateVariableRepository emailTemplateVariableRepository, AttachmentRepository attachmentRepository) {
+    public EmailService(EmailTemplateRepository emailTemplateRepository, EmailTemplateVariableRepository emailTemplateVariableRepository, AttachmentService attachmentService) {
         this.emailTemplateRepository = emailTemplateRepository;
         this.emailTemplateVariableRepository = emailTemplateVariableRepository;
-        this.attachmentRepository = attachmentRepository;
+        this.attachmentService = attachmentService;
     }
 
-//    @Transactional
     public List<EmailTemplateDto> getEmailTemplateList() {
         return emailTemplateRepository.findAllByOrderByUpdateDateDesc().stream()
                 .map(emailTemplateMapper::emailTemplateToEmailTemplateDto)
                 .collect(Collectors.toList());
     }
 
-//    @Transactional
     public Optional<EmailTemplateDto> getEmailTemplateById(Long emailTemplateId) {
         // Znajdz szablon, zmapuj na DTO i zwroc go
         return emailTemplateRepository.findById(emailTemplateId).
                 map(emailTemplateMapper::emailTemplateToEmailTemplateDto);
-//        return emailTemplateRepository.findById(emailTemplateId).map(emailTemplate -> {
-//            emailTemplate.getAttachments();
-//
-//            return emailTemplateMapper.emailTemplateToEmailTemplateDto(emailTemplate);
-//        });
     }
 
-//    @Transactional
     public void updateEmailTemplate(EmailTemplateDto emailTemplateDTO) {
         if (emailTemplateRepository.existsById(emailTemplateDTO.getEmailTemplateId())) {
-            EmailTemplate emailTemplate = emailTemplateMapper.emailTemplateDTOToEmailTemplate(emailTemplateDTO);
+            EmailTemplate emailTemplate = emailTemplateMapper.emailTemplateDtoToEmailTemplate(emailTemplateDTO);
 
-            // Przetwarzanie zalacznikow jesli sa obecne w DTO
-            if (emailTemplateDTO.getAttachmentDtos() != null && !emailTemplateDTO.getAttachmentDtos().isEmpty()) {
-                List<Attachment> attachments = emailTemplateDTO.getAttachmentDtos().stream()
-                        .map(dto -> new Attachment(dto.getFilename(), dto.getFileData(), LocalDateTime.now(), emailTemplate))
-                        .collect(Collectors.toList());
-                emailTemplate.setAttachments(attachments);
-                emailTemplateRepository.save(emailTemplate);
-//                attachmentRepository.saveAll(attachments);
-            }
-//            if (emailTemplateDTO.getAttachments() != null && !emailTemplateDTO.getAttachments().isEmpty()) {
-//                List<Attachment> newAttachments = new ArrayList<>();
+            // Ustawienie daty aktualizacji
+//            emailTemplate.setUpdateDate(LocalDateTime.now());
+//            List<Attachment> attachments = attachmentMapper.attachmentToAttachmentDto(emailTemplate);
+
+            // Powiazanie zalacznikow z szablonem
+//            if (emailTemplateDTO.getAttachmentDtos() != null && !emailTemplateDTO.getAttachmentDtos().isEmpty()) {
+//                List<Attachment> attachments = emailTemplateDTO.getAttachmentDtos().stream()
+//                        .map(dto -> new Attachment(dto.getFilename(), dto.getFileData(), LocalDateTime.now(), emailTemplate))
+//                        .collect(Collectors.toList());
+            List<Attachment> attachments = attachmentService.mapAndAssignEmailTemplate(emailTemplateDTO.getAttachmentDtos(), emailTemplate);
+//            if (emailTemplateDTO.getAttachmentDtos() != null && !emailTemplateDTO.getAttachmentDtos().isEmpty()) {
+//                List<Attachment> attachments = emailTemplateDTO.getAttachmentDtos().stream()
+//                        .map(dto -> {
+//                            Attachment attachment = attachmentMapper.attachmentDtoToAttachment(dto);
+//                            attachment.setEmailTemplate(emailTemplate); // Przypisanie szablonu do zalacznika
+//                            return attachment;
+//                        })
+//                        .collect(Collectors.toList());
 //
-//                for (Attachment attachment : emailTemplateDTO.getAttachments()) {
-//                    Optional<Attachment> existingAttachment = attachmentRepository.findById(attachment.getAttachmentId());
-//                    if (existingAttachment.isEmpty()) {
-//                        newAttachments.add(attachment);
-//                    }
-//                }
-//
-//                // Ustaw nowe załączniki tylko, jeżeli są
-//                if (!newAttachments.isEmpty()) {
-//                    emailTemplate.setAttachments(newAttachments);
-//                    //attachmentRepository.saveAll(newAttachments); // Zapisujemy nowe załączniki do bazy
-//                }
+
 //            }
-
-//            emailTemplateRepository.save(emailTemplate);
+            emailTemplate.setAttachments(attachments);
+            emailTemplateRepository.save(emailTemplate);
         }
         else {
             throw new EmailTemplateNotFoundException("BŁĄD AKTUALIZACJI: szablon o id " + emailTemplateDTO.getEmailTemplateId() + " nie istnieje");

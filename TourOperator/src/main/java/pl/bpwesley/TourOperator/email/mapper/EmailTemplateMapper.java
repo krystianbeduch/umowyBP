@@ -2,7 +2,6 @@ package pl.bpwesley.TourOperator.email.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 import pl.bpwesley.TourOperator.email.dto.EmailTemplateDto;
 import pl.bpwesley.TourOperator.email.entity.EmailTemplate;
@@ -13,5 +12,7 @@ public interface EmailTemplateMapper {
 
     @Mapping(target = "attachmentDtos", source = "attachments")
     EmailTemplateDto emailTemplateToEmailTemplateDto(EmailTemplate emailTemplate);
-    EmailTemplate emailTemplateDTOToEmailTemplate(EmailTemplateDto emailTemplateDto);
+
+    @Mapping(target = "attachments", source = "attachmentDtos")
+    EmailTemplate emailTemplateDtoToEmailTemplate(EmailTemplateDto emailTemplateDto);
 }

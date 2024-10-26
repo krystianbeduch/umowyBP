@@ -16,6 +16,6 @@ public class AttachmentDto {
     private Long attachmentId;
     private String filename;
     private byte[] fileData;
-    private LocalDateTime updateDate;
+//    private LocalDateTime updateDate;
     private EmailTemplate emailTemplate;
 }

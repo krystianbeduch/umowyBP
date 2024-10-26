@@ -7,14 +7,17 @@ import freemarker.template.TemplateException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.util.ByteArrayDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import pl.bpwesley.TourOperator.email.dto.AttachmentDto;
 import pl.bpwesley.TourOperator.email.dto.EmailTemplateDto;
 import pl.bpwesley.TourOperator.email.entity.EmailTemplateVariable;
 
+import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
@@ -38,10 +41,10 @@ public class EmailSendingService {
     }
 
 
-    public void sendEmail(EmailTemplateDto emailTemplateDTO, String to, String subject, List<EmailTemplateVariable> emailTemplateVariables, List<String> attachments) throws MessagingException, IOException {
+    public void sendEmail(EmailTemplateDto emailTemplateDto, String to, String subject, List<EmailTemplateVariable> emailTemplateVariables, List<AttachmentDto> attachments) throws MessagingException, IOException {
         // Pobierz nazwe i html szablonu
-        String templateContent = emailTemplateDTO.getContent();
-        String templateName = emailTemplateDTO.getTemplateName();
+        String templateContent = emailTemplateDto.getContent();
+        String templateName = emailTemplateDto.getTemplateName();
 
         // Inicjalizuj szablon FreeMarker
         Template template = new Template(templateName, new StringReader(templateContent), freemarkerConfig);
@@ -83,13 +86,27 @@ public class EmailSendingService {
         helper.setText(body, true);
 
         // Dodaj zalaczniki pdf
-        if (attachments != null && !attachments.isEmpty()) {
-            for (String fileName : attachments) {
-                ClassPathResource attachment = new ClassPathResource("templates/email_templates/attachments/" + fileName);
-                File file = Objects.requireNonNull(attachment.getFile(), "Załącznik nie znaleziony");
-                helper.addAttachment(file.getName(), attachment);
+        if (attachments.size() > 0) {
+            for (AttachmentDto attachment : emailTemplateDto.getAttachmentDtos()) {
+                byte[] fileData = attachment.getFileData();
+                String filename = attachment.getFilename();
+                if (fileData != null && filename != null) {
+                    ByteArrayDataSource dataSource = new ByteArrayDataSource(fileData, "application/octet-stream");
+                    helper.addAttachment(filename, dataSource);
+                }
+
             }
+//            helper.addAttachment();
+//            emailTemplateDto.getAttachmentDtos()
         }
+
+//        if (attachments != null && !attachments.isEmpty()) {
+//            for (String fileName : attachments) {
+//                ClassPathResource attachment = new ClassPathResource("templates/email_templates/attachments/" + fileName);
+//                File file = Objects.requireNonNull(attachment.getFile(), "Załącznik nie znaleziony");
+//                helper.addAttachment(file.getName(), attachment);
+//            }
+//        }
 
         // Zaladuj logo do maila
         ClassPathResource image = new ClassPathResource("static/images/Logo_Wesley_mini.png");
