@@ -23,7 +23,6 @@ public class Attachment {
     private LocalDateTime updateDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @ManyToOne
     @JoinColumn(name = "email_template_id")
     private EmailTemplate emailTemplate;
 

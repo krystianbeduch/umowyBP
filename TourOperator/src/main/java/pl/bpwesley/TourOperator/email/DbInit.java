@@ -64,19 +64,23 @@ public class DbInit implements CommandLineRunner {
 
             Path filePath = Paths.get("src/main/resources/templates/email_templates/reservation_confirmation.html");
             String content = Files.readString(filePath);
-            EmailTemplate reservationConfirmationTemplate = new EmailTemplate("Potwierdzenie rezerwacji", content, LocalDateTime.now());
+            EmailTemplate reservationConfirmationTemplate = new EmailTemplate("Potwierdzenie rezerwacji", null, content ,LocalDateTime.now());
+            reservationConfirmationTemplate.setTemplateSubject(reservationConfirmationTemplate.getTemplateName() + " ${tour_name} ${tour_id}");
 
             filePath = Paths.get("src/main/resources/templates/email_templates/advance_payment_confirmation.html");
             content = Files.readString(filePath);
-            EmailTemplate advancePaymentConfirmationTemplate = new EmailTemplate("Potwierdzenie płatności zaliczki", content, LocalDateTime.now());
+            EmailTemplate advancePaymentConfirmationTemplate = new EmailTemplate("Potwierdzenie płatności zaliczki", null, content, LocalDateTime.now());
+            advancePaymentConfirmationTemplate.setTemplateSubject(advancePaymentConfirmationTemplate.getTemplateName() + " za ${tour_name} ${tour_id}");
 
             filePath = Paths.get("src/main/resources/templates/email_templates/payment_of_total_confirmation.html");
             content = Files.readString(filePath);
-            EmailTemplate paymentOfTotalConfirmationTemplate = new EmailTemplate("Potwierdzenie płatności całości", content, LocalDateTime.now());
+            EmailTemplate paymentOfTotalConfirmationTemplate = new EmailTemplate("Potwierdzenie płatności całości", null, content, LocalDateTime.now());
+            paymentOfTotalConfirmationTemplate.setTemplateSubject(paymentOfTotalConfirmationTemplate.getTemplateName() + " za ${tour_name} ${tour_id}");
 
             filePath = Paths.get("src/main/resources/templates/email_templates/meeting-point-reminder.html");
             content = Files.readString(filePath);
-            EmailTemplate meetingPointReminderTemplate = new EmailTemplate("Przypomnienie o zbiórce na wycieczkę", content, LocalDateTime.now());
+            EmailTemplate meetingPointReminderTemplate = new EmailTemplate("Przypomnienie o zbiórce na wycieczkę", null, content, LocalDateTime.now());
+            meetingPointReminderTemplate.setTemplateSubject(meetingPointReminderTemplate.getTemplateName() + " za ${tour_name} ${tour_id}");
 
              // Zapisz szablony do bazy danych
             emailTemplateRepository.saveAll(Arrays.asList(

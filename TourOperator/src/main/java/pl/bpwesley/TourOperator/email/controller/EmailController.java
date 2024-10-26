@@ -9,7 +9,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.bpwesley.TourOperator.email.dto.AttachmentDto;
 import pl.bpwesley.TourOperator.email.dto.EmailTemplateDto;
 import pl.bpwesley.TourOperator.email.exception.EmailTemplateNotFoundException;
-import pl.bpwesley.TourOperator.email.repository.AttachmentRepository;
 import pl.bpwesley.TourOperator.email.service.AttachmentService;
 import pl.bpwesley.TourOperator.email.service.EmailService;
 
@@ -21,20 +20,16 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/email")
 public class EmailController {
-
     private final EmailService emailService;
-    private final AttachmentRepository attachmentRepository;
     private final AttachmentService attachmentService;
 
     @Autowired
-    public EmailController(EmailService emailService, AttachmentRepository attachmentRepository, AttachmentService attachmentService) {
+    public EmailController(EmailService emailService, AttachmentService attachmentService) {
         this.emailService = emailService;
-        this.attachmentRepository = attachmentRepository;
         this.attachmentService = attachmentService;
     }
 
     @GetMapping("/edit-template/{id}")
-//    @Transactional
     public String showEditEmailTemplatePage(
             @PathVariable("id") Long emailTemplateId,
             Model model) {
@@ -44,6 +39,7 @@ public class EmailController {
             // Pobieramy zawartosc szablonu na podstawie przekazanego ID
             EmailTemplateDto emailTemplateDTO = emailTemplateDtoOptional.get();
             model.addAttribute("emailTemplateId", emailTemplateDTO.getEmailTemplateId());
+            model.addAttribute("emailTemplateSubject", emailTemplateDTO.getTemplateSubject());
             model.addAttribute("emailTemplateContent", emailTemplateDTO.getContent());
             model.addAttribute("emailTemplateName", emailTemplateDTO.getTemplateName());
             model.addAttribute("attachments", emailTemplateDTO.getAttachmentDtos());
@@ -58,6 +54,7 @@ public class EmailController {
     @PutMapping("/edit-template")
     public String updateEmailTemplate(@RequestParam("templateId") Long templateId,
                                       @RequestParam("templateName") String templateName,
+                                      @RequestParam("templateSubject") String templateSubject,
                                       @RequestParam("content") String content,
                                       @RequestParam(value = "attachments", required = false) List<MultipartFile> newAttachments,
                                       @RequestParam(value = "existingAttachments", required = false) List<Long> existingAttachmentIds,
@@ -66,6 +63,7 @@ public class EmailController {
         EmailTemplateDto emailTemplateDto = new EmailTemplateDto();
         emailTemplateDto.setEmailTemplateId(templateId);
         emailTemplateDto.setTemplateName(templateName);
+        emailTemplateDto.setTemplateSubject(templateSubject);
         emailTemplateDto.setContent(content);
         emailTemplateDto.setUpdateDate(LocalDateTime.now());
 

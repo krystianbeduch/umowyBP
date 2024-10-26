@@ -19,11 +19,15 @@
         <form id="edit-template-form" th:action="@{'/email/edit-template'}" method="post" enctype="multipart/form-data">
             <!-- Wymagane dla Springa -->
             <input type="hidden" name="_method" value="put">
+            <!-- atrybut name odpowiada @RequestParam() w kontrolerze -->
             <input type="hidden" th:value="${emailTemplateId}" name="templateId" readonly>
             <!--    docelowo ID type=hidden -->
 
             <label for="template-name">Tytuł szablonu:</label>
-            <input type="text" id="template-name"  th:value="${emailTemplateName}" name="templateName" size="50" required>
+            <input type="text" id="template-name" th:value="${emailTemplateName}" name="templateName" size="50" required>
+
+            <label for="template-subject">Temat wiadomości:</label>
+            <input type="text" id="template-subject" th:value="${emailTemplateSubject}" name="templateSubject" size="50" required>
 
             <label for="ta-edit-template">Edycja szablonu:</label>
             <textarea id="ta-edit-template" th:text="${emailTemplateContent}" name="content" rows="40" cols="140"></textarea>
