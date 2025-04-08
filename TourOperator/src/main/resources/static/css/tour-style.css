@@ -1,0 +1,195 @@
+section#home-tour-section {
+    width: 100%;
+    /*max-width: 1200px;*/
+    margin-bottom: 40px; /* Dodanie marginesu dolnego */
+}
+
+section#home-tour-section table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+section#home-tour-section table th,
+section#home-tour-section table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+section#home-tour-section table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+/* Kolumna z datą */
+/*section#home-tour-section table th:nth-child(2),*/
+/*section#home-tour-section table td:nth-child(2) {*/
+/*    width: 170px;*/
+/*    text-align: center;*/
+/*}*/
+/*section#home-tour-section table td:nth-child(2) {*/
+/*    font-size: 0.8em;*/
+/*}*/
+
+section#home-tour-section table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+section#home-tour-section table tr:hover {
+    background-color: #e0e0e0;
+}
+
+section#home-tour-section table a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+section#home-tour-section table a:hover {
+    text-decoration: underline;
+}
+
+/*!* EDIT TEMPLATE *!*/
+/*section#edit-template-form {*/
+/*    width: 100%;*/
+/*    !*max-width: 1200px;*!*/
+/*    padding: 20px;*/
+/*    background-color: #f9f9f9; !* Jasne tło dla sekcji *!*/
+/*    border-radius: 8px; !* Zaokrąglone rogi *!*/
+/*    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);*/
+/*}*/
+
+/*form#edit-template-form {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    gap: 15px;*/
+/*    margin-top: 10px;*/
+/*}*/
+
+/*form#edit-template-form label {*/
+/*    font-weight: bold;*/
+/*}*/
+
+/*form#edit-template-form input[type="text"],*/
+/*form#edit-template-form textarea,*/
+/*form#edit-template-form input[type="file"] {*/
+/*    padding: 10px;*/
+/*    border: 1px solid #ddd;*/
+/*    border-radius: 4px;*/
+/*    font-size: 14px;*/
+/*}*/
+
+/*form#edit-template-form textarea {*/
+/*    resize: vertical; !* Mozliwosc zmiany rozmiaru w pionie *!*/
+/*}*/
+
+/*form#edit-template-form fieldset.attachment-fieldset {*/
+/*    border: 1px solid #007bff;*/
+/*    border-radius: 5px;*/
+/*    padding: 15px;*/
+/*    margin-top: 20px;*/
+/*}*/
+
+/*form#edit-template-form fieldset.attachment-fieldset legend {*/
+/*    font-size: 1.2em;*/
+/*    font-weight: bold;*/
+/*    color: #007bff;*/
+/*    padding: 0 10px;*/
+/*}*/
+
+/*form#edit-template-form ul {*/
+/*    list-style-type: none;*/
+/*    padding: 0;*/
+/*}*/
+
+/*form#edit-template-form ul li {*/
+/*    display: flex;*/
+/*    justify-content: space-between; !* Ustawienie elementow w linii *!*/
+/*    align-items: center; !* Wyrownanie w pionie *!*/
+/*    padding: 8px 10px;*/
+/*    border: 1px solid #ddd;*/
+/*    border-radius: 4px;*/
+/*    background-color: #fff;*/
+/*    margin-bottom: 5px;*/
+/*}*/
+
+/*form#edit-template-form ul li a {*/
+/*    color: #007bff;*/
+/*    text-decoration: none;*/
+/*}*/
+
+/*form#edit-template-form button.delete-attachment-button {*/
+/*    background-color: #dc3545;*/
+/*    color: white;*/
+/*    border: none;*/
+/*    padding: 5px 10px;*/
+/*    border-radius: 4px;*/
+/*    cursor: pointer;*/
+/*    font-size: 14px;*/
+/*}*/
+
+/*form#edit-template-form button.delete-attachment-button:hover {*/
+/*    background-color: #c82333;*/
+/*}*/
+
+/*form#edit-template-form button#add-attachment-button {*/
+/*    padding: 5px 10px;*/
+/*    background-color: #28a745;*/
+/*    color: white;*/
+/*    border: none;*/
+/*    border-radius: 5px;*/
+/*    cursor: pointer;*/
+/*    transition: background-color 0.3s;*/
+/*    margin-top: 10px;*/
+/*    float: left;*/
+/*}*/
+
+/*form#edit-template-form button#add-attachment-button:hover {*/
+/*    background-color: #218838; !* Ciemniejszy zielony przy najechaniu *!*/
+/*}*/
+
+
+/*form#edit-template-form button[type="submit"] {*/
+/*    background-color: #007bff;*/
+/*    color: white;*/
+/*    border: none;*/
+/*    padding: 8px 24px;*/
+/*    margin: 20px auto;*/
+/*    border-radius: 4px;*/
+/*    cursor: pointer;*/
+/*    font-size: 16px;*/
+/*    transition: background-color 0.3s;*/
+/*}*/
+
+/*form#edit-template-form button[type="submit"]:hover {*/
+/*    background-color: #0056b3;*/
+/*}*/
+
+
+/*!* HOME - MESSAGE DIV *!*/
+main#home-main div.alert {
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
+/**/
+main#home-main div.alert p {
+    margin: 0;
+}
+/**/
+main#home-main div.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+/**/
+main#home-main div.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;;
+}

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:insert="~{fragments :: pageHeadContent}"/>
+    <title th:text="${pageTitle}">Tytuł strony</title>
+    <link rel="stylesheet" type="text/css" href="/css/reservation-style.css">
+</head>
+<body>
+<nav th:replace="~{fragments :: SidebarMenu}"></nav>
+
+<main id="home-main">
+    <header th:replace="~{fragments :: header(headerTitle=${pageTitle})}"></header>
+
+    <section id="home-reservation-section">
+        <table>
+            <thead>
+            <tr>
+                <th>Uczestnicy</th>
+                <th>Wyjazd</th>
+                <th>Kwota</th>
+                <th>Potwierdzenie</th>
+                <th>Zaliczka</th>
+                <th>Płatność całości</th>
+                <th>Komentarz</th>
+                <th>Operacje</th>
+            </tr>
+            </thead>
+<!--            <tbody>-->
+<!--            <tr th:each="reservation, stat: ${reservations}">-->
+<!--                <td><a th:href="@{/reservation/edit-reservation/{id}(id=${reservation.reservationId})}" th:text="${reservation.mainParticipant.firstName}"></a></td>-->
+<!--                <td th:text="${reservation.tour.title}"></td>-->
+<!--                <td th:text="${reservation.tour.price}"></td>-->
+<!--                <td th:text="${reservation.confirmed}"></td>-->
+<!--                <td th:text="${reservation.advancePaymentPaid}"></td>-->
+<!--                <td th:text="${reservation.totalPaid}"></td>-->
+<!--                <td th:text="${reservation.comment}"></td>-->
+<!--                <td><a th:href="@{/reservation/pdf-agreement/{id}(id=${reservation.reservationId})}">PDF</a></td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+            <tbody>
+            <th:block th:each="reservation, resStat : ${reservations}" th:object="${reservation}">
+
+                <!-- Osoba rezerwujaca -->
+                <tr th:class="${resStat.index % 2 == 0} ? 'group-even' : 'group-odd'">
+                    <td colspan="7" style="font-weight: bold; padding-top: 10px; padding-bottom: 10px;">
+                        <a th:href="@{/reservation/edit-reservation/{id}(id=${reservation.reservationId})}"
+                           th:text="${reservation.mainParticipant.firstName} + ' ' + ${reservation.mainParticipant.lastName}"></a>
+                        - <span th:text="${reservation.tour.title}"></span>
+                    </td>
+<!--                    <td th:if="${reservation.participants.size() > 1}" rowspan="${reservation.participants.size()}">-->
+<!--                        <a th:href="@{/reservation/pdf-agreement/{id}(id=${reservation.reservationId})}">PDF</a>-->
+<!--                    </td>-->
+                </tr>
+
+                <!-- Uczestnicy w ramach rezerwacji -->
+                <th:block th:each="participant, partStat : ${reservation.participants}">
+                    <tr th:class="${resStat.index % 2 == 0} ? 'group-even' : 'group-odd'">
+                        <td th:text="${participant.firstName} + ' ' + ${participant.lastName}"></td>
+                        <td th:text="${reservation.tour.title}"></td>
+                        <td th:text="${reservation.tour.price}"></td>
+                        <td th:text="${participant.confirmed}"></td>
+                        <td th:text="${participant.advancePaymentPaid}"></td>
+                        <td th:text="${participant.totalPaid}"></td>
+                        <td th:text="${participant.comment}"></td>
+                        <td th:if="${partStat.index == 0}">
+                            <a th:href="@{/reservation/pdf-agreement/{id}(id=${reservation.reservationId})}">PDF</a>
+                        </td>
+                    </tr>
+                </th:block>
+            </th:block>
+
+
+<!--            <th:block th:each="reservation, resStat : ${reservations}" th:object="${reservation}">-->
+<!--                <th:block th:each="participant, partStat : *{participants}">-->
+<!--                    <tr th:class="${resStat.index % 2 == 0} ? 'group-even' : 'group-odd'">-->
+<!--                        <td>-->
+<!--                            <a th:if="${partStat.index == 0}"-->
+<!--                               th:href="@{/reservation/edit-reservation/{id}(id=*{reservationId})}"-->
+<!--                               th:text="${participant.firstName} + ' ' + ${participant.lastName}"></a>-->
+<!--                            <span th:if="${partStat.index != 0}"-->
+<!--                                  th:text="${participant.firstName} + ' ' + ${participant.lastName}"></span>-->
+<!--                        </td>-->
+<!--                        <td th:text="${partStat.index == 0} ? *{tour.title} : ''"></td>-->
+<!--                        <td th:text="${partStat.index == 0} ? *{tour.price} : ''"></td>-->
+<!--                        <td th:text="${partStat.index == 0} ? *{confirmed} : ''"></td>-->
+<!--                        <td th:text="${partStat.index == 0} ? *{advancePaymentPaid} : ''"></td>-->
+<!--                        <td th:text="${partStat.index == 0} ? *{totalPaid} : ''"></td>-->
+<!--                        <td th:text="${partStat.index == 0} ? *{comment} : ''"></td>-->
+<!--                        <td>-->
+<!--                            <a th:if="${partStat.index == 0}"-->
+<!--                               th:href="@{/reservation/pdf-agreement/{id}(id=*{reservationId})}">-->
+<!--                                PDF-->
+<!--                            </a>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                </th:block>-->
+<!--            </th:block>-->
+
+<!--            </tr>-->
+            </tbody>
+        </table>
+    </section>
+
+    <div th:if="${successMessage}" class="alert alert-success">
+        <p th:text="${successMessage}"></p>
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-error">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+
+    <footer th:replace="~{fragments :: CopyrightFooter}"></footer>
+</main>
+
+</body>
+</html>

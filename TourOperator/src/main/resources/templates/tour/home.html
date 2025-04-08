@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:insert="~{fragments :: pageHeadContent}"/>
+    <title th:text="${pageTitle}">Tytuł strony</title>
+    <link rel="stylesheet" type="text/css" href="/css/tour-style.css">
+</head>
+<body>
+<nav th:replace="~{fragments :: SidebarMenu}"></nav>
+
+<main id="home-main">
+    <header th:replace="~{fragments :: header(headerTitle=${pageTitle})}"></header>
+
+    <section id="home-tour-section">
+        <table>
+            <thead>
+            <tr>
+                <th>Wyjazd</th>
+                <th>Data rozpoczęcia</th>
+                <th>Data zakończenia</th>
+                <th>Ostateczna data płatności</th>
+                <th>Miejsca</th>
+                <th>Typ wyjazdu</th>
+                <th>Data modyfikacji</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="tour, stat: ${tours}">
+                <td><a th:href="@{/tour/edit-tour/{id}(id=${tour.tourId})}" th:text="${tour.tourId} + '. ' + ${tour.title}"></a></td>
+                <td th:text="${#temporals.format(tour.startDate, 'dd.MM.yyyy')}"></td>
+                <td th:text="${#temporals.format(tour.endDate, 'dd.MM.yyyy')}"></td>
+                <td th:text="${#temporals.format(tour.finalPaymentDate, 'dd.MM.yyyy')}"></td>
+                <td th:text="${tour.numberOfAvailableSeats}"></td>
+                <td th:text="${tour.type}"></td>
+                <td th:text="${#temporals.format(tour.updateDate, 'dd.MM.yyyy HH:mm')}"></td>
+
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <div th:if="${successMessage}" class="alert alert-success">
+        <p th:text="${successMessage}"></p>
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-error">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+
+    <footer th:replace="~{fragments :: CopyrightFooter}"></footer>
+</main>
+
+</body>
+</html>

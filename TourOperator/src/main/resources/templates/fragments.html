@@ -1,9 +1,20 @@
 <!DOCTYPE html>
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:fragment="pageHeadContent">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="/css/home-style.css">
+        <script type="module" src="/js/sidebar.js"></script>
+    </th:block>
+</head>
+
 <body>
 
     <nav id="sidebar-menu" th:fragment="SidebarMenu">
         <a th:href="@{/}" class="button">Strona Główna</a>
+        <a th:href="@{/tour/home}" class="button">Wyjazdy</a>
+        <a th:href="@{/reservation/home}" class="button">Rezerwacje</a>
         <a th:href="@{/email/home}" class="button">Szablony email</a>
         <a th:href="@{/admin/home}" class="button">Panel administracyjny</a>
     </nav>
@@ -14,7 +25,7 @@
 
 
     <footer th:fragment="CopyrightFooter">
-        <p>&copy; October 2024 Krystian Będuch</p>
+        <p>&copy; Kwiecień 2025 Krystian Będuch</p>
     </footer>
 </body>
 </html>
