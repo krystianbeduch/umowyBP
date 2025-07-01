@@ -1,4 +1,4 @@
-package pl.bpwesley.TourOperator.email.controller;
+package pl.bpwesley.TourOperator.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,7 +8,7 @@ import pl.bpwesley.TourOperator.email.service.EmailService;
 import pl.bpwesley.TourOperator.reservation.entity.Participant;
 import pl.bpwesley.TourOperator.reservation.entity.Reservation;
 import pl.bpwesley.TourOperator.reservation.service.ReservationService;
-import pl.bpwesley.TourOperator.reservation.service.TourService;
+import pl.bpwesley.TourOperator.reservation.service.IndividualOneDayTourService;
 
 import java.util.Comparator;
 import java.util.List;
@@ -16,13 +16,13 @@ import java.util.List;
 @Controller
 public class MainController {
     private final EmailService emailService;
-    private final TourService tourService;
+    private final IndividualOneDayTourService tourService;
     private final ReservationService reservationService;
 
     @Autowired
-    public MainController(EmailService emailService, TourService tourService, ReservationService reservationService) {
+    public MainController(EmailService emailService, IndividualOneDayTourService individualOneDayTourService, ReservationService reservationService) {
         this.emailService = emailService;
-        this.tourService = tourService;
+        this.tourService = individualOneDayTourService;
         this.reservationService = reservationService;
     }
 
@@ -32,12 +32,12 @@ public class MainController {
     }
 
 
-    @GetMapping("/tour/home")
-    public String tourHome(Model model) {
-        model.addAttribute("tours", tourService.getAllTours());
-        model.addAttribute("pageTitle", "Wyjazdy");
-        return "tour/home";
-    }
+//    @GetMapping("/tour/home")
+//    public String tourHome(Model model) {
+//        model.addAttribute("tours", tourService.getAllTours());
+//        model.addAttribute("pageTitle", "Wyjazdy");
+//        return "tour/home";
+//    }
 
     @GetMapping("/reservation/home")
     public String reservationHome(Model model) {

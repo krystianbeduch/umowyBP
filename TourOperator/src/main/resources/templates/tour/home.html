@@ -4,6 +4,7 @@
     <th:block th:insert="~{fragments :: pageHeadContent}"/>
     <title th:text="${pageTitle}">Tytuł strony</title>
     <link rel="stylesheet" type="text/css" href="/css/tour-style.css">
+    <script src="/js/tour/tour-home.js"></script>
 </head>
 <body>
 <nav th:replace="~{fragments :: SidebarMenu}"></nav>
@@ -12,6 +13,26 @@
     <header th:replace="~{fragments :: header(headerTitle=${pageTitle})}"></header>
 
     <section id="home-tour-section">
+        <div class="d-flex align-items-center mb-4">
+            <button id="toggle-tour-type" class="btn btn-primary me-2">
+                ➕ Dodaj nową wycieczkę
+            </button>
+
+            <div id="tour-type-options" style="display: none;">
+                <select id="tour-type-select" class="form-select">
+                    <option value="" selected disabled>-- wybierz typ wycieczki --</option>
+                    <optgroup label="Klient indywidualny">
+                        <option value="/tour/individual-one-day/new">Jednodniowa</option>
+                        <option value="/tour/overnight/new">Noclegowa</option>
+                    </optgroup>
+
+                    <optgroup label="Klient grupowy">
+                        <option value="/tour/group/new">Wycieczka grupowa</option>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+
         <table>
             <thead>
             <tr>
@@ -20,19 +41,19 @@
                 <th>Data zakończenia</th>
                 <th>Ostateczna data płatności</th>
                 <th>Miejsca</th>
-                <th>Typ wyjazdu</th>
+<!--                <th>Typ wyjazdu</th>-->
                 <th>Data modyfikacji</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="tour, stat: ${tours}">
-                <td><a th:href="@{/tour/edit-tour/{id}(id=${tour.tourId})}" th:text="${tour.tourId} + '. ' + ${tour.title}"></a></td>
-                <td th:text="${#temporals.format(tour.startDate, 'dd.MM.yyyy')}"></td>
-                <td th:text="${#temporals.format(tour.endDate, 'dd.MM.yyyy')}"></td>
-                <td th:text="${#temporals.format(tour.finalPaymentDate, 'dd.MM.yyyy')}"></td>
-                <td th:text="${tour.numberOfAvailableSeats}"></td>
-                <td th:text="${tour.type}"></td>
-                <td th:text="${#temporals.format(tour.updateDate, 'dd.MM.yyyy HH:mm')}"></td>
+            <tr th:each="individualOneDayTour, stat: ${tours}">
+                <td><a th:href="@{/tour/individual-one-day/edit/{id}(id=${individualOneDayTour.tourId})}" th:text="${individualOneDayTour.tourId} + '. ' + ${individualOneDayTour.title}"></a></td>
+                <td th:text="${#temporals.format(individualOneDayTour.startDate, 'dd.MM.yyyy')}"></td>
+                <td th:text="${#temporals.format(individualOneDayTour.endDate, 'dd.MM.yyyy')}"></td>
+                <td th:text="${#temporals.format(individualOneDayTour.finalPaymentDate, 'dd.MM.yyyy')}"></td>
+                <td th:text="${individualOneDayTour.numberOfAvailableSeats}"></td>
+<!--                <td th:text="${individualOneDayTour.type}"></td>-->
+                <td th:text="${#temporals.format(individualOneDayTour.updateDate, 'dd.MM.yyyy HH:mm')}"></td>
 
             </tr>
             </tbody>

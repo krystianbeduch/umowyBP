@@ -28,8 +28,8 @@
 <!--            <tbody>-->
 <!--            <tr th:each="reservation, stat: ${reservations}">-->
 <!--                <td><a th:href="@{/reservation/edit-reservation/{id}(id=${reservation.reservationId})}" th:text="${reservation.mainParticipant.firstName}"></a></td>-->
-<!--                <td th:text="${reservation.tour.title}"></td>-->
-<!--                <td th:text="${reservation.tour.price}"></td>-->
+<!--                <td th:text="${reservation.individualOneDayTour.title}"></td>-->
+<!--                <td th:text="${reservation.individualOneDayTour.price}"></td>-->
 <!--                <td th:text="${reservation.confirmed}"></td>-->
 <!--                <td th:text="${reservation.advancePaymentPaid}"></td>-->
 <!--                <td th:text="${reservation.totalPaid}"></td>-->
@@ -45,7 +45,7 @@
                     <td colspan="7" style="font-weight: bold; padding-top: 10px; padding-bottom: 10px;">
                         <a th:href="@{/reservation/edit-reservation/{id}(id=${reservation.reservationId})}"
                            th:text="${reservation.mainParticipant.firstName} + ' ' + ${reservation.mainParticipant.lastName}"></a>
-                        - <span th:text="${reservation.tour.title}"></span>
+                        - <span th:text="${reservation.individualOneDayTour.title}"></span>
                     </td>
 <!--                    <td th:if="${reservation.participants.size() > 1}" rowspan="${reservation.participants.size()}">-->
 <!--                        <a th:href="@{/reservation/pdf-agreement/{id}(id=${reservation.reservationId})}">PDF</a>-->
@@ -56,8 +56,8 @@
                 <th:block th:each="participant, partStat : ${reservation.participants}">
                     <tr th:class="${resStat.index % 2 == 0} ? 'group-even' : 'group-odd'">
                         <td th:text="${participant.firstName} + ' ' + ${participant.lastName}"></td>
-                        <td th:text="${reservation.tour.title}"></td>
-                        <td th:text="${reservation.tour.price}"></td>
+                        <td th:text="${reservation.individualOneDayTour.title}"></td>
+                        <td th:text="${reservation.individualOneDayTour.price}"></td>
                         <td th:text="${participant.confirmed}"></td>
                         <td th:text="${participant.advancePaymentPaid}"></td>
                         <td th:text="${participant.totalPaid}"></td>
@@ -80,8 +80,8 @@
 <!--                            <span th:if="${partStat.index != 0}"-->
 <!--                                  th:text="${participant.firstName} + ' ' + ${participant.lastName}"></span>-->
 <!--                        </td>-->
-<!--                        <td th:text="${partStat.index == 0} ? *{tour.title} : ''"></td>-->
-<!--                        <td th:text="${partStat.index == 0} ? *{tour.price} : ''"></td>-->
+<!--                        <td th:text="${partStat.index == 0} ? *{individualOneDayTour.title} : ''"></td>-->
+<!--                        <td th:text="${partStat.index == 0} ? *{individualOneDayTour.price} : ''"></td>-->
 <!--                        <td th:text="${partStat.index == 0} ? *{confirmed} : ''"></td>-->
 <!--                        <td th:text="${partStat.index == 0} ? *{advancePaymentPaid} : ''"></td>-->
 <!--                        <td th:text="${partStat.index == 0} ? *{totalPaid} : ''"></td>-->

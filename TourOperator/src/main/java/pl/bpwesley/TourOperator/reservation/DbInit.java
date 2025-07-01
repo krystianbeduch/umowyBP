@@ -4,30 +4,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import pl.bpwesley.TourOperator.reservation.entity.enums.Transport;
+import pl.bpwesley.TourOperator.reservation.entity.tours.IndividualOneDayTour;
 import pl.bpwesley.TourOperator.reservation.entity.Participant;
 import pl.bpwesley.TourOperator.reservation.entity.Reservation;
-import pl.bpwesley.TourOperator.reservation.entity.Tour;
 import pl.bpwesley.TourOperator.reservation.repository.ParticipantRepository;
 import pl.bpwesley.TourOperator.reservation.repository.ReservationRepository;
-import pl.bpwesley.TourOperator.reservation.repository.TourRepository;
+import pl.bpwesley.TourOperator.reservation.repository.IndividualOneDayTourRepository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @Profile("create-simple-reservation")
 @Configuration
 public class DbInit implements CommandLineRunner {
     private final ReservationRepository reservationRepository;
-    private final TourRepository tourRepository;
+    private final IndividualOneDayTourRepository individualOneDayTourRepository;
     private final ParticipantRepository participantRepository;
 
     @Autowired
-    public DbInit(ReservationRepository reservationRepository, TourRepository tourRepository, ParticipantRepository participantRepository) {
+    public DbInit(ReservationRepository reservationRepository, IndividualOneDayTourRepository individualOneDayTourRepository, ParticipantRepository participantRepository) {
         this.reservationRepository = reservationRepository;
-        this.tourRepository = tourRepository;
+        this.individualOneDayTourRepository = individualOneDayTourRepository;
         this.participantRepository = participantRepository;
     }
 
@@ -35,23 +36,24 @@ public class DbInit implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // Wycieczka
-        Tour tour = new Tour();
-        tour.setTitle("Wakacje w Grecji");
-        tour.setStartDate(LocalDate.now());
-        tour.setEndDate(LocalDate.now().plusDays(7));
-        tour.setFinalPaymentDate(LocalDate.now().plusDays(3));
-        tour.setNumberOfAvailableSeats(50);
-        tour.setNumberOfSeatsForMessageLastSeats(5);
-        tour.setLocation("Ateny");
-        tour.setTransport("Samolot");
-        tour.setHotel("Hotel Grecki");
-        tour.setCatering("All inclusive");
-        tour.setInsurance("Pełne");
-        tour.setNotesToTheAgreement("Brak uwag");
-        tour.setPrice("3500 PLN");
-        tour.setType("Indywidualna");
-        tour.setUpdateDate(LocalDateTime.now());
-        tourRepository.save(tour);
+        IndividualOneDayTour individualOneDayTour = new IndividualOneDayTour();
+        individualOneDayTour.setTitle("Wakacje w Grecji");
+        individualOneDayTour.setCatalogId("2115i");
+        individualOneDayTour.setStartDate(LocalDate.now());
+        individualOneDayTour.setEndDate(LocalDate.now().plusDays(7));
+        individualOneDayTour.setFinalPaymentDate(LocalDate.now().plusDays(3));
+        individualOneDayTour.setNumberOfAvailableSeats(50);
+        individualOneDayTour.setNumberOfSeatsForMessageLastSeats(5);
+        individualOneDayTour.setLocation("Ateny");
+        individualOneDayTour.setTransport(String.valueOf(Transport.COACH));
+//        individualOneDayTour.setHotel("Hotel Grecki");
+        individualOneDayTour.setCatering("All inclusive");
+        individualOneDayTour.setInsurance("Pełne");
+        individualOneDayTour.setNotes("Brak uwag");
+        individualOneDayTour.setPrice(3500);
+//        individualOneDayTour.setType(TourType.INDIVIDUAL_ONE_DAY);
+        individualOneDayTour.setUpdateDate(LocalDateTime.now());
+        individualOneDayTourRepository.save(individualOneDayTour);
 
         // Rezerwacja 1 (1 uczestnik)
         Participant main1 = new Participant();
@@ -68,7 +70,7 @@ public class DbInit implements CommandLineRunner {
         main1.setMainParticipant(true);
 
         Reservation reservation1 = new Reservation();
-        reservation1.setTour(tour);
+        reservation1.setIndividualOneDayTour(individualOneDayTour);
         reservation1.setMainParticipant(main1);
 
         main1.setReservation(reservation1);
@@ -146,7 +148,7 @@ public class DbInit implements CommandLineRunner {
         p2e.setMainParticipant(false);
 
         Reservation reservation2 = new Reservation();
-        reservation2.setTour(tour);
+        reservation2.setIndividualOneDayTour(individualOneDayTour);
         reservation2.setMainParticipant(main2);
 
         main2.setReservation(reservation2);

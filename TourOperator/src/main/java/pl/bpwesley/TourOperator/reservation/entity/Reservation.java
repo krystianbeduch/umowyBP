@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.bpwesley.TourOperator.reservation.entity.tours.IndividualOneDayTour;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class Reservation {
 
     @ManyToOne
     @JoinColumn(name = "tour_id", nullable = false)
-    private Tour tour;
+    private IndividualOneDayTour individualOneDayTour;
 
 //    private boolean confirmed;
 //    private boolean advancePaymentPaid;

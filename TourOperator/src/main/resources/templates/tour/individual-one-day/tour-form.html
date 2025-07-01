@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:insert="~{fragments :: pageHeadContent}"/>
+    <title th:text="${pageTitle}">Tytuł strony</title>
+    <link rel="stylesheet" type="text/css" href="/css/tour-style.css">
+    <script src="/js/tour/tour-form.js"></script>
+    <script src="/js/tour/price-variant.js"></script>
+</head>
+<body>
+<nav th:replace="~{fragments :: SidebarMenu}"></nav>
+
+<main id="home-main">
+    <header th:replace="~{fragments :: header(headerTitle=${pageTitle})}"></header>
+
+    <h1>Nowa wycieczka jednodniowa</h1>
+
+    <form th:action="@{/tour/individual-one-day/save}" th:object="${tour}" method="post">
+
+        <fieldset class="border p-3 mb-4">
+            <div class="row mb-3 align-items-end">
+                <div class="col">
+                    <label for="title" class="form-label">Nazwa wycieczki *</label>
+                    <input type="text" id="title" th:field="*{title}" class="form-control" required />
+                </div>
+                <div class="col-auto" style="max-width: 120px;">
+                    <label for="catalogId" class="form-label">Numer katalogowy</label>
+                    <input type="text" id="catalogId" th:field="*{catalogId}" class="form-control form-control-sm" />
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-4">
+                    <label for="startDate" class="form-label">Data początku wyjazdu *</label>
+                    <input type="text" id="startDate" th:field="*{startDate}" class="form-control datepicker" required/>
+                </div>
+                <div class="col-4">
+                    <label for="endDate" class="form-label">Data końca wyjazdu *</label>
+                    <input type="text" id="endDate" th:field="*{endDate}" class="form-control datepicker" required/>
+                </div>
+            </div>
+
+            <!--
+            TODO: skladek nie ma w wycieczkach 1-dniowych
+            //model.addAttribute("tfgFeeValues", TfgFee.values());
+            <div class="mb-3">
+                <label for="tfgType" class="form-label">Rodzaj składki TFG</label>
+                <select id="tfgType" name="tfgType" class="form-select" th:field="*{tfgFee}">
+                    <option th:each="fee : ${tfgFeeValues}"
+                            th:value="${fee}"
+                            th:text="${fee.toString()}">
+                    </option>
+                </select>
+            </div>
+            -->
+
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="numberOfAvailableSeats" class="form-label">Liczba wolnych miejsc *</label>
+                    <input type="number" id="numberOfAvailableSeats" th:field="*{numberOfAvailableSeats}" min="1" class="form-control" required/>
+                </div>
+                <div class="col">
+                    <label for="numberOfSeatsForMessageLastSeats" class="form-label">Miejsca dla komunikatu "Ostatnie wolne miejsca"</label>
+                    <input type="number" id="numberOfSeatsForMessageLastSeats" th:field="*{numberOfSeatsForMessageLastSeats}" min="0" class="form-control"/>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="location" class="form-label">Lokalizacja *</label>
+                <input type="text" id="location" th:field="*{location}" class="form-control" required/>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="transport" class="form-label">Środek transportu</label>
+                    <select id="transport" name="transport" class="form-select" th:field="*{transport}">
+                        <option th:each="t : ${transportValues}"
+                                th:value="${t}"
+                                th:text="${t.displayName}">
+                        </option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="hotel" class="form-label">Wyżywienie</label>
+                    <input type="text" id="hotel" th:field="*{catering}" class="form-control"/>
+                </div>
+                <div class="col">
+                    <label for="insurance" class="form-label">Ubezpieczenie</label>
+                    <input type="text" id="insurance" th:field="*{insurance}" class="form-control"/>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="notes" class="form-label">Uwagi</label>
+                <textarea id="notes" th:field="*{notes}" class="form-control" rows="4" placeholder="Wpisz dodatkowe uwagi..."></textarea>
+            </div>
+        </fieldset>
+
+        <!-- Cennik -->
+        <fieldset class="border p-3 mb-4">
+            <legend class="w-auto px-2">Cennik</legend>
+
+            <div class="mb-3">
+                <label for="price" class="form-label">Główna kwota</label>
+                <input type="number" id="price" th:field="*{price}" class="form-control" required/>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="numberOfDaysOfAdvancePaymentAfterBooking" class="form-label">Liczba dni płatności zaliczki po rezerwacji</label>
+                    <input type="number" id="numberOfDaysOfAdvancePaymentAfterBooking" th:field="*{numberOfDaysOfAdvancePaymentAfterBooking}" min="1" class="form-control"/>
+                </div>
+                <div class="col d-flex align-items-center mt-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="noAdvancePayment" name="noAdvancePayment" th:checked="${tour.numberOfDaysOfAdvancePaymentAfterBooking == 0}"/>
+                        <label class="form-check-label" for="noAdvancePayment">Brak zaliczki</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="finalPaymentDate" class="form-label">Termin płatności całości</label>
+                <input type="text" id="finalPaymentDate" th:field="*{finalPaymentDate}" class="form-control datepicker" required/>
+            </div>
+
+            <!-- Warianty cenowe -->
+            <div id="variant-section" class="mb-3">
+                <label class="form-label">Warianty cenowe</label>
+                <div id="variant-container">
+<!--                    <div th:if="${tour.priceVariants != null}"-->
+                    <div th:each="variant, iterStat : ${priceVariants}"
+                         th:attr="data-index=${iterStat.index}"
+                         class="variant-block border p-3 mb-3 rounded">
+                        <!--                         th:each="variant, iterStat : ${tour.priceVariants}"-->
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong>Wariant</strong>
+                            <button type="button" class="btn btn-danger btn-sm remove-variant">Usuń</button>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Nazwa wariantu</label>
+                            <input type="text" th:name="'priceVariants[' + ${iterStat.index} + '].name'"
+                                   th:value="${variant.name}" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Cena wariantu</label>
+                            <input type="number" th:name="'priceVariants[' + ${iterStat.index} + '].price'"
+                                   th:value="${variant.price}" class="form-control" required>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label class="form-label">Wiek od</label>
+                                <input type="number" min="0" th:name="'priceVariants[' + ${iterStat.index} + '].ageFrom'"
+                                       th:value="${variant.ageFrom}" class="form-control age-from">
+                                <div class="invalid-feedback">Wypełnij przynajmniej jedno pole i upewnij się, że <strong>wiek od</strong> ≤ <strong>wiek do</strong>.</div>
+                            </div>
+                            <div class="col">
+                                <label class="form-label">Wiek do</label>
+                                <input type="number" min="0" th:name="'priceVariants[' + ${iterStat.index} + '].ageTo'"
+                                       th:value="${variant.ageTo}" class="form-control age-to">
+                                <div class="invalid-feedback">Wypełnij przynajmniej jedno pole i upewnij się, że <strong>wiek od</strong> ≤ <strong>wiek do</strong>.</div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col">
+                                <label class="form-label">Data urodzenia do</label>
+                                <input type="text" class="form-control birth-date-to" readonly
+                                       th:value="${variant.birthDateTo != null ? #temporals.format(variant.birthDateTo, 'dd.MM.yyyy') : ''}">
+                            </div>
+                            <div class="col">
+                                <label class="form-label">Data urodzenia od</label>
+                                <input type="text" class="form-control birth-date-from" readonly
+                                       th:value="${variant.birthDateFrom != null ? #temporals.format(variant.birthDateFrom, 'dd.MM.yyyy') : ''}">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <button type="button" class="btn btn-outline-primary mt-2" id="add-variant-button">Dodaj wariant</button>
+            </div>
+
+        </fieldset>
+
+        <button type="submit" class="btn btn-primary">Zapisz wycieczkę</button>
+        <a th:href="@{/tour/home}" class="btn btn-secondary ms-2">Anuluj</a>
+    </form>
+
+    <div th:if="${successMessage}" class="alert alert-success">
+        <p th:text="${successMessage}"></p>
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-error">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <footer th:replace="~{fragments :: CopyrightFooter}"></footer>
+</main>
+
+</body>
+</html>
