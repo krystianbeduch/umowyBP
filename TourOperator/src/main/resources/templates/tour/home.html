@@ -41,8 +41,8 @@
                 <th>Data zakończenia</th>
                 <th>Ostateczna data płatności</th>
                 <th>Miejsca</th>
-<!--                <th>Typ wyjazdu</th>-->
                 <th>Data modyfikacji</th>
+                <th>Akcje</th>
             </tr>
             </thead>
             <tbody>
@@ -52,20 +52,22 @@
                 <td th:text="${#temporals.format(individualOneDayTour.endDate, 'dd.MM.yyyy')}"></td>
                 <td th:text="${#temporals.format(individualOneDayTour.finalPaymentDate, 'dd.MM.yyyy')}"></td>
                 <td th:text="${individualOneDayTour.numberOfAvailableSeats}"></td>
-<!--                <td th:text="${individualOneDayTour.type}"></td>-->
                 <td th:text="${#temporals.format(individualOneDayTour.updateDate, 'dd.MM.yyyy HH:mm')}"></td>
+                <td>
+                    <button class="btn btn-danger delete-tour-btn" th:data-id="${individualOneDayTour.tourId}">Usuń</button>
+                </td>
 
             </tr>
             </tbody>
         </table>
     </section>
 
-    <div th:if="${successMessage}" class="alert alert-success">
-        <p th:text="${successMessage}"></p>
+    <div th:if="${successMessage}" class="alert alert-success" id="success-message-box">
+        <p th:text="${successMessage}" id="success-message-text"></p>
     </div>
 
-    <div th:if="${errorMessage}" class="alert alert-error">
-        <p th:text="${errorMessage}"></p>
+    <div th:if="${errorMessage}" class="alert alert-error" id="error-message-box">
+        <p th:text="${errorMessage}" id="error-message-text"></p>
     </div>
 
 

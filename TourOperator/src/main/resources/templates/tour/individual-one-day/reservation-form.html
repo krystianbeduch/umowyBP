@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:insert="~{fragments :: pageHeadContent}"/>
+    <title th:text="${pageTitle}">Tytuł strony</title>
+    <link rel="stylesheet" href="/css/reservation-form-style.css">
+    <script type="module" src="/js/tour/reservation-form.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const countries = /*[[${countries}]]*/ [];
+        /*]]>*/
+    </script>
+</head>
+<body>
+
+<main id="reservation-form-main" class="container my-5">
+    <h2 class="mb-4">Rezerwacja wycieczki</h2>
+
+    <div class="card mb-4">
+        <div class="card-header">Szczegóły wycieczki</div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tr>
+                    <th>Wycieczka</th>
+                    <td th:text="${tour.title}"></td>
+                </tr>
+                <tr>
+                    <th>Numer katalogowy</th>
+                    <td th:text="${tour.catalogId}"></td>
+                </tr>
+                <tr>
+                    <th>Termin</th>
+                    <td th:text="${tour.startDate} + ' - ' + ${tour.endDate}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <form th:action="@{/reservation}" th:object="${reservationForm}" method="post" id="reservationForm" class="needs-validation" novalidate>
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="reserverNotParticipating">
+            <label class="form-check-label" for="reserverNotParticipating">
+                Rezerwujący nie bierze udziału w wycieczce
+            </label>
+        </div>
+        <div id="participantsContainer">
+            <div class="participant border rounded p-3 mb-4 bg-light" data-index="0">
+                <h5>Uczestnik 1 (osoba rezerwująca)</h5>
+                <div class="row g-3">
+                    <div class="col-md-6 form-floating">
+                        <input type="text" class="form-control" id="firstName-0" name="participants[0].firstName" placeholder="Imię" required>
+                        <label for="firstName-0" class="form-label">Imię *</label>
+                    </div>
+
+                    <div class="col-md-6 form-floating">
+                        <input type="text" class="form-control" id="lastName-0" name="participants[0].lastName" placeholder="Nazwisko" required>
+                        <label for="lastName-0">Nazwisko *</label>
+                    </div>
+
+                    <div class="col-md-4 form-floating">
+                        <input type="text" class="form-control birth-date" id="birthDate-0" name="participants[0].birthDate" placeholder="Data urodzenia" inputmode="none" required>
+                        <label for="birthDate-0">Data urodzenia *</label>
+                    </div>
+
+                    <div class="col-md-4 form-floating">
+                        <input type="email" class="form-control" id="email-0" name="participants[0].email" placeholder="Email" required>
+                        <label for="email-0">Email *</label>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <div class="form-floating" style="max-width: 90px;">
+                                <select class="form-select phone-prefix" id="phonePrefix-0" name="participants[0].phonePrefix" required>
+                                    <th:block th:each="country : ${countries}">
+                                        <option th:value="${country.phoneCode}" th:text="${country.commonName}"></option>
+                                    </th:block>
+                                </select>
+                                <label for="phonePrefix-0">Kraj *</label>
+                            </div>
+
+                            <input type="text" class="form-control" id="phonePrefixDisplay-0" readonly style="min-width: 60px; max-width: 140px;">
+
+                            <div class="form-floating flex-grow-2">
+                                <input type="tel" class="form-control" id="phone-0" name="participants[0].phone" placeholder="Telefon" required maxlength="22">
+                                <label for="phone-0">Telefon *</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <p class="minor-warning text-danger mt-3" style="display: none;">Rezerwujący musi byc pełnoletni – nie można kontynuować.</p>
+                <p class="price-output text-success fw-semibold mt-2">Cena: -</p>
+
+            </div>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="button" id="add-participant" class="btn btn-outline-secondary">Dodaj uczestnika</button>
+            <button type="submit" id="submit-button" class="btn btn-primary">Zarezerwuj</button>
+        </div>
+    </form>
+
+</main>
+
+</body>
+</html>
