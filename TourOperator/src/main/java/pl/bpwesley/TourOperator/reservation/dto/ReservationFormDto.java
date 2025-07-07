@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 public class ReservationFormDto {
-    private List<ParticipantDto> participantDtoList = new ArrayList<>();
     private Long tourId;
+    private boolean reserverNotParticipating;
+    private List<ParticipantDto> participants = new ArrayList<>();
 }

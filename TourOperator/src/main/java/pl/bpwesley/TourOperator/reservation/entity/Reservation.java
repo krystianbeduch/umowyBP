@@ -29,6 +29,8 @@ public class Reservation {
     @JoinColumn(name = "tour_id", nullable = false)
     private IndividualOneDayTour individualOneDayTour;
 
+    private boolean reserverNotParticipating;
+
 //    private boolean confirmed;
 //    private boolean advancePaymentPaid;
 //    private boolean totalPaid;

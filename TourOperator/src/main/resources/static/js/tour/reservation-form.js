@@ -6,9 +6,10 @@ $(() => {
     const today = new Date();
     const eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
 
-    const $birthDay = $("#birthDate-0");
+    const $birthDate0 = $("#birthDate-0");
+    const $birthDate = $(".birth-date");
 
-    $birthDay.datepicker({
+    $birthDate0.datepicker({
         changeMonth: true,
         changeYear: true,
         yearRange: "1900:" + eighteenYearsAgo.getFullYear(),
@@ -16,7 +17,7 @@ $(() => {
         defaultDate: eighteenYearsAgo,
     });
 
-    $(".birth-date").on("keydown paste", e => e.preventDefault());
+    $birthDate.on("keydown paste", e => e.preventDefault());
 
     // $(".birth-date").not("#birthDate-0").each(function () {
     //     $(this).datepicker({
@@ -97,7 +98,7 @@ $(() => {
                             <select class="form-select phone-prefix" id="phonePrefix-${participantIndex}" name="participants[${participantIndex}].phonePrefix">
                                 ${generateCountryOptions()}
                             </select>
-                            <label for="phonePrefix-0">Kraj *</label>
+                            <label for="phonePrefix-0">Kraj</label>
                         </div>
                         
                         <input type="text" class="form-control" id="phonePrefixDisplay-${participantIndex}" readonly style="min-width: 60px; max-width: 140px;">
@@ -110,6 +111,8 @@ $(() => {
                 </div>
                 
             </div>
+            <p class="price-output text-success fw-bold mt-2" id="priceDisplay-${participantIndex}">Cena: -</p>
+            <input type="hidden" name="participants[${participantIndex}].price" id="price-${participantIndex}">
         </div>
         `;
         container.append(html);
@@ -163,18 +166,22 @@ $(() => {
             const prefix = $(`#phonePrefix-${index}`).val();
             const phoneInput = $(`#phone-${index}`);
             const phoneVal = phoneInput.val().replace(/-/g, "");
+            const isMainParticipant = index === "0";
+
+            phoneInput.removeClass("is-invalid");
 
             if (prefix === "+48") {
-                if (!/^\d{9}$/.test(phoneVal)) {
+                const shouldValidate = isMainParticipant || phoneVal !== ""
+                if (shouldValidate && !/^\d{9}$/.test(phoneVal)) {
                     validPhones = false;
-                    phoneInput.addClass("is-invalid").removeClass("is-valid");
+                    phoneInput.addClass("is-invalid");
+                    if (!phoneInput.next().hasClass("invalid-feedback")) {
+                        phoneInput.after('<div class="invalid-feedback d-block">Numer telefonu musi mieć 9 cyfr w formacie 123-456-789</div>');
+                    }
                 }
                 else {
-                    phoneInput.removeClass("is-invalid");
+                    phoneInput.next(".invalid-feedback").remove();
                 }
-            }
-            else {
-                phoneInput.removeClass("is-invalid");
             }
         });
 
@@ -290,4 +297,41 @@ $(() => {
 
         participantIndex = participants.length;
     };
+
+    const convertToIsoDate = (inputDate) => {
+        const parts = inputDate.split(".");
+        if (parts.length !== 3) {
+            return null;
+        }
+        const [day, month, year] = parts;
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+
+    };
+
+    $("#participantsContainer").on("change", ".birth-date", function () {
+        const input = $(this);
+        const participantIndex = input.attr("id").split("-")[1];
+        const birthDate = convertToIsoDate(input.val());
+        const tourId = $('#tourId').val();
+
+        if (!birthDate) {
+            return;
+        }
+
+        $.ajax({
+            url: "/api/tour/price",
+            method: "GET",
+            data: {
+                tourId: tourId,
+                birthDate: birthDate
+            },
+            success: (price) => {
+                $(`#priceDisplay-${participantIndex}`).text(`Cena: ${price} zł`);
+                $(`#price-${participantIndex}`).val(price);
+            },
+            error: ()  => {
+                $(`#priceDisplay-${participantIndex}`).text('Nie znaleziono ceny');
+            }
+        });
+    })
 });

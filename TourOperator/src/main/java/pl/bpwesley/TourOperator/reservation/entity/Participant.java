@@ -25,11 +25,15 @@ public class Participant {
     private String phone;
     private LocalDate birthDate;
     private int price;
+
+    // TODO: platnosci
     private boolean confirmed;
     private boolean advancePaymentPaid;
     private boolean totalPaid;
-    private String comment;
-    private boolean mainParticipant;
+    //
+
+    private String comment; // TODO: dodawanie notatki przez panel
+    private boolean mainParticipant; // ? byc moze nie potrzebne
 
     @ManyToOne
     @JoinColumn(name = "reservation_id")

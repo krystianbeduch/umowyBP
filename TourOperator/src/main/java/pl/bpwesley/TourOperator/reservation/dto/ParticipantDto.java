@@ -14,5 +14,7 @@ public class ParticipantDto {
     private String lastName;
     private LocalDate birthDate;
     private String email;
+    private String phonePrefix;
     private String phone;
+    private int price;
 }
